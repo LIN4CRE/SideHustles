@@ -69,6 +69,39 @@ I noticed your Google snippet is missing meta tags. I made 5 free search-optimiz
     preview: `Fiverr Gig / Reddit Post:
 "I will reformat your messy resume bullets with high-impact executive metrics in 1 hour.
 Reply with 1 bullet point right now and I'll rewrite it for FREE in the comments!"`
+  },
+  {
+    id: 'asset-5',
+    title: '💻 ChatGPT & AI Coding Master Cheatsheet Vault',
+    platform: 'Gumroad / Etsy',
+    price: '99p - £1.99',
+    fileLocation: 'ready-to-sell-assets/05-ChatGPT-AI-Coding-Cheatsheet.md',
+    preview: `ChatGPT & AI Coding Master Cheatsheet Vault
+- Memory leak & O(n^2) refactoring prompts
+- Automated bug hunting & stack trace error diagnosis
+- Vitest/Jest unit test auto-generation prompts`
+  },
+  {
+    id: 'asset-6',
+    title: '📱 100 TikTok & Reels Viral Hooks Vault',
+    platform: 'Gumroad / Etsy',
+    price: '99p - £1.99',
+    fileLocation: 'ready-to-sell-assets/06-TikTok-Reels-Viral-Hook-Vault.md',
+    preview: `100 TikTok & Reels Viral Hooks & Script Vault
+- "Stop scrolling if you're trying to [DESIRED GOAL]..."
+- "This 1 free AI prompt feels illegal to know..."
+- "I tested 20 tools so you don't have to..."`
+  },
+  {
+    id: 'asset-7',
+    title: '✉️ 100 B2B Cold Email & Lead Gen Templates',
+    platform: 'Gumroad / Direct Outreach',
+    price: '£1.49 - £2.99',
+    fileLocation: 'ready-to-sell-assets/07-100-High-Converting-Cold-Email-Templates.md',
+    preview: `100 High-Converting B2B Cold Email Templates
+- 2-Sentence Value Gift Pitch (5 Free Meta Tags)
+- 60-Second Video Audit Offer
+- Instant Client Agreement & Payment Terms`
   }
 ];
 
