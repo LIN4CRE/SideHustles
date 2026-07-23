@@ -24,6 +24,7 @@ interface NavbarProps {
 
 const CATEGORIES: CategoryType[] = [
   'All',
+  'Free Starter Sets',
   'AI & Automation',
   'Micro-SaaS',
   'Digital Products',
@@ -161,17 +162,23 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-1.5 overflow-x-auto pt-3 pb-1 scrollbar-none">
           {CATEGORIES.map((category) => {
             const isSelected = selectedCategory === category;
+            const isFreeStarter = category === 'Free Starter Sets';
+
             return (
               <button
                 key={category}
                 onClick={() => onSelectCategory(category)}
                 className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                  isSelected
+                  isFreeStarter
+                    ? isSelected
+                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/30 font-bold'
+                      : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/20'
+                    : isSelected
                     ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-500/30'
                     : 'bg-slate-950/60 text-slate-400 border border-slate-800 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                {category}
+                {isFreeStarter ? '🎁 Free Starter Sets ($0)' : category}
               </button>
             );
           })}

@@ -1,5 +1,6 @@
 export type CategoryType =
   | 'All'
+  | 'Free Starter Sets'
   | 'AI & Automation'
   | 'Micro-SaaS'
   | 'Digital Products'
@@ -7,6 +8,17 @@ export type CategoryType =
   | 'E-Commerce'
   | 'High-Ticket Agency'
   | 'Local Lead Gen';
+
+export interface FreeStarterSetInfo {
+  starterKitName: string;
+  setupTimeMinutes: number;
+  expectedDay1Earnings: string; // e.g. "£15.00 - £50.00 / 24 hrs"
+  zeroCostToolsUsed: string[];
+  proofOfConceptMechanism: string;
+  trustBuildingLadder: string; // How completing this free set builds confidence & skills to upgrade to paid $10k+ agency hustles
+  upgradeToHustleId: string; // The paid hustle to transition to
+  upgradeToHustleTitle: string;
+}
 
 export interface ZapierBlueprintNode {
   id: string;
@@ -127,6 +139,10 @@ export interface SideHustle {
   // Sample Copy & Hooks
   sampleHook: string;
   sampleAudience: string;
+
+  // Free Starter Set extensions
+  isFreeStarterSet?: boolean;
+  freeStarterSet?: FreeStarterSetInfo;
 
   // Initial Viability Score (base)
   baseViabilityScore: number;

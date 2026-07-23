@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { SIDE_HUSTLES } from './data/hustles';
 import { SideHustle, CategoryType } from './types';
 import { Navbar } from './components/Navbar';
@@ -199,20 +200,39 @@ export default function App() {
 
         {/* Cards Grid */}
         {filteredHustles.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredHustles.map((hustle) => (
-              <HustleCard
-                key={hustle.id}
-                hustle={hustle}
-                isSaved={savedHustleIds.includes(hustle.id)}
-                onToggleSave={toggleSaveHustle}
-                onSelectHustle={(h) => setSelectedHustle(h)}
-                onOpenModeler={(h) => {
-                  setSelectedHustle(h);
-                }}
-              />
-            ))}
-          </div>
+          <motion.div 
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredHustles.map((hustle, index) => (
+                <motion.div
+                  key={hustle.id}
+                  layout
+                  initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ 
+                    duration: 0.35, 
+                    delay: Math.min(index * 0.05, 0.3),
+                    ease: [0.21, 0.47, 0.32, 0.98] 
+                  }}
+                  whileHover={{ y: -4 }}
+                  className="h-full"
+                >
+                  <HustleCard
+                    hustle={hustle}
+                    isSaved={savedHustleIds.includes(hustle.id)}
+                    onToggleSave={toggleSaveHustle}
+                    onSelectHustle={(h) => setSelectedHustle(h)}
+                    onOpenModeler={(h) => {
+                      setSelectedHustle(h);
+                    }}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         ) : (
           <div className="py-16 text-center bg-slate-900/50 border border-slate-800 rounded-2xl space-y-3">
             <Search className="w-10 h-10 text-slate-600 mx-auto" />
@@ -380,6 +400,10 @@ export default function App() {
         onClose={() => setSelectedHustle(null)}
         isSaved={selectedHustle ? savedHustleIds.includes(selectedHustle.id) : false}
         onToggleSave={toggleSaveHustle}
+        onSelectUpgradeHustle={(id) => {
+          const found = SIDE_HUSTLES.find((h) => h.id === id);
+          if (found) setSelectedHustle(found);
+        }}
       />
 
       {/* AI CUSTOM IDEA VALIDATOR MODAL */}

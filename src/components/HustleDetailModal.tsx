@@ -4,6 +4,7 @@ import { GrowthRoadmap } from './GrowthRoadmap';
 import { WorkflowBlueprintLibrary } from './WorkflowBlueprintLibrary';
 import { CompetitiveEdgeSection } from './CompetitiveEdgeSection';
 import { RecommendedToolingStack } from './RecommendedToolingStack';
+import { FreeStarterKitTester } from './FreeStarterKitTester';
 import { 
   X, 
   Sparkles, 
@@ -24,7 +25,8 @@ import {
   Target,
   Globe,
   Flag,
-  Activity
+  Activity,
+  Gift
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 
@@ -33,17 +35,21 @@ interface HustleDetailModalProps {
   onClose: () => void;
   isSaved: boolean;
   onToggleSave: (id: string) => void;
+  onSelectUpgradeHustle?: (hustleId: string) => void;
 }
 
 export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
   hustle,
   onClose,
   isSaved,
-  onToggleSave
+  onToggleSave,
+  onSelectUpgradeHustle
 }) => {
   if (!hustle) return null;
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'tooling' | 'roadmap' | 'workflow' | 'competitive' | 'economics' | 'kit'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'starterKit' | 'tooling' | 'roadmap' | 'workflow' | 'competitive' | 'economics' | 'kit'>(
+    hustle.isFreeStarterSet ? 'starterKit' : 'overview'
+  );
   
   // Economics state with defaults from hustle
   const [economics, setEconomics] = useState<UnitEconomics>(hustle.defaultEconomics);
@@ -156,6 +162,20 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
 
         {/* Tab Navigation */}
         <div className="flex items-center border-b border-slate-800 px-5 bg-slate-950/40 overflow-x-auto scrollbar-none">
+          {hustle.isFreeStarterSet && (
+            <button
+              onClick={() => setActiveTab('starterKit')}
+              className={`py-3 px-3.5 text-xs font-medium border-b-2 transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                activeTab === 'starterKit'
+                  ? 'border-emerald-500 text-emerald-300 font-bold bg-emerald-500/10'
+                  : 'border-transparent text-emerald-400 hover:text-emerald-300'
+              }`}
+            >
+              <Gift className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+              <span>🎁 Free $0 Starter Kit Engine</span>
+            </button>
+          )}
+
           <button
             onClick={() => setActiveTab('overview')}
             className={`py-3 px-3.5 text-xs font-medium border-b-2 transition-all whitespace-nowrap flex items-center gap-1.5 ${
@@ -249,6 +269,11 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
         {/* Tab Content Body */}
         <div className="p-6 overflow-y-auto flex-1 space-y-6">
           
+          {/* TAB: FREE STARTER KIT ENGINE */}
+          {activeTab === 'starterKit' && (
+            <FreeStarterKitTester hustle={hustle} onSelectUpgradeHustle={onSelectUpgradeHustle} />
+          )}
+
           {/* TAB 1: OVERVIEW */}
           {activeTab === 'overview' && (
             <div className="space-y-6">

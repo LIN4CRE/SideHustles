@@ -2,6 +2,236 @@ import { SideHustle } from '../types';
 
 export const SIDE_HUSTLES: SideHustle[] = [
   {
+    id: 'free-local-seo-tag-booster',
+    title: 'Free AI SEO Meta & Tag Repair Service',
+    category: 'Free Starter Sets',
+    isFreeStarterSet: true,
+    tagline: '$0 Free Starter Set: Generate 5 free SEO meta tags for local businesses, prove instant search ranking value, then convert to a paid £25-£100 audit.',
+    description: 'A 100% free-tier proof-of-concept starter set. Scan local business websites with Gemini Free API, generate 5 ready-to-paste optimized meta tags & title tags, and email them to the owner for free. Once they see Google search snippet improvements, they pay you £25 to fix their entire site.',
+    startupCost: 0,
+    marginPercentage: 100,
+    monthlyRevenuePotential: 1800,
+    automationScore: 95,
+    weeklyHoursNeeded: 2,
+    difficulty: 'Beginner',
+    traditionalModel: 'Cold pitching $1,000/mo SEO retainers with zero proof to skeptical local owners who hang up immediately.',
+    automatedUpgrade: 'Give away 5 optimized meta descriptions for FREE upfront using Gemini 3.6 Flash. When local owners copy-paste them and see their Google search preview improve within 24 hours, they gladly pay £25-£100 for a full site audit.',
+    scalabilityPillars: [
+      '100% Free Software Stack: $0 startup risk using Gemini Free API & Gmail',
+      'Zero-friction pitch: "Here are 5 free meta tags for your site, no strings attached"',
+      'Instant trust foundation: Converts 1 in 8 local owners into paying clients'
+    ],
+    recommendedTools: ['Gemini 3.6 Flash (Free)', 'Google Search Console', 'Gmail (Free)'],
+    freeStarterSet: {
+      starterKitName: '1-Click Local SEO Tag Repair Kit',
+      setupTimeMinutes: 5,
+      expectedDay1Earnings: '£15.00 - £50.00 / 24 hrs',
+      zeroCostToolsUsed: ['Gemini 3.6 Flash (Free)', 'Google Chrome', 'Free Gmail'],
+      proofOfConceptMechanism: 'Send 5 free generated meta descriptions to a local plumber/bakery. They paste them in WordPress, see instant Google snippet improvements, and pay £25 to fix the remaining 30 pages.',
+      trustBuildingLadder: 'Proves cold business owners buy when value is delivered upfront with $0 capital. Builds confidence to upgrade to the $11,000/mo Local AI Review & Lead Engine.',
+      upgradeToHustleId: 'local-ai-reputation-agent',
+      upgradeToHustleTitle: 'Local Business AI Review & Lead Engine ($11,000/mo)'
+    },
+    workflowBlueprint: [
+      {
+        stepNumber: 1,
+        title: 'Free Local Website Quick Scan',
+        tool: 'Gemini Free Search',
+        description: 'Find a local service site missing meta descriptions or title tags.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 2,
+        title: 'Generate 5 Free Meta Tags',
+        tool: 'Gemini 3.6 Flash',
+        description: 'AI crafts 5 high-CTR meta descriptions with target city keywords in 3 seconds.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 3,
+        title: 'Send Zero-Pitch Gift Email',
+        tool: 'Gmail',
+        description: 'Email owner: "Hi! Made 5 free meta tags for your site to boost Google clicks. Paste them in for free!"',
+        isAutomated: false
+      },
+      {
+        stepNumber: 4,
+        title: 'Convert Trust to £25 Site Audit',
+        tool: 'Stripe / PayPal ($0)',
+        description: 'Owner thanks you and asks to audit remaining pages for £25-£50.',
+        isAutomated: true
+      }
+    ],
+    defaultEconomics: {
+      pricePerUnit: 25,
+      monthlyCustomers: 20,
+      monthlyOperatingCost: 0,
+      conversionRate: 12.0,
+      estimatedMonthlyLeads: 160,
+      fulfillmentCostPerUnit: 0
+    },
+    sampleHook: 'I analyzed your website and wrote 5 free Google meta tags for your business. Here they are—no cost or sign-up needed!',
+    sampleAudience: 'Local plumbers, roofers, dentists, bakeries, auto repair shops',
+    baseViabilityScore: 98,
+    zapierBlueprint: {
+      blueprintName: 'Free Local SEO Tag Repair & Pitch Generator',
+      description: 'Generates 5 free SEO meta tags using Gemini, drafts zero-pressure email offer, and logs response in free Google Sheet.',
+      platform: 'Make.com',
+      nodes: [
+        {
+          id: 'seo-1',
+          type: 'trigger',
+          toolName: 'Google Sheets / Form',
+          iconName: 'Database',
+          actionTitle: 'New Local Business URL Input',
+          description: 'Paste local business name and website URL.',
+          samplePayload: '{\n  "business": "Apex Plumbing",\n  "city": "Austin TX",\n  "url": "apexplumbingaustin.com"\n}'
+        },
+        {
+          id: 'seo-2',
+          type: 'action',
+          toolName: 'Gemini 3.6 Flash (Free)',
+          iconName: 'Bot',
+          actionTitle: 'Generate 5 High-CTR Meta Descriptions',
+          description: 'Outputs 5 search-optimized meta tags and 1 zero-pitch email draft in 2 seconds.',
+          samplePayload: '{\n  "prompt": "Write 5 meta descriptions for Apex Plumbing in Austin TX..."\n}'
+        }
+      ]
+    }
+  },
+  {
+    id: 'free-ai-doc-formatting-service',
+    title: 'Free AI Document & Resume Polisher',
+    category: 'Free Starter Sets',
+    isFreeStarterSet: true,
+    tagline: '$0 Free Starter Set: Format messy resumes and client proposals in 10 seconds using free AI templates on Fiverr/Reddit for quick $10-$25 payouts.',
+    description: 'A zero-cost starter set for instant freelance earnings. Offer free 1-bullet resume polishing or doc reformatting on Reddit, LinkedIn, or Fiverr. Use Gemini 3.6 Flash ($0) to transform messy text into clean, high-impact Markdown or Canva PDF layouts in seconds.',
+    startupCost: 0,
+    marginPercentage: 100,
+    monthlyRevenuePotential: 1500,
+    automationScore: 96,
+    weeklyHoursNeeded: 2,
+    difficulty: 'Beginner',
+    traditionalModel: 'Manually spending 2 hours re-typing Word docs and re-aligning bullet points for low pay.',
+    automatedUpgrade: 'Paste raw client notes into Gemini free prompt kit. AI formats executive summary, re-writes bullet points with metric achievements, and outputs clean format in 5 seconds. Earn $10-$25 per document.',
+    scalabilityPillars: [
+      'Zero Software COGS: Uses 100% free Gemini API & Google Docs',
+      'Instant gratification: Takes 10 seconds per order fulfillment',
+      'High repeat business: Job seekers and students order multiple docs'
+    ],
+    recommendedTools: ['Gemini 3.6 Flash (Free)', 'Google Docs (Free)', 'Canva Free'],
+    freeStarterSet: {
+      starterKitName: 'Instant AI Resume & Proposal Formatter',
+      setupTimeMinutes: 5,
+      expectedDay1Earnings: '£10.00 - £30.00 / 24 hrs',
+      zeroCostToolsUsed: ['Gemini 3.6 Flash', 'Google Docs', 'Fiverr Free Account'],
+      proofOfConceptMechanism: 'Post "I will reformat 1 resume bullet point with metric achievements for free" in Reddit r/Resumes. Users test it, love the output, and pay $15 for the full document.',
+      trustBuildingLadder: 'Proves clients pay real money for fast aesthetic polish. Prepares you to scale into the $15,000/mo AI Pitch Deck & Proposal Studio.',
+      upgradeToHustleId: 'ai-pitchdeck-agency',
+      upgradeToHustleTitle: 'AI Pitch Deck & Proposal Studio ($15,000/mo)'
+    },
+    workflowBlueprint: [
+      {
+        stepNumber: 1,
+        title: 'Receive Raw Notes / Resume',
+        tool: 'Fiverr / Reddit / Gmail',
+        description: 'Client sends messy Word document or bullet points.',
+        isAutomated: false
+      },
+      {
+        stepNumber: 2,
+        title: 'AI Executive Polish',
+        tool: 'Gemini 3.6 Flash',
+        description: 'Gemini rewrites bullets with action verbs, metrics, and structured sections.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 3,
+        title: 'Export Clean Layout',
+        tool: 'Google Docs / Canva Free',
+        description: 'Paste into clean template layout and export PDF in 1 minute.',
+        isAutomated: true
+      }
+    ],
+    defaultEconomics: {
+      pricePerUnit: 15,
+      monthlyCustomers: 30,
+      monthlyOperatingCost: 0,
+      conversionRate: 15.0,
+      estimatedMonthlyLeads: 200,
+      fulfillmentCostPerUnit: 0
+    },
+    sampleHook: 'Send me your messy resume bullet point and I will rewrite it with executive-level metrics in 10 seconds for FREE.',
+    sampleAudience: 'Job seekers, college graduates, freelancers, sales representatives',
+    baseViabilityScore: 97
+  },
+  {
+    id: 'free-notion-micro-cheatsheet-vault',
+    title: 'Free Notion Micro-Cheatsheet Monetizer',
+    category: 'Free Starter Sets',
+    isFreeStarterSet: true,
+    tagline: '$0 Free Starter Set: Build 1-page Notion checklists & prompt guides, host on Gumroad ($0 upfront), and collect 20p-£5 organic downloads.',
+    description: 'Build single-page Notion micro-templates (e.g. 50 ChatGPT Prompts for Marketers, Solopreneur Weekly Audit) for free. Host on Gumroad with "pay what you want" pricing starting at £0 or £1. Post threads on Reddit/X to generate instant hands-off downloads.',
+    startupCost: 0,
+    marginPercentage: 100,
+    monthlyRevenuePotential: 2100,
+    automationScore: 97,
+    weeklyHoursNeeded: 1,
+    difficulty: 'Beginner',
+    traditionalModel: 'Spending $300 on website building, ad traffic, and complex ecommerce setups.',
+    automatedUpgrade: 'Create 1 Notion page in 10 minutes using Gemini to research top prompts/checklists. Publish to Gumroad ($0 cost). Share link on social media and collect instant pay-what-you-warned earnings on autopilot.',
+    scalabilityPillars: [
+      '100% Net Profit: Zero hosting costs on Notion & Gumroad',
+      'Evergreen digital asset: Earns passive micro-payouts indefinitely',
+      'Builds email subscriber list for future paid bundle launches'
+    ],
+    recommendedTools: ['Notion (Free)', 'Gumroad ($0 Upfront)', 'Gemini 3.6 Flash', 'Reddit / X'],
+    freeStarterSet: {
+      starterKitName: 'Notion Micro-Guide & Gumroad Kit',
+      setupTimeMinutes: 10,
+      expectedDay1Earnings: '20p - £10.00 / day 1 downloads',
+      zeroCostToolsUsed: ['Notion Free Tier', 'Gumroad $0 Account', 'Reddit / X'],
+      proofOfConceptMechanism: 'Distribute a 1-page "Solopreneur AI Prompt Sheet" on Reddit. 50 people download it for free, and 8 people pay £1-£3 voluntary donation.',
+      trustBuildingLadder: 'Proves users download digital products automatically without human intervention. Prepares you to launch the full AI Digital Product & Notion System Vault ($6,000/mo).',
+      upgradeToHustleId: 'digital-asset-vault',
+      upgradeToHustleTitle: 'AI Digital Product & Notion System Vault ($6,000/mo)'
+    },
+    workflowBlueprint: [
+      {
+        stepNumber: 1,
+        title: 'Generate Cheatsheet Content',
+        tool: 'Gemini 3.6 Flash',
+        description: 'Ask AI for 20 high-value workflow rules or prompts in target niche.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 2,
+        title: 'Paste into Free Notion Template',
+        tool: 'Notion Free',
+        description: 'Structure clean Notion page with checkboxes and toggle headers.',
+        isAutomated: false
+      },
+      {
+        stepNumber: 3,
+        title: 'Publish to Gumroad ($0)',
+        tool: 'Gumroad API',
+        description: 'Set up "Pay what you want" ($0+) digital product listing in 2 minutes.',
+        isAutomated: true
+      }
+    ],
+    defaultEconomics: {
+      pricePerUnit: 3,
+      monthlyCustomers: 120,
+      monthlyOperatingCost: 0,
+      conversionRate: 8.0,
+      estimatedMonthlyLeads: 1500,
+      fulfillmentCostPerUnit: 0
+    },
+    sampleHook: 'I built a 1-page Notion Cheatsheet with 50 AI prompts for agency growth. Free download link below!',
+    sampleAudience: 'Solopreneurs, agency owners, digital creators, students',
+    baseViabilityScore: 96
+  },
+  {
     id: 'ai-outreach-agency',
     title: 'AI Automated Lead Gen & Outreach Agency',
     category: 'AI & Automation',
