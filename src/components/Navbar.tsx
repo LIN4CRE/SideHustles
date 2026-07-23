@@ -22,6 +22,7 @@ interface NavbarProps {
   onOpenCalculator: () => void;
   onOpenAssetGen: () => void;
   onOpenPayoutModal: () => void;
+  onOpenFoolproofWizard: () => void;
 }
 
 const CATEGORIES: CategoryType[] = [
@@ -46,16 +47,21 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenValidator,
   onOpenCalculator,
   onOpenAssetGen,
-  onOpenPayoutModal
+  onOpenPayoutModal,
+  onOpenFoolproofWizard
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
       {/* Top Banner */}
-      <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 px-4 py-1.5 text-xs text-center border-b border-indigo-500/20 text-indigo-200 flex items-center justify-center gap-2">
-        <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+      <div 
+        onClick={onOpenFoolproofWizard}
+        className="bg-gradient-to-r from-emerald-950 via-indigo-950 to-purple-950 px-4 py-1.5 text-xs text-center border-b border-emerald-500/30 text-emerald-200 flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 transition-all font-mono"
+      >
+        <Zap className="w-3.5 h-3.5 text-amber-300 animate-pulse shrink-0" />
         <span>
-          <strong>Automated Profitability Engine:</strong> Every concept is enhanced with 80%+ automated workflows and AI launch kits.
+          <strong>Zero Code & No Settings Required:</strong> Click here to launch a 1-click foolproof side hustle with auto-injected Bank/PayPal payout!
         </span>
+        <ArrowRight className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -121,6 +127,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Desktop Action Buttons */}
             <div className="hidden md:flex items-center gap-2">
+              <button
+                onClick={onOpenFoolproofWizard}
+                className="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-400 hover:to-teal-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-emerald-500/20 animate-pulse"
+                title="Foolproof 1-Click Zero-Code Side Hustle Wizard"
+              >
+                <Zap className="w-3.5 h-3.5 text-slate-950 fill-slate-950" />
+                <span>⚡ 1-Click Launch Wizard</span>
+              </button>
+
               <button
                 onClick={onOpenPayoutModal}
                 className="px-3 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 font-medium text-xs border border-emerald-500/30 flex items-center gap-1.5 transition-all shadow-sm shadow-emerald-500/10"

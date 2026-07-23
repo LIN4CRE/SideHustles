@@ -493,6 +493,61 @@ Also provide a "masterSetupPrompt": A comprehensive single prompt to paste into 
   }
 });
 
+// Foolproof 1-Click Side Hustle Auto-Launcher Endpoint
+app.post("/api/foolproof-launch", async (req, res) => {
+  try {
+    const { hustleTitle, hustleCategory, businessName, targetNiche, payoutOption, payoutDetails } = req.body;
+
+    const ai = getGenAI();
+
+    const prompt = `
+You are a master business automation architect creating a 100% foolproof, zero-technical-knowledge launch package for a beginner named "${businessName || 'David Linacre'}".
+The side hustle is "${hustleTitle || 'Free Local SEO Tag Booster'}" in category "${hustleCategory || 'AI & Automation'}".
+Target Niche: "${targetNiche || 'Local Businesses'}".
+Payout Destination: "${payoutDetails || 'PayPal.me/dlinacre16'}".
+
+Generate a completely done-for-you, zero-code, zero-command-line package. The beginner should simply copy and paste these pre-formatted scripts.
+
+Provide a JSON output with:
+1. "headline": Short catchy title (e.g. "1-Click Foolproof Launch Pack for ${businessName}")
+2. "summary": 2-sentence encouraging summary explaining that no technical skills or settings are needed.
+3. "readyToOfferScript": A highly personalized, warm, zero-pitch email/message offering a $0 free value gift first, with the payment link (${payoutDetails}) seamlessly embedded for upgrades.
+4. "socialPostScript": A 3-line post for Facebook Groups, LinkedIn, or Reddit to get their first 3 interested prospects within 24 hours.
+5. "day1Checklist": An array of 3 plain-English, zero-tech step-by-step instructions.
+6. "autoCorrectionNotes": A short note highlighting how grammar, tone, and payment formatting were auto-corrected and verified.
+`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            headline: { type: Type.STRING },
+            summary: { type: Type.STRING },
+            readyToOfferScript: { type: Type.STRING },
+            socialPostScript: { type: Type.STRING },
+            day1Checklist: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING }
+            },
+            autoCorrectionNotes: { type: Type.STRING }
+          },
+          required: ["headline", "summary", "readyToOfferScript", "socialPostScript", "day1Checklist", "autoCorrectionNotes"]
+        }
+      }
+    });
+
+    const data = JSON.parse(response.text || "{}");
+    res.json(data);
+  } catch (error: any) {
+    console.error("Error in foolproof-launch:", error);
+    res.status(500).json({ error: error.message || "Failed to generate launch pack" });
+  }
+});
+
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

@@ -10,6 +10,7 @@ import { FinancialCalculator } from './components/FinancialCalculator';
 import { AssetGeneratorModal } from './components/AssetGeneratorModal';
 import { RevenueTracker } from './components/RevenueTracker';
 import { PayoutDestinationModal } from './components/PayoutDestinationModal';
+import { FoolproofAutoLauncherModal } from './components/FoolproofAutoLauncherModal';
 import { 
   Sparkles, 
   Bot, 
@@ -56,6 +57,7 @@ export default function App() {
   const [isCalculatorOpen, setIsCalculatorOpen] = useState<boolean>(false);
   const [isAssetGenOpen, setIsAssetGenOpen] = useState<boolean>(false);
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState<boolean>(false);
+  const [isFoolproofWizardOpen, setIsFoolproofWizardOpen] = useState<boolean>(false);
   const [drawerTab, setDrawerTab] = useState<'tracker' | 'items'>('tracker');
 
   const toggleSaveHustle = (id: string) => {
@@ -101,6 +103,7 @@ export default function App() {
         onOpenCalculator={() => setIsCalculatorOpen(true)}
         onOpenAssetGen={() => setIsAssetGenOpen(true)}
         onOpenPayoutModal={() => setIsPayoutModalOpen(true)}
+        onOpenFoolproofWizard={() => setIsFoolproofWizardOpen(true)}
       />
 
       {/* Main Container */}
@@ -127,6 +130,14 @@ export default function App() {
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => setIsFoolproofWizardOpen(true)}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition-all border border-emerald-400/30 animate-pulse"
+                >
+                  <Zap className="w-4 h-4 text-amber-300" />
+                  <span>⚡ 1-Click Foolproof Auto-Launcher (Zero Code)</span>
+                </button>
+
                 <button
                   onClick={() => setIsValidatorOpen(true)}
                   className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-xs shadow-lg shadow-indigo-600/25 flex items-center gap-2 transition-all"
@@ -434,6 +445,13 @@ export default function App() {
       <PayoutDestinationModal
         isOpen={isPayoutModalOpen}
         onClose={() => setIsPayoutModalOpen(false)}
+      />
+
+      {/* FOOLPROOF 1-CLICK AUTO-LAUNCHER WIZARD */}
+      <FoolproofAutoLauncherModal
+        isOpen={isFoolproofWizardOpen}
+        onClose={() => setIsFoolproofWizardOpen(false)}
+        onSelectHustle={(hustle) => setSelectedHustle(hustle)}
       />
 
     </div>
