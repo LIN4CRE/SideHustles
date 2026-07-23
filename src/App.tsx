@@ -9,6 +9,7 @@ import { CustomIdeaValidator } from './components/CustomIdeaValidator';
 import { FinancialCalculator } from './components/FinancialCalculator';
 import { AssetGeneratorModal } from './components/AssetGeneratorModal';
 import { RevenueTracker } from './components/RevenueTracker';
+import { PayoutDestinationModal } from './components/PayoutDestinationModal';
 import { 
   Sparkles, 
   Bot, 
@@ -54,6 +55,7 @@ export default function App() {
   const [isValidatorOpen, setIsValidatorOpen] = useState<boolean>(false);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState<boolean>(false);
   const [isAssetGenOpen, setIsAssetGenOpen] = useState<boolean>(false);
+  const [isPayoutModalOpen, setIsPayoutModalOpen] = useState<boolean>(false);
   const [drawerTab, setDrawerTab] = useState<'tracker' | 'items'>('tracker');
 
   const toggleSaveHustle = (id: string) => {
@@ -98,6 +100,7 @@ export default function App() {
         onOpenValidator={() => setIsValidatorOpen(true)}
         onOpenCalculator={() => setIsCalculatorOpen(true)}
         onOpenAssetGen={() => setIsAssetGenOpen(true)}
+        onOpenPayoutModal={() => setIsPayoutModalOpen(true)}
       />
 
       {/* Main Container */}
@@ -425,6 +428,12 @@ export default function App() {
         isOpen={isAssetGenOpen}
         onClose={() => setIsAssetGenOpen(false)}
         hustles={SIDE_HUSTLES}
+      />
+
+      {/* BANK & PAYPAL PAYOUT DESTINATION MODAL */}
+      <PayoutDestinationModal
+        isOpen={isPayoutModalOpen}
+        onClose={() => setIsPayoutModalOpen(false)}
       />
 
     </div>

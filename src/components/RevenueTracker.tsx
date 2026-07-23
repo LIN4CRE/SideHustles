@@ -319,6 +319,22 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
           {/* Portfolio Net Profit & Operational Costs Dashboard */}
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
             
+            {/* Bank & PayPal Auto-Payout Destination Card */}
+            <div className="bg-gradient-to-r from-emerald-950/80 via-slate-900 to-indigo-950/80 p-3 rounded-lg border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-1.5 font-bold font-mono text-emerald-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>Auto-Payout Account: MR DAVID CHRISTOPHER LINACRE</span>
+                </div>
+                <div className="text-[11px] text-slate-300 font-mono">
+                  Bank: Sort 05-02-30 • Acc 49193968 • IBAN GB14YORK05023049193968 | PayPal: PayPal.me/dlinacre16
+                </div>
+              </div>
+              <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30 shrink-0 self-start sm:self-center">
+                100% Direct Payout
+              </span>
+            </div>
+            
             {/* Top KPI row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               

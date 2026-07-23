@@ -256,6 +256,15 @@ export const FreeStarterKitTester: React.FC<FreeStarterKitTesterProps> = ({
             {/* If local SEO tags */}
             {generatedOutput.metaTags && (
               <div className="space-y-3">
+                <div className="p-2.5 bg-emerald-950/60 rounded-lg border border-emerald-500/30 text-[11px] text-emerald-300 font-mono flex items-center justify-between">
+                  <span>💳 Direct Payment Link: PayPal.me/dlinacre16 | Bank: MR DAVID CHRISTOPHER LINACRE</span>
+                  <button
+                    onClick={() => handleCopy('https://paypal.me/dlinacre16', 'pLink')}
+                    className="px-2 py-0.5 bg-emerald-500/20 border border-emerald-500/40 rounded text-[10px] text-emerald-200 hover:bg-emerald-500/30 font-mono"
+                  >
+                    {copiedKey === 'pLink' ? 'Copied Link!' : 'Copy PayPal Link'}
+                  </button>
+                </div>
                 <div className="space-y-2">
                   <span className="text-[10px] uppercase font-mono text-slate-400 block">5 Free Google Search Meta Tags</span>
                   {generatedOutput.metaTags.map((tag: any, idx: number) => (

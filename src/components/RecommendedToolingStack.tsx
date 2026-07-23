@@ -49,6 +49,14 @@ export const RecommendedToolingStack: React.FC<RecommendedToolingStackProps> = (
     setIsLoading(true);
     setError(null);
     try {
+      let payoutConfig = null;
+      try {
+        const stored = localStorage.getItem('sh_payout_destination_config');
+        if (stored) payoutConfig = JSON.parse(stored);
+      } catch (e) {
+        console.error(e);
+      }
+
       const response = await fetch('/api/generate-tool-stack', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -56,7 +64,8 @@ export const RecommendedToolingStack: React.FC<RecommendedToolingStackProps> = (
           title: hustle.title,
           category: hustle.category,
           description: hustle.description,
-          recommendedTools: hustle.recommendedTools
+          recommendedTools: hustle.recommendedTools,
+          payoutDestination: payoutConfig
         })
       });
 
@@ -187,6 +196,26 @@ export const RecommendedToolingStack: React.FC<RecommendedToolingStackProps> = (
           {isLoading ? <Loader2 className="w-4 h-4 animate-spin text-amber-400" /> : <Sparkles className="w-4 h-4 text-amber-400" />}
           <span>{isLoading ? 'Re-analyzing...' : 'Refresh Stack'}</span>
         </button>
+      </div>
+
+      {/* Payout Destination Banner */}
+      <div className="bg-slate-950 border border-emerald-500/30 rounded-xl p-3.5 flex items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2.5">
+          <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <CreditCard className="w-4 h-4" />
+          </div>
+          <div>
+            <span className="text-emerald-300 font-bold font-mono block">
+              Auto-Payout Destination Attached
+            </span>
+            <span className="text-slate-400 text-[11px]">
+              Bank Account: MR DAVID CHRISTOPHER LINACRE (Sort: 05-02-30 / Acc: 49193968) • PayPal.me/dlinacre16
+            </span>
+          </div>
+        </div>
+        <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] border border-emerald-500/30 shrink-0 hidden sm:inline-block">
+          Active Direct Deposit
+        </span>
       </div>
 
       {isLoading ? (
