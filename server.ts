@@ -1,0 +1,510 @@
+import express from "express";
+import path from "path";
+import dotenv from "dotenv";
+import { GoogleGenAI, Type } from "@google/genai";
+import { createServer as createViteServer } from "vite";
+
+dotenv.config();
+
+const app = express();
+const PORT = 3000;
+
+app.use(express.json({ limit: "10mb" }));
+
+// Helper to get Gemini Client
+function getGenAI() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY environment variable is not set.");
+  }
+  return new GoogleGenAI({
+    apiKey,
+    httpOptions: {
+      headers: {
+        "User-Agent": "aistudio-build",
+      },
+    },
+  });
+}
+
+// API Health Check
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+// Generate Automated Side Hustle Execution Kit
+app.post("/api/generate-hustle-kit", async (req, res) => {
+  try {
+    const { title, category, description, targetAudience, pricingModel } = req.body;
+    
+    if (!title) {
+      return res.status(400).json({ error: "Title is required" });
+    }
+
+    const ai = getGenAI();
+
+    const prompt = `
+You are an expert micro-SaaS and side hustle automation architect.
+Generate a comprehensive, highly profitable, and automated execution kit for the following side hustle idea:
+
+Title: ${title}
+Category: ${category || "General"}
+Base Concept: ${description || "N/A"}
+Target Audience: ${targetAudience || "General SMBs / Consumers"}
+Pricing Model: ${pricingModel || "Subscription / One-time"}
+
+Create a detailed, high-converting execution package with exact text copy and actionable steps.
+Ensure all copy is professional, high-converting, and actionable.
+
+Return JSON in the specified format with:
+- headline: Catchy 1-line value proposition headline
+- subheadline: 2-line persuasive summary
+- targetCustomerAvatar: Description of ideal buyer with pain points and budget
+- automatedWorkflowSteps: Array of 4-6 step-by-step automated workflow triggers/actions (e.g., Lead Capture -> AI Enriched Prompt -> Webhook -> Automated Delivery -> Stripe Billing)
+- coldOutreachScript: Ready-to-send high-converting cold email / DM outreach template with placeholders like [Prospect Name] and [Company]
+- landingPageCopy:
+  - heroHeading: Direct impact heading
+  - heroSubheading: Supporting copy
+  - keyBenefits: Array of 4 strong bullet benefits
+  - ctaButtonText: High-converting CTA text
+  - faqs: Array of 3 common objections and high-converting answers
+- marketingCampaign30Days: Array of 4 week milestone themes with specific daily post / distribution channel tactics
+- techStackRecommended: Array of 5-7 low-code/no-code/AI tools to automate operations (e.g. Make.com, Zapier, Gemini API, Stripe, Framer, Airtable, Beehiiv)
+- pricingStrategy:
+  - tier1Name, tier1Price, tier1Features
+  - tier2Name, tier2Price, tier2Features (Most popular)
+  - tier3Name, tier3Price, tier3Features
+- upsideProfitHacks: Array of 3 high-margin upsell or recurring revenue expanders
+`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            headline: { type: Type.STRING },
+            subheadline: { type: Type.STRING },
+            targetCustomerAvatar: { type: Type.STRING },
+            automatedWorkflowSteps: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+            },
+            coldOutreachScript: { type: Type.STRING },
+            landingPageCopy: {
+              type: Type.OBJECT,
+              properties: {
+                heroHeading: { type: Type.STRING },
+                heroSubheading: { type: Type.STRING },
+                keyBenefits: {
+                  type: Type.ARRAY,
+                  items: { type: Type.STRING },
+                },
+                ctaButtonText: { type: Type.STRING },
+                faqs: {
+                  type: Type.ARRAY,
+                  items: {
+                    type: Type.OBJECT,
+                    properties: {
+                      question: { type: Type.STRING },
+                      answer: { type: Type.STRING },
+                    },
+                    required: ["question", "answer"],
+                  },
+                },
+              },
+              required: ["heroHeading", "heroSubheading", "keyBenefits", "ctaButtonText", "faqs"],
+            },
+            marketingCampaign30Days: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  week: { type: Type.STRING },
+                  theme: { type: Type.STRING },
+                  tactics: { type: Type.ARRAY, items: { type: Type.STRING } },
+                },
+                required: ["week", "theme", "tactics"],
+              },
+            },
+            techStackRecommended: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+            },
+            pricingStrategy: {
+              type: Type.OBJECT,
+              properties: {
+                tier1Name: { type: Type.STRING },
+                tier1Price: { type: Type.STRING },
+                tier1Features: { type: Type.ARRAY, items: { type: Type.STRING } },
+                tier2Name: { type: Type.STRING },
+                tier2Price: { type: Type.STRING },
+                tier2Features: { type: Type.ARRAY, items: { type: Type.STRING } },
+                tier3Name: { type: Type.STRING },
+                tier3Price: { type: Type.STRING },
+                tier3Features: { type: Type.ARRAY, items: { type: Type.STRING } },
+              },
+              required: ["tier1Name", "tier1Price", "tier1Features", "tier2Name", "tier2Price", "tier2Features"],
+            },
+            upsideProfitHacks: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+            },
+          },
+          required: [
+            "headline",
+            "subheadline",
+            "targetCustomerAvatar",
+            "automatedWorkflowSteps",
+            "coldOutreachScript",
+            "landingPageCopy",
+            "marketingCampaign30Days",
+            "techStackRecommended",
+            "pricingStrategy",
+            "upsideProfitHacks",
+          ],
+        },
+      },
+    });
+
+    const jsonText = response.text || "{}";
+    const data = JSON.parse(jsonText);
+    res.json({ success: true, kit: data });
+  } catch (error: any) {
+    console.error("Error generating hustle kit:", error);
+    res.status(500).json({ error: error.message || "Failed to generate kit" });
+  }
+});
+
+// Analyze Custom Hustle Viability & Profitability
+app.post("/api/analyze-viability", async (req, res) => {
+  try {
+    const { idea, pricePoint, hoursPerWeek, targetMonthlyRevenue } = req.body;
+
+    if (!idea) {
+      return res.status(400).json({ error: "Idea prompt is required" });
+    }
+
+    const ai = getGenAI();
+
+    const prompt = `
+Analyze the business viability, automation index, and net margin potential for this side hustle concept:
+Concept: ${idea}
+Price Point Target: $${pricePoint || 100}
+Weekly Effort Available: ${hoursPerWeek || 5} hours
+Target Monthly Income: $${targetMonthlyRevenue || 3000}
+
+Provide an objective, actionable breakdown in JSON:
+- overallScore: integer 1 to 100
+- profitabilityScore: integer 1 to 100
+- automationScore: integer 1 to 100
+- timeToFirstDollarDays: integer (e.g. 7, 14, 30)
+- monthlyRequiredClients: integer needed to reach $${targetMonthlyRevenue || 3000} target
+- strengths: Array of 3 strong advantages
+- potentialBottlenecks: Array of 2 operational friction points
+- keyAutomationLever: 1-2 sentence description of the #1 tool or script that transforms this into hands-off passive income
+- growthHacks: Array of 3 growth shortcuts
+`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            overallScore: { type: Type.INTEGER },
+            profitabilityScore: { type: Type.INTEGER },
+            automationScore: { type: Type.INTEGER },
+            timeToFirstDollarDays: { type: Type.INTEGER },
+            monthlyRequiredClients: { type: Type.INTEGER },
+            strengths: { type: Type.ARRAY, items: { type: Type.STRING } },
+            potentialBottlenecks: { type: Type.ARRAY, items: { type: Type.STRING } },
+            keyAutomationLever: { type: Type.STRING },
+            growthHacks: { type: Type.ARRAY, items: { type: Type.STRING } },
+          },
+          required: [
+            "overallScore",
+            "profitabilityScore",
+            "automationScore",
+            "timeToFirstDollarDays",
+            "monthlyRequiredClients",
+            "strengths",
+            "potentialBottlenecks",
+            "keyAutomationLever",
+            "growthHacks",
+          ],
+        },
+      },
+    });
+
+    const data = JSON.parse(response.text || "{}");
+    res.json({ success: true, analysis: data });
+  } catch (error: any) {
+    console.error("Error analyzing viability:", error);
+    res.status(500).json({ error: error.message || "Failed to analyze viability" });
+  }
+});
+
+// Generate 30-60-90 Day Scaling Growth Roadmap
+app.post("/api/generate-roadmap", async (req, res) => {
+  try {
+    const { hustleTitle, category, targetRevenue, customGoals } = req.body;
+
+    if (!hustleTitle) {
+      return res.status(400).json({ error: "hustleTitle is required" });
+    }
+
+    const ai = getGenAI();
+
+    const prompt = `
+You are an elite micro-SaaS and side hustle growth strategist.
+Create a hyper-actionable, step-by-step 30-60-90 Day Scaling Plan for this business model:
+
+Side Hustle: ${hustleTitle}
+Category: ${category || "General"}
+Target Monthly Income: $${targetRevenue || 5000}
+User Specific Context/Goals: ${customGoals || "Focus on rapid validation and automated operations"}
+
+Return JSON format with:
+- day30Milestones: Array of 4 concrete tasks for Days 1-30 (Validation, minimum viable setup, first 1-3 clients/sales)
+- day60Milestones: Array of 4 concrete tasks for Days 31-60 (Automating workflows, Zapier/Make triggers, cold outreach scaling)
+- day90Milestones: Array of 4 concrete tasks for Days 61-90 (Team/AI delegation, price increases, retention & recurring referral loops)
+- keyMetricsToTrack: Array of 4 essential KPIs (e.g. CAC, LTV, Automation %, Churn)
+- scalingBottleneckWarning: 2-sentence warning on the #1 mistake founders make when scaling this specific model.
+`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            day30Milestones: { type: Type.ARRAY, items: { type: Type.STRING } },
+            day60Milestones: { type: Type.ARRAY, items: { type: Type.STRING } },
+            day90Milestones: { type: Type.ARRAY, items: { type: Type.STRING } },
+            keyMetricsToTrack: { type: Type.ARRAY, items: { type: Type.STRING } },
+            scalingBottleneckWarning: { type: Type.STRING },
+          },
+          required: [
+            "day30Milestones",
+            "day60Milestones",
+            "day90Milestones",
+            "keyMetricsToTrack",
+            "scalingBottleneckWarning",
+          ],
+        },
+      },
+    });
+
+    const data = JSON.parse(response.text || "{}");
+    res.json({ success: true, roadmap: data });
+  } catch (error: any) {
+    console.error("Error generating growth roadmap:", error);
+    res.status(500).json({ error: error.message || "Failed to generate roadmap" });
+  }
+});
+
+// Analyze Competitive Advantage & Market Trends with Google Search Grounding
+app.post("/api/generate-market-edge", async (req, res) => {
+  try {
+    const { hustleTitle, category, description } = req.body;
+
+    if (!hustleTitle) {
+      return res.status(400).json({ error: "hustleTitle is required" });
+    }
+
+    const ai = getGenAI();
+
+    const prompt = `
+Search the latest current web market trends, industry news, and competitive shifts for this business model:
+Title: ${hustleTitle}
+Category: ${category || "General"}
+Concept: ${description || ""}
+
+Provide an up-to-date, grounded analysis with 3 distinct competitive advantages that allow a solo operator to win against incumbents.
+
+Format your response as JSON:
+- marketTrendOverview: 2-sentence summary of current market demand and tailwinds based on recent web data
+- threePointEdge: Array of exactly 3 distinct competitive advantages, each object with:
+  - title: Short bold edge title (e.g. "AI-First Speed Advantage")
+  - detail: 2-sentence explanation of why this creates an unfair advantage
+  - competitiveLeverage: 1 sentence on how to exploit it against legacy competitors
+- trendingTools2026: Array of 4 cutting-edge AI/Automation tools currently trending for this space
+`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: prompt,
+      config: {
+        tools: [{ googleSearch: {} }],
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            marketTrendOverview: { type: Type.STRING },
+            threePointEdge: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  title: { type: Type.STRING },
+                  detail: { type: Type.STRING },
+                  competitiveLeverage: { type: Type.STRING },
+                },
+                required: ["title", "detail", "competitiveLeverage"],
+              },
+            },
+            trendingTools2026: { type: Type.ARRAY, items: { type: Type.STRING } },
+          },
+          required: ["marketTrendOverview", "threePointEdge", "trendingTools2026"],
+        },
+      },
+    });
+
+    // Grounding metadata
+    const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
+    const sources = groundingChunks?.map((chunk: any) => chunk.web?.title || chunk.web?.uri).filter(Boolean) || [];
+
+    const data = JSON.parse(response.text || "{}");
+    res.json({ success: true, marketEdge: data, sources });
+  } catch (error: any) {
+    console.error("Error generating market edge:", error);
+    res.status(500).json({ error: error.message || "Failed to generate market edge" });
+  }
+});
+
+// Generate Specific On-Demand Marketing / Content Asset
+app.post("/api/generate-asset", async (req, res) => {
+  try {
+    const { hustleTitle, assetType, customPrompt } = req.body;
+    
+    if (!hustleTitle || !assetType) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const ai = getGenAI();
+
+    const systemInstruction = `You are an elite direct-response marketer and AI automation strategist writing production-ready assets for side hustles.`;
+    
+    let userPrompt = `Side Hustle: ${hustleTitle}\nAsset Needed: ${assetType}\n`;
+    if (customPrompt) {
+      userPrompt += `Additional Context: ${customPrompt}\n`;
+    }
+
+    userPrompt += `
+Provide high-converting, polished, ready-to-copy text formatted in clean Markdown.
+Format includes headers, bullet points, callout boxes, and copyable text snippets.
+`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: userPrompt,
+      config: {
+        systemInstruction,
+        temperature: 0.7,
+      },
+    });
+
+    res.json({ success: true, content: response.text });
+  } catch (error: any) {
+    console.error("Error generating asset:", error);
+    res.status(500).json({ error: error.message || "Failed to generate asset" });
+  }
+});
+
+// Generate AI-Recommended Tooling Stack & Setup Prompts
+app.post("/api/generate-tool-stack", async (req, res) => {
+  try {
+    const { title, category, description, recommendedTools } = req.body;
+    
+    if (!title) {
+      return res.status(400).json({ error: "Title is required" });
+    }
+
+    const ai = getGenAI();
+
+    const prompt = `
+You are a pragmatic, elite no-code & micro-SaaS architecture consultant.
+For the side hustle titled "${title}" (${category || 'General'}), recommend 5 specific, real-world, production-ready no-code or low-code tools (e.g., Airtable, Zapier, Make.com, Resend, Stripe, Framer, Gemini API, Beehiiv, Supabase, Softr).
+
+For each tool, provide:
+1. toolName: exact brand name (e.g., "Airtable")
+2. category: one of ["Database", "Automation", "Email & Outreach", "Payments", "AI Engine", "Landing Page"]
+3. roleInHustle: 1 sentence explaining its exact job in this specific hustle
+4. estimatedMonthlyCost: e.g. "Free Tier ($0/mo)" or "$19/mo"
+5. difficulty: "Easy" | "Intermediate" | "Advanced"
+6. setupPrompt: A detailed, copy-pasteable prompt for setting up this specific tool (e.g. for Airtable: exact column names and field types; for Zapier: trigger event, action steps, key mappings; for Resend/Stripe: configuration steps).
+7. quickStartBlueprint: 2-3 bullet steps for 5-minute setup
+
+Also provide a "masterSetupPrompt": A comprehensive single prompt to paste into AI or no-code builders to configure the entire integrated stack.
+`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            masterSetupPrompt: { type: Type.STRING },
+            tools: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  toolName: { type: Type.STRING },
+                  category: { type: Type.STRING },
+                  roleInHustle: { type: Type.STRING },
+                  estimatedMonthlyCost: { type: Type.STRING },
+                  difficulty: { type: Type.STRING },
+                  setupPrompt: { type: Type.STRING },
+                  quickStartBlueprint: {
+                    type: Type.ARRAY,
+                    items: { type: Type.STRING }
+                  }
+                },
+                required: ["toolName", "category", "roleInHustle", "estimatedMonthlyCost", "difficulty", "setupPrompt", "quickStartBlueprint"]
+              }
+            }
+          },
+          required: ["masterSetupPrompt", "tools"]
+        }
+      }
+    });
+
+    const data = JSON.parse(response.text || "{}");
+    res.json({ success: true, toolStack: data });
+  } catch (error: any) {
+    console.error("Error generating tool stack:", error);
+    res.status(500).json({ error: error.message || "Failed to generate tool stack" });
+  }
+});
+
+async function startServer() {
+  if (process.env.NODE_ENV !== "production") {
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: "spa",
+    });
+    app.use(vite.middlewares);
+  } else {
+    const distPath = path.join(process.cwd(), "dist");
+    app.use(express.static(distPath));
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(distPath, "index.html"));
+    });
+  }
+
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server listening on http://0.0.0.0:${PORT}`);
+  });
+}
+
+startServer();
