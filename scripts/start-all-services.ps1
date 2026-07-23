@@ -18,8 +18,8 @@ if (-not (Test-Path "$repoDir\node_modules")) {
     npm install
 }
 
-# 3. Launch Development & Production Server on Port 3000
-Write-Host "[3/3] Launching Studio WebApp & Live Webhook Listener on http://localhost:3000..." -ForegroundColor Green
-Write-Host "Open http://localhost:3000 in your browser to view your live payouts & sales dashboard!" -ForegroundColor Cyan
+# 3. Launch Development & Production Server on Port 3847
+Write-Host "[3/3] Launching Studio WebApp & Live Webhook Listener on http://localhost:3847..." -ForegroundColor Green
+Write-Host "Open http://localhost:3847 in your browser to view your live payouts & sales dashboard!" -ForegroundColor Cyan
 
 npm run dev

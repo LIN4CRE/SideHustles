@@ -179,7 +179,7 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
               <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs space-y-1">
                 <div className="font-semibold text-indigo-300">Live Webhook Listener URL:</div>
                 <code className="text-[11px] text-amber-300 font-mono bg-slate-900 px-2 py-1 rounded block">
-                  http://localhost:3000/api/webhooks/sale
+                  http://localhost:3847/api/webhooks/sale
                 </code>
                 <div className="text-[11px] text-slate-400">
                   Paste this URL in Gumroad ➔ Settings ➔ Advanced ➔ Ping / Webhook URL to receive live desktop sound alerts for every sale!
