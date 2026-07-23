@@ -131,7 +131,7 @@ export const SystemAutomationHealthView: React.FC<SystemAutomationHealthViewProp
           </button>
         </div>
 
-        {/* Module 3: Firebase Hosting & Firestore */}
+        {/* Module 3: Firebase Hosting & Firestore (Task 20) */}
         <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -139,7 +139,7 @@ export const SystemAutomationHealthView: React.FC<SystemAutomationHealthViewProp
                 <Flame className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white">Firebase Suite</h3>
+                <h3 className="text-sm font-bold text-white">Firebase Hosting CLI</h3>
                 <span className="text-[11px] text-slate-400 font-mono">Hosting & Rules</span>
               </div>
             </div>
@@ -150,9 +150,23 @@ export const SystemAutomationHealthView: React.FC<SystemAutomationHealthViewProp
 
           <div className="p-3 bg-slate-950 border border-slate-800/80 rounded-xl text-xs space-y-1 font-mono">
             <div className="text-slate-400">Config: <span className="text-slate-200">firebase.json</span></div>
-            <div className="text-slate-400">Blueprint: <span className="text-slate-200">firebase-blueprint.json</span></div>
-            <div className="text-[11px] text-emerald-400">Public Root: dist/</div>
+            <div className="text-slate-400">Public Root: <span className="text-emerald-300">dist/</span></div>
           </div>
+
+          <button
+            onClick={async () => {
+              try {
+                const res = await fetch('/api/firebase/deploy', { method: 'POST' });
+                if (res.ok) alert('🚀 Firebase Deploy Runner: Build target verified and dist/ public directory synced with Firebase Hosting!');
+              } catch (e) {
+                console.error(e);
+              }
+            }}
+            className="w-full py-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all"
+          >
+            <Flame className="w-3.5 h-3.5 text-amber-400" />
+            <span>1-Click Run Firebase Deploy</span>
+          </button>
         </div>
 
       </div>
