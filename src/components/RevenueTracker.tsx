@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import { SideHustle } from '../types';
 import { 
   DollarSign, 
@@ -20,7 +21,11 @@ import {
   Wallet,
   TrendingDown,
   Percent,
-  Tag
+  Tag,
+  Trophy,
+  Target,
+  Flame,
+  Check
 } from 'lucide-react';
 
 interface RevenueEntry {
@@ -271,6 +276,9 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
     ? Math.min(100, Math.round((totalActualRevenue / totalTargetPotential) * 100))
     : 0;
 
+  const revenueProgress1k = Math.min(100, Math.round((totalActualRevenue / 1000) * 100));
+  const remaining1k = Math.max(0, 1000 - totalActualRevenue);
+
   const filteredAutoLogs = filterHustleId === 'all'
     ? automationLogs
     : automationLogs.filter(l => l.hustleId === filterHustleId);
@@ -394,6 +402,119 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
               </div>
             </div>
 
+          </div>
+
+          {/* £1,000 Revenue Journey Progress Bar Component */}
+          <div className="bg-gradient-to-br from-slate-950 via-indigo-950/40 to-slate-950 p-4 rounded-xl border border-indigo-500/30 space-y-3.5 shadow-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                  <Trophy className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <span>Journey to First £1,000 Revenue</span>
+                    <span className="px-2 py-0.2 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono border border-amber-500/30">
+                      £1,000 Club Goal
+                    </span>
+                  </h4>
+                  <p className="text-[11px] text-slate-400">Track real progress towards your first milestone</p>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <div className="text-sm font-extrabold font-mono text-emerald-400">
+                  £{totalActualRevenue.toLocaleString()} / £1,000
+                </div>
+                <div className="text-[10px] text-slate-400 font-mono">
+                  {totalActualRevenue >= 1000 ? (
+                    <span className="text-amber-300 font-bold flex items-center justify-end gap-1">
+                      <Sparkles className="w-3 h-3 text-amber-400" />
+                      £1,000 Milestone Unlocked!
+                    </span>
+                  ) : (
+                    <span>£{remaining1k.toLocaleString()} remaining to reach £1k</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Visual Milestone Progress Bar */}
+            <div className="space-y-2">
+              <div className="relative w-full bg-slate-900 h-3 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                <div 
+                  className="bg-gradient-to-r from-indigo-500 via-emerald-400 to-amber-400 h-full rounded-full transition-all duration-500 shadow-md shadow-emerald-500/30"
+                  style={{ width: `${revenueProgress1k}%` }}
+                />
+              </div>
+
+              {/* Milestone Badges Step Track */}
+              <div className="grid grid-cols-4 gap-1 pt-1 text-center">
+                
+                {/* Milestone 1: £100 */}
+                <div className={`p-1.5 rounded-lg border text-[10px] font-mono font-bold transition-all ${
+                  totalActualRevenue >= 100 
+                    ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300 shadow-sm shadow-emerald-500/20' 
+                    : 'bg-slate-900/60 border-slate-800 text-slate-500'
+                }`}>
+                  <div className="flex items-center justify-center gap-1 mb-0.5">
+                    {totalActualRevenue >= 100 ? <Check className="w-3 h-3 text-emerald-400" /> : <Target className="w-3 h-3 text-slate-600" />}
+                    <span>£100</span>
+                  </div>
+                  <span className="text-[9px] block font-sans text-slate-400">First Sale</span>
+                </div>
+
+                {/* Milestone 2: £250 */}
+                <div className={`p-1.5 rounded-lg border text-[10px] font-mono font-bold transition-all ${
+                  totalActualRevenue >= 250 
+                    ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300 shadow-sm shadow-emerald-500/20' 
+                    : 'bg-slate-900/60 border-slate-800 text-slate-500'
+                }`}>
+                  <div className="flex items-center justify-center gap-1 mb-0.5">
+                    {totalActualRevenue >= 250 ? <Check className="w-3 h-3 text-emerald-400" /> : <Flame className="w-3 h-3 text-slate-600" />}
+                    <span>£250</span>
+                  </div>
+                  <span className="text-[9px] block font-sans text-slate-400">Momentum</span>
+                </div>
+
+                {/* Milestone 3: £500 */}
+                <div className={`p-1.5 rounded-lg border text-[10px] font-mono font-bold transition-all ${
+                  totalActualRevenue >= 500 
+                    ? 'bg-indigo-950/80 border-indigo-500/50 text-indigo-300 shadow-sm shadow-indigo-500/20' 
+                    : 'bg-slate-900/60 border-slate-800 text-slate-500'
+                }`}>
+                  <div className="flex items-center justify-center gap-1 mb-0.5">
+                    {totalActualRevenue >= 500 ? <Check className="w-3 h-3 text-indigo-400" /> : <Award className="w-3 h-3 text-slate-600" />}
+                    <span>£500</span>
+                  </div>
+                  <span className="text-[9px] block font-sans text-slate-400">Halfway</span>
+                </div>
+
+                {/* Milestone 4: £1000 */}
+                <div className={`p-1.5 rounded-lg border text-[10px] font-mono font-bold transition-all ${
+                  totalActualRevenue >= 1000 
+                    ? 'bg-amber-950/80 border-amber-500/50 text-amber-300 shadow-lg shadow-amber-500/30 animate-pulse' 
+                    : 'bg-slate-900/60 border-slate-800 text-slate-500'
+                }`}>
+                  <div className="flex items-center justify-center gap-1 mb-0.5">
+                    {totalActualRevenue >= 1000 ? <Trophy className="w-3 h-3 text-amber-400" /> : <Trophy className="w-3 h-3 text-slate-600" />}
+                    <span>£1,000</span>
+                  </div>
+                  <span className="text-[9px] block font-sans text-slate-400">Mastery</span>
+                </div>
+
+              </div>
+            </div>
+
+            {totalActualRevenue >= 1000 && (
+              <button
+                onClick={() => confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } })}
+                className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-500 to-indigo-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 hover:opacity-90 transition-all"
+              >
+                <Sparkles className="w-4 h-4 text-slate-950 fill-slate-950" />
+                <span>Celebrate £1,000 Revenue Victory 🎉</span>
+              </button>
+            )}
           </div>
 
           {/* List of Saved Hustles with Earnings & Cost Drawers */}

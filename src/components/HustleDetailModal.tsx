@@ -7,6 +7,7 @@ import { RecommendedToolingStack } from './RecommendedToolingStack';
 import { FreeStarterKitTester } from './FreeStarterKitTester';
 import { SetupStepToolTooltip } from './SetupStepToolTooltip';
 import { RealityCheckService } from '../services/realityCheckService';
+import { exportBlueprintPdf } from '../utils/exportBlueprintPdf';
 import { 
   X, 
   Sparkles, 
@@ -28,6 +29,7 @@ import {
   Loader2,
   Share2,
   Wrench,
+  FileText,
   Target,
   Globe,
   Flag,
@@ -150,7 +152,16 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+            <button
+              onClick={() => exportBlueprintPdf(hustle)}
+              className="px-3 py-1.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 font-bold text-xs border border-emerald-500/30 flex items-center gap-1.5 transition-all shadow-sm"
+              title="Export complete workflow blueprint as formatted PDF report"
+            >
+              <FileText className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Export PDF</span>
+            </button>
+
             <button
               onClick={() => setIsFocusMode(!isFocusMode)}
               className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all ${

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SideHustle, ZapierBlueprintNode } from '../types';
 import { SetupStepToolTooltip } from './SetupStepToolTooltip';
+import { exportBlueprintPdf } from '../utils/exportBlueprintPdf';
 import { 
   Zap, 
   Webhook, 
@@ -16,7 +17,8 @@ import {
   Code,
   Layers,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  FileText
 } from 'lucide-react';
 
 interface WorkflowBlueprintLibraryProps {
@@ -74,10 +76,19 @@ export const WorkflowBlueprintLibrary: React.FC<WorkflowBlueprintLibraryProps> =
           <p className="text-xs text-slate-400 leading-relaxed">{blueprint.description}</p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="text-[11px] font-mono text-slate-400">
+        <div className="flex items-center gap-3 shrink-0">
+          <span className="text-[11px] font-mono text-slate-400 hidden sm:inline">
             {blueprint.nodes.length} Connected Modules
           </span>
+
+          <button
+            onClick={() => exportBlueprintPdf(hustle)}
+            className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-emerald-600/20"
+            title="Export full workflow blueprint as formatted PDF report"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>Export Blueprint PDF</span>
+          </button>
         </div>
       </div>
 

@@ -161,9 +161,19 @@ export default function App() {
     });
   };
 
+  const [selectedDifficulty, setSelectedDifficulty] = useState<'All' | 'Beginner' | 'Intermediate' | 'Advanced'>('All');
+  const [selectedTimeCommitment, setSelectedTimeCommitment] = useState<'All' | '< 3 hrs/wk' | '3–5 hrs/wk' | '5+ hrs/wk'>('All');
+
   // Filtered Hustles
   const filteredHustles = SIDE_HUSTLES.filter((hustle) => {
     const matchesCategory = selectedCategory === 'All' || hustle.category === selectedCategory;
+    const matchesDifficulty = selectedDifficulty === 'All' || hustle.difficulty === selectedDifficulty;
+
+    let matchesTime = true;
+    if (selectedTimeCommitment === '< 3 hrs/wk') matchesTime = hustle.weeklyHoursNeeded < 3;
+    else if (selectedTimeCommitment === '3–5 hrs/wk') matchesTime = hustle.weeklyHoursNeeded >= 3 && hustle.weeklyHoursNeeded <= 5;
+    else if (selectedTimeCommitment === '5+ hrs/wk') matchesTime = hustle.weeklyHoursNeeded > 5;
+
     const q = searchQuery.toLowerCase();
     const matchesSearch =
       !q ||
@@ -172,7 +182,7 @@ export default function App() {
       hustle.category.toLowerCase().includes(q) ||
       hustle.recommendedTools.some((t) => t.toLowerCase().includes(q));
 
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesDifficulty && matchesTime && matchesSearch;
   });
 
   const savedHustles = SIDE_HUSTLES.filter((h) => savedHustleIds.includes(h.id));
@@ -350,26 +360,77 @@ export default function App() {
           onOpenViralScout={() => setIsViralScoutOpen(true)}
         />
 
+        {/* Difficulty & Time Commitment Filter Chips */}
+        <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+          {/* Difficulty Chips */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[10px] font-mono text-slate-400 uppercase font-bold mr-1">Difficulty:</span>
+            {(['All', 'Beginner', 'Intermediate', 'Advanced'] as const).map((diff) => (
+              <button
+                key={diff}
+                onClick={() => setSelectedDifficulty(diff)}
+                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  selectedDifficulty === diff
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                    : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+                }`}
+              >
+                {diff}
+              </button>
+            ))}
+          </div>
+
+          {/* Time Commitment Chips */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[10px] font-mono text-slate-400 uppercase font-bold mr-1">Time Effort:</span>
+            {(['All', '< 3 hrs/wk', '3–5 hrs/wk', '5+ hrs/wk'] as const).map((time) => (
+              <button
+                key={time}
+                onClick={() => setSelectedTimeCommitment(time)}
+                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  selectedTimeCommitment === time
+                    ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30'
+                    : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+                }`}
+              >
+                {time}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Search Results Summary */}
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
+          <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2 flex-wrap">
             <span>Exploratory Blueprints ({filteredHustles.length})</span>
             {selectedCategory !== 'All' && (
               <span className="text-xs font-normal text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
                 Category: {selectedCategory}
               </span>
             )}
+            {selectedDifficulty !== 'All' && (
+              <span className="text-xs font-normal text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
+                Difficulty: {selectedDifficulty}
+              </span>
+            )}
+            {selectedTimeCommitment !== 'All' && (
+              <span className="text-xs font-normal text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                Effort: {selectedTimeCommitment}
+              </span>
+            )}
           </h3>
 
-          {(searchQuery || selectedCategory !== 'All') && (
+          {(searchQuery || selectedCategory !== 'All' || selectedDifficulty !== 'All' || selectedTimeCommitment !== 'All') && (
             <button
               onClick={() => {
                 setSelectedCategory('All');
+                setSelectedDifficulty('All');
+                setSelectedTimeCommitment('All');
                 setSearchQuery('');
               }}
-              className="text-xs text-indigo-400 hover:text-indigo-300"
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-bold"
             >
-              Reset Filters
+              Reset All Filters
             </button>
           )}
         </div>

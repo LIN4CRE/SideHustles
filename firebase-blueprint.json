@@ -1,0 +1,33 @@
+{
+  "entities": {
+    "portfolios": {
+      "title": "User Portfolio",
+      "description": "Stores saved side hustles, tracked sales, macros, and configuration preferences per user.",
+      "type": "object",
+      "properties": {
+        "savedHustleIds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of saved side hustle IDs"
+        },
+        "salesTracked": {
+          "type": "array",
+          "description": "Recorded sales transactions and revenue events"
+        },
+        "customMacros": {
+          "type": "array",
+          "description": "Custom recorded workflow automation sequences"
+        },
+        "payoutDestination": {
+          "type": "string",
+          "description": "PayPal / Stripe payout URL or address"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp of last sync"
+        }
+      },
+      "required": ["savedHustleIds"]
+    }
+  }
+}
