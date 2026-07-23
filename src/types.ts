@@ -148,6 +148,26 @@ export interface SideHustle {
   baseViabilityScore: number;
 }
 
+export interface ExecutionLogItem {
+  id: string;
+  hustleId: string;
+  hustleTitle: string;
+  taskName: string;
+  status: 'completed' | 'running' | 'scheduled' | 'failed';
+  timestamp: string;
+  agentName: string;
+  details: string;
+  outputSnippet?: string;
+  durationMs?: number;
+}
+
+export interface HustleHealthState {
+  hustleId: string;
+  completedSteps: number[]; // e.g. [1, 2]
+  healthScore: number; // 0-100%
+  lastAuditTimestamp?: string;
+}
+
 export interface ViabilityAnalysis {
   overallScore: number;
   profitabilityScore: number;

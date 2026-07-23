@@ -1,6 +1,8 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { SideHustle } from '../types';
 import { calculateDynamicViabilityScore, ViabilityOverrides } from '../utils/viability';
+import { getCompletedStepsForHustle, calculateHustleHealth } from '../utils/hustleHealth';
 import { 
   Zap, 
   DollarSign, 
@@ -14,7 +16,8 @@ import {
   Sparkles,
   Layers,
   Activity,
-  Gift
+  Gift,
+  CheckCircle2
 } from 'lucide-react';
 
 interface HustleCardProps {
@@ -35,6 +38,8 @@ export const HustleCard: React.FC<HustleCardProps> = ({
   viabilityOverrides
 }) => {
   const viability = calculateDynamicViabilityScore(hustle, viabilityOverrides);
+  const completedSteps = getCompletedStepsForHustle(hustle.id);
+  const health = calculateHustleHealth(hustle, completedSteps);
 
   return (
     <div className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 shadow-lg hover:shadow-indigo-500/10 transition-all group flex flex-col justify-between relative overflow-hidden">
@@ -131,6 +136,31 @@ export const HustleCard: React.FC<HustleCardProps> = ({
               <Clock className="w-3 h-3 text-slate-400" />
               {hustle.weeklyHoursNeeded}h
             </span>
+          </div>
+        </div>
+
+        {/* Hustle Health Progress Bar */}
+        <div className="bg-slate-950/90 rounded-xl p-3 border border-slate-800/90 mb-4 space-y-1.5">
+          <div className="flex items-center justify-between text-[11px]">
+            <span className="text-slate-400 font-mono flex items-center gap-1">
+              <Activity className="w-3 h-3 text-emerald-400" />
+              Hustle Health
+            </span>
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono border ${health.badgeClass}`}>
+              {health.score}% • {health.label}
+            </span>
+          </div>
+          <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${health.score}%` }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+              className={`h-full bg-gradient-to-r ${health.barColor}`}
+            />
+          </div>
+          <div className="flex justify-between items-center text-[10px] text-slate-500 font-mono pt-0.5">
+            <span>Setup Steps: {completedSteps.length}/{hustle.workflowBlueprint.length || 4} Completed</span>
+            <span>Click to view kit & finish</span>
           </div>
         </div>
 

@@ -11,6 +11,8 @@ import { AssetGeneratorModal } from './components/AssetGeneratorModal';
 import { RevenueTracker } from './components/RevenueTracker';
 import { PayoutDestinationModal } from './components/PayoutDestinationModal';
 import { FoolproofAutoLauncherModal } from './components/FoolproofAutoLauncherModal';
+import { ExecutionLog } from './components/ExecutionLog';
+import { SavedHustleHealthCard } from './components/SavedHustleHealthCard';
 import { 
   Sparkles, 
   Bot, 
@@ -58,7 +60,7 @@ export default function App() {
   const [isAssetGenOpen, setIsAssetGenOpen] = useState<boolean>(false);
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState<boolean>(false);
   const [isFoolproofWizardOpen, setIsFoolproofWizardOpen] = useState<boolean>(false);
-  const [drawerTab, setDrawerTab] = useState<'tracker' | 'items'>('tracker');
+  const [drawerTab, setDrawerTab] = useState<'tracker' | 'items' | 'execution'>('tracker');
 
   const toggleSaveHustle = (id: string) => {
     setSavedHustleIds((prev) =>
@@ -298,30 +300,42 @@ export default function App() {
               </button>
             </div>
 
-            {/* Sub-Tabs: Revenue Tracker vs Portfolio Items */}
-            <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 my-4">
+            {/* Sub-Tabs: Revenue Tracker vs Saved Items vs Execution Log */}
+            <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 my-4 text-xs">
               <button
                 onClick={() => setDrawerTab('tracker')}
-                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+                className={`flex-1 py-1.5 px-2 rounded-lg font-semibold flex items-center justify-center gap-1 transition-all ${
                   drawerTab === 'tracker'
                     ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
                 <Activity className="w-3.5 h-3.5" />
-                <span>Revenue Tracker</span>
+                <span>Tracker</span>
               </button>
 
               <button
                 onClick={() => setDrawerTab('items')}
-                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+                className={`flex-1 py-1.5 px-2 rounded-lg font-semibold flex items-center justify-center gap-1 transition-all ${
                   drawerTab === 'items'
                     ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
                 <Bookmark className="w-3.5 h-3.5" />
-                <span>Saved Items ({savedHustles.length})</span>
+                <span>Health ({savedHustles.length})</span>
+              </button>
+
+              <button
+                onClick={() => setDrawerTab('execution')}
+                className={`flex-1 py-1.5 px-2 rounded-lg font-semibold flex items-center justify-center gap-1 transition-all ${
+                  drawerTab === 'execution'
+                    ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Bot className="w-3.5 h-3.5 text-amber-300" />
+                <span>AI Logs</span>
               </button>
             </div>
 
@@ -336,6 +350,14 @@ export default function App() {
                         setIsSavedDrawerOpen(false);
                         setSelectedHustle(hustle);
                       }} 
+                    />
+                  ) : drawerTab === 'execution' ? (
+                    <ExecutionLog 
+                      savedHustles={savedHustles}
+                      onSelectHustle={(hustle) => {
+                        setIsSavedDrawerOpen(false);
+                        setSelectedHustle(hustle);
+                      }}
                     />
                   ) : (
                     <div>
@@ -353,31 +375,15 @@ export default function App() {
 
                       <div className="space-y-3">
                         {savedHustles.map((hustle) => (
-                          <div key={hustle.id} className="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
-                            <div>
-                              <h4 className="text-xs font-bold text-white">{hustle.title}</h4>
-                              <span className="text-[10px] text-emerald-400 font-mono">${hustle.monthlyRevenuePotential}/mo</span>
-                            </div>
-
-                            <div className="flex items-center gap-1">
-                              <button
-                                onClick={() => {
-                                  setIsSavedDrawerOpen(false);
-                                  setSelectedHustle(hustle);
-                                }}
-                                className="p-1.5 rounded bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 text-xs"
-                              >
-                                <ChevronRight className="w-4 h-4" />
-                              </button>
-                              <button
-                                onClick={() => toggleSaveHustle(hustle.id)}
-                                className="p-1.5 rounded bg-slate-800 text-rose-400 hover:bg-rose-950/50"
-                                title="Remove"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-                          </div>
+                          <SavedHustleHealthCard
+                            key={hustle.id}
+                            hustle={hustle}
+                            onOpenDetail={() => {
+                              setIsSavedDrawerOpen(false);
+                              setSelectedHustle(hustle);
+                            }}
+                            onRemove={() => toggleSaveHustle(hustle.id)}
+                          />
                         ))}
                       </div>
                     </div>
