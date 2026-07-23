@@ -335,7 +335,7 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
                   <span>Auto-Payout Account: MR DAVID CHRISTOPHER LINACRE</span>
                 </div>
                 <div className="text-[11px] text-slate-300 font-mono">
-                  Bank: Sort 05-02-30 • Acc 49193968 • IBAN GB14YORK05023049193968 | PayPal: PayPal.me/dlinacre16
+                  Bank: Sort ••-••-30 • Acc ••••3968 • IBAN GB••YORK••••••••3968 | PayPal: PayPal.me/dlinacre16
                 </div>
               </div>
               <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30 shrink-0 self-start sm:self-center">

@@ -21,7 +21,7 @@ export const INITIAL_EXECUTION_LOGS: ExecutionLogItem[] = [
     timestamp: '2 mins ago',
     agentName: 'Payout Router AI',
     details: 'Injected PayPal.me/dlinacre16 & Bank Account MR DAVID CHRISTOPHER LINACRE into invoice scripts.',
-    outputSnippet: 'Payment URL: https://paypal.me/dlinacre16 | Sort: 05-02-30 | Acc: 49193968'
+    outputSnippet: 'Payment URL: https://paypal.me/dlinacre16 | Sort: ••-••-30 | Acc: ••••3968'
   },
   {
     id: 'log-3',

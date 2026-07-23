@@ -92,7 +92,7 @@ export const ExecutionLog: React.FC<ExecutionLogProps> = ({
       timestamp: 'Just now',
       agentName: chosenAgentName,
       details: `Initiated automated execution workflow for ${targetHustle.title}. Processing parameters...`,
-      outputSnippet: `[EXEC LOG] Initializing ${chosenAgentName}...\nConnecting to API Endpoint...\nTargeting: ${targetHustle.category}\nPayout Target: PayPal.me/dlinacre16 | Bank 05-02-30`
+      outputSnippet: `[EXEC LOG] Initializing ${chosenAgentName}...\nConnecting to API Endpoint...\nTargeting: ${targetHustle.category}\nPayout Target: PayPal.me/dlinacre16 | Bank ••-••-30`
     };
 
     setLogs((prev) => [newLogItem, ...prev]);

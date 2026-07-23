@@ -1,0 +1,10 @@
+services:
+  studio:
+    build: .
+    ports:
+      - "3847:3847"
+    env_file:
+      - .env
+    volumes:
+      - ./ready-to-sell-assets:/app/ready-to-sell-assets
+    restart: always

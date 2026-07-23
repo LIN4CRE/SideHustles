@@ -210,7 +210,7 @@ export const RecommendedToolingStack: React.FC<RecommendedToolingStackProps> = (
               Auto-Payout Destination Attached
             </span>
             <span className="text-slate-400 text-[11px]">
-              Bank Account: MR DAVID CHRISTOPHER LINACRE (Sort: 05-02-30 / Acc: 49193968) • PayPal.me/dlinacre16
+              Bank Account: MR DAVID CHRISTOPHER LINACRE (Sort: ••-••-30 / Acc: ••••3968) • PayPal.me/dlinacre16
             </span>
           </div>
         </div>

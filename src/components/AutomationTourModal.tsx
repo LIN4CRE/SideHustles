@@ -83,9 +83,9 @@ export const AutomationTourModal: React.FC<AutomationTourModalProps> = ({
       icon: CreditCard,
       color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
       badge: 'Instant Deposit Ready',
-      description: 'Automate invoice links with verified UK sort code (05-02-30 / 49193968) and PayPal checkout endpoints so buyers deposit funds directly to you.',
-      interactiveTip: 'Verified account: MR DAVID CHRISTOPHER LINACRE - 05-02-30 (Yorkshire Bank / Virgin Money)',
-      codeSnippet: 'PayPal.me/dlinacre16 | Bank Sort: 05-02-30 Acc: 49193968',
+      description: 'Automate invoice links with verified UK sort code (••-••-30 / ••••3968) and PayPal checkout endpoints so buyers deposit funds directly to you.',
+      interactiveTip: 'Verified account: MR DAVID CHRISTOPHER LINACRE - ••-••-30 (Yorkshire Bank / Virgin Money)',
+      codeSnippet: 'PayPal.me/dlinacre16 | Bank Sort: ••-••-30 Acc: ••••3968',
       actionText: 'Verify Payout Account Details',
       action: () => {
         if (onOpenPayoutModal) onOpenPayoutModal();

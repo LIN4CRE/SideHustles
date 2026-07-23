@@ -72,7 +72,7 @@ export const FoolproofAutoLauncherModal: React.FC<FoolproofAutoLauncherModalProp
           payoutOption,
           payoutDetails: payoutOption === 'paypal' 
             ? 'PayPal.me/dlinacre16' 
-            : 'MR DAVID CHRISTOPHER LINACRE (Sort: 05-02-30 / Acc: 49193968 / IBAN: GB14YORK05023049193968)'
+            : 'MR DAVID CHRISTOPHER LINACRE (Sort: ••-••-30 / Acc: ••••3968 / IBAN: GB••YORK••••••••3968)'
         })
       });
 
@@ -89,7 +89,7 @@ export const FoolproofAutoLauncherModal: React.FC<FoolproofAutoLauncherModalProp
       console.log('Using robust client fallback launch generator');
       const payoutText = payoutOption === 'paypal' 
         ? 'PayPal link: https://paypal.me/dlinacre16' 
-        : 'Bank Transfer (Account Name: MR DAVID CHRISTOPHER LINACRE | Sort Code: 05-02-30 | Account No: 49193968 | IBAN: GB14YORK05023049193968)';
+        : 'Bank Transfer (Account Name: MR DAVID CHRISTOPHER LINACRE | Sort Code: ••-••-30 | Account No: ••••3968 | IBAN: GB••YORK••••••••3968)';
 
       setLaunchPackage({
         hustle: chosenHustle,
@@ -314,7 +314,7 @@ export const FoolproofAutoLauncherModal: React.FC<FoolproofAutoLauncherModalProp
                       }`}
                     >
                       <Building2 className="w-3.5 h-3.5 text-emerald-400" />
-                      Bank (Sort 05-02-30 / Acc 49193968)
+                      Bank (Sort ••-••-30 / Acc ••••3968)
                     </button>
                   </div>
                 </div>

@@ -27,9 +27,9 @@ export interface PayoutAccountInfo {
 
 export const DEFAULT_PAYOUT_INFO: PayoutAccountInfo = {
   accountHolder: 'MR DAVID CHRISTOPHER LINACRE',
-  sortCode: '05-02-30',
-  accountNumber: '49193968',
-  iban: 'GB14YORK05023049193968',
+  sortCode: '••-••-30',
+  accountNumber: '••••3968',
+  iban: 'GB••YORK••••••••3968',
   swiftBic: 'YORKGB21230',
   payPalMeLink: 'https://paypal.me/dlinacre16',
   preferredMethod: 'paypal',
@@ -140,7 +140,7 @@ export const PayoutDestinationModal: React.FC<PayoutDestinationModalProps> = ({
             <div className="pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-2 text-[10px] font-mono">
               <div className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
                 <span className="text-slate-500 block">Verification ID:</span>
-                <span className="text-emerald-400 font-bold">VERIFIED-UK-BANK-49193968</span>
+                <span className="text-emerald-400 font-bold">VERIFIED-UK-BANK-••••3968</span>
               </div>
               <div className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
                 <span className="text-slate-500 block">Instant Deposit Mode:</span>

@@ -41,8 +41,8 @@ const PRESET_SYSTEM_ISSUES: SystemIssue[] = [
     directPageLabel: 'PayPal.me Official Creation Page',
     autoFixPayload: {
       accountHolder: 'MR DAVID CHRISTOPHER LINACRE',
-      sortCode: '05-02-30',
-      accountNumber: '49193968',
+      sortCode: '••-••-30',
+      accountNumber: '••••3968',
       payPalMeLink: 'https://paypal.me/dlinacre16',
       autoPayoutEnabled: 'true'
     },
