@@ -4,6 +4,7 @@ import {
   DollarSign, 
   TrendingUp, 
   Plus, 
+  Minus,
   Trash2, 
   CheckCircle2, 
   Calendar, 
@@ -14,13 +15,26 @@ import {
   Award,
   Zap,
   Clock,
-  RefreshCw
+  RefreshCw,
+  Receipt,
+  Wallet,
+  TrendingDown,
+  Percent,
+  Tag
 } from 'lucide-react';
 
 interface RevenueEntry {
   id: string;
   date: string;
   amount: number;
+  note?: string;
+}
+
+interface CostEntry {
+  id: string;
+  date: string;
+  amount: number;
+  category: string;
   note?: string;
 }
 
@@ -55,6 +69,22 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
     return {
       'ai-outreach-agency': [
         { id: '1', date: new Date().toISOString().split('T')[0], amount: 250, note: 'First retainer deposit' }
+      ]
+    };
+  });
+
+  // Store operational cost entries by hustleId: { [hustleId]: CostEntry[] }
+  const [costLogs, setCostLogs] = useState<Record<string, CostEntry[]>>(() => {
+    try {
+      const stored = localStorage.getItem('sh_cost_tracker_logs');
+      if (stored) return JSON.parse(stored);
+    } catch (e) {
+      console.error('Failed to parse cost logs', e);
+    }
+    return {
+      'ai-outreach-agency': [
+        { id: 'c-1', date: new Date().toISOString().split('T')[0], amount: 20, category: 'Software / API', note: 'OpenAI API usage' },
+        { id: 'c-2', date: new Date().toISOString().split('T')[0], amount: 12, category: 'Hosting & Domain', note: 'Domain registration' }
       ]
     };
   });
@@ -109,8 +139,12 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
     savedHustles[0]?.id || null
   );
 
+  // Form mode per hustle drawer: 'revenue' | 'cost'
+  const [entryType, setEntryType] = useState<'revenue' | 'cost'>('revenue');
+
   // Form input states
   const [inputAmount, setInputAmount] = useState<string>('');
+  const [inputCategory, setInputCategory] = useState<string>('Software / API');
   const [inputNote, setInputNote] = useState<string>('');
   const [inputDate, setInputDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
@@ -124,13 +158,21 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
 
   useEffect(() => {
     try {
+      localStorage.setItem('sh_cost_tracker_logs', JSON.stringify(costLogs));
+    } catch (e) {
+      console.error('Failed to save cost logs', e);
+    }
+  }, [costLogs]);
+
+  useEffect(() => {
+    try {
       localStorage.setItem('sh_automation_exec_logs', JSON.stringify(automationLogs));
     } catch (e) {
       console.error('Failed to save automation logs', e);
     }
   }, [automationLogs]);
 
-  const handleAddLog = (hustleId: string) => {
+  const handleAddRevenueLog = (hustleId: string) => {
     const numericAmount = parseFloat(inputAmount);
     if (isNaN(numericAmount) || numericAmount <= 0) return;
 
@@ -150,8 +192,36 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
     setInputNote('');
   };
 
-  const handleDeleteLog = (hustleId: string, entryId: string) => {
+  const handleAddCostLog = (hustleId: string) => {
+    const numericAmount = parseFloat(inputAmount);
+    if (isNaN(numericAmount) || numericAmount <= 0) return;
+
+    const newEntry: CostEntry = {
+      id: 'c-' + Date.now().toString(),
+      date: inputDate || new Date().toISOString().split('T')[0],
+      amount: numericAmount,
+      category: inputCategory || 'Software / API',
+      note: inputNote.trim() || 'Operational Expense'
+    };
+
+    setCostLogs((prev) => ({
+      ...prev,
+      [hustleId]: [newEntry, ...(prev[hustleId] || [])]
+    }));
+
+    setInputAmount('');
+    setInputNote('');
+  };
+
+  const handleDeleteRevenueLog = (hustleId: string, entryId: string) => {
     setRevenueLogs((prev) => ({
+      ...prev,
+      [hustleId]: (prev[hustleId] || []).filter((item) => item.id !== entryId)
+    }));
+  };
+
+  const handleDeleteCostLog = (hustleId: string, entryId: string) => {
+    setCostLogs((prev) => ({
       ...prev,
       [hustleId]: (prev[hustleId] || []).filter((item) => item.id !== entryId)
     }));
@@ -180,13 +250,22 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
     }, 600);
   };
 
-  const getHustleTotal = (hustleId: string) => {
+  const getHustleRevenueTotal = (hustleId: string) => {
     const logs = revenueLogs[hustleId] || [];
     return logs.reduce((sum, entry) => sum + entry.amount, 0);
   };
 
+  const getHustleCostTotal = (hustleId: string) => {
+    const logs = costLogs[hustleId] || [];
+    return logs.reduce((sum, entry) => sum + entry.amount, 0);
+  };
+
   // Overall Portfolio Aggregates
-  const totalActualRevenue = savedHustles.reduce((acc, h) => acc + getHustleTotal(h.id), 0);
+  const totalActualRevenue = savedHustles.reduce((acc, h) => acc + getHustleRevenueTotal(h.id), 0);
+  const totalActualCosts = savedHustles.reduce((acc, h) => acc + getHustleCostTotal(h.id), 0);
+  const netProfit = totalActualRevenue - totalActualCosts;
+  const netMargin = totalActualRevenue > 0 ? Math.round((netProfit / totalActualRevenue) * 100) : 0;
+
   const totalTargetPotential = savedHustles.reduce((acc, h) => acc + h.monthlyRevenuePotential, 0);
   const overallProgress = totalTargetPotential > 0 
     ? Math.min(100, Math.round((totalActualRevenue / totalTargetPotential) * 100))
@@ -200,7 +279,7 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
     return (
       <div className="p-4 text-center bg-slate-950/60 rounded-xl border border-slate-800 space-y-2">
         <DollarSign className="w-6 h-6 text-slate-500 mx-auto" />
-        <p className="text-xs text-slate-400">Save side hustles to track your daily earnings and monitor Zapier/Make automation history.</p>
+        <p className="text-xs text-slate-400">Save side hustles to track your daily earnings, operational costs, and net margins.</p>
       </div>
     );
   }
@@ -208,7 +287,7 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
   return (
     <div className="space-y-4">
 
-      {/* Sub-navigation tabs: Revenue Goals vs Automation Logs */}
+      {/* Sub-navigation tabs: Financial Health vs Automation Logs */}
       <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
         <button
           onClick={() => setActiveView('revenue')}
@@ -219,7 +298,7 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
           }`}
         >
           <DollarSign className="w-3.5 h-3.5" />
-          <span>Earnings & Potential</span>
+          <span>Profit & Operational Costs</span>
         </button>
 
         <button
@@ -237,55 +316,86 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
 
       {activeView === 'revenue' ? (
         <>
-          {/* Overall Portfolio Progress Bar Header */}
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  <PieChart className="w-4 h-4" />
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-white block">Portfolio Revenue Goal</span>
-                  <span className="text-[10px] text-slate-400">Actual vs Target Potential</span>
-                </div>
-              </div>
-
-              <div className="text-right">
-                <span className="text-xs font-bold font-mono text-emerald-400">
+          {/* Portfolio Net Profit & Operational Costs Dashboard */}
+          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+            
+            {/* Top KPI row */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              
+              <div className="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800 space-y-0.5">
+                <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
+                  <DollarSign className="w-3 h-3 text-emerald-400" />
+                  Gross Revenue
+                </span>
+                <span className="text-sm font-bold font-mono text-emerald-400 block">
                   ${totalActualRevenue.toLocaleString()}
                 </span>
-                <span className="text-[10px] text-slate-500 font-mono block">
-                  / ${totalTargetPotential.toLocaleString()} target
+              </div>
+
+              <div className="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800 space-y-0.5">
+                <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
+                  <Receipt className="w-3 h-3 text-rose-400" />
+                  Software & Costs
+                </span>
+                <span className="text-sm font-bold font-mono text-rose-400 block">
+                  -${totalActualCosts.toLocaleString()}
                 </span>
               </div>
+
+              <div className="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800 space-y-0.5">
+                <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
+                  <Wallet className="w-3 h-3 text-amber-400" />
+                  Net Profit
+                </span>
+                <span className={`text-sm font-bold font-mono block ${netProfit >= 0 ? 'text-amber-400' : 'text-rose-400'}`}>
+                  ${netProfit.toLocaleString()}
+                </span>
+              </div>
+
+              <div className="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800 space-y-0.5">
+                <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
+                  <Percent className="w-3 h-3 text-indigo-400" />
+                  Profit Margin
+                </span>
+                <span className={`text-sm font-bold font-mono block ${netMargin >= 50 ? 'text-emerald-400' : netMargin >= 0 ? 'text-amber-400' : 'text-rose-400'}`}>
+                  {netMargin}%
+                </span>
+              </div>
+
             </div>
 
-            {/* Combined Progress Bar */}
-            <div className="space-y-1">
+            {/* Target Progress Bar */}
+            <div className="space-y-1 pt-1 border-t border-slate-900">
               <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                <span>Overall Target Pace</span>
-                <span className="text-emerald-400 font-bold">{overallProgress}%</span>
+                <span>Revenue vs Potential Target (${totalTargetPotential.toLocaleString()})</span>
+                <span className="text-emerald-400 font-bold">{overallProgress}% Pace</span>
               </div>
-              <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
                 <div 
-                  className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full transition-all duration-300"
+                  className="bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-400 h-full transition-all duration-300"
                   style={{ width: `${overallProgress}%` }}
                 />
               </div>
             </div>
+
           </div>
 
-          {/* List of Saved Hustles with Mini Progress Bars */}
+          {/* List of Saved Hustles with Earnings & Cost Drawers */}
           <div className="space-y-3">
             <span className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-400 block">
-              Daily Earnings Log per Hustle
+              Hustle Financial Ledgers
             </span>
 
             {savedHustles.map((hustle) => {
-              const totalLogged = getHustleTotal(hustle.id);
-              const percent = Math.min(100, Math.round((totalLogged / hustle.monthlyRevenuePotential) * 100));
+              const gross = getHustleRevenueTotal(hustle.id);
+              const costs = getHustleCostTotal(hustle.id);
+              const hustleProfit = gross - costs;
+              const hustleMargin = gross > 0 ? Math.round((hustleProfit / gross) * 100) : 0;
+              const percentTarget = Math.min(100, Math.round((gross / hustle.monthlyRevenuePotential) * 100));
+              
               const isExpanded = expandedHustleId === hustle.id;
-              const entries = revenueLogs[hustle.id] || [];
+              const revEntries = revenueLogs[hustle.id] || [];
+              const costEntries = costLogs[hustle.id] || [];
 
               return (
                 <div 
@@ -305,13 +415,17 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
                         <span className="text-xs font-bold text-white truncate">{hustle.title}</span>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-xs font-bold font-mono text-emerald-400">
-                          ${totalLogged.toLocaleString()}
-                        </span>
-                        <span className="text-[10px] text-slate-500 font-mono">
-                          / ${hustle.monthlyRevenuePotential.toLocaleString()}
-                        </span>
+                      <div className="flex items-center gap-3 shrink-0 text-xs font-mono">
+                        <div className="text-right">
+                          <span className="text-emerald-400 font-bold block">+${gross.toLocaleString()}</span>
+                          <span className="text-[10px] text-rose-400 block">-${costs.toLocaleString()} costs</span>
+                        </div>
+                        <div className="text-right border-l border-slate-800 pl-2">
+                          <span className={`font-bold block ${hustleProfit >= 0 ? 'text-amber-400' : 'text-rose-400'}`}>
+                            ${hustleProfit.toLocaleString()}
+                          </span>
+                          <span className="text-[9px] text-slate-400 block">Net Profit</span>
+                        </div>
                         {isExpanded ? (
                           <ChevronUp className="w-4 h-4 text-slate-400" />
                         ) : (
@@ -320,110 +434,202 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
                       </div>
                     </div>
 
-                    {/* Mini Progress Bar */}
+                    {/* Mini Target Bar */}
                     <div className="space-y-1">
-                      <div className="flex items-center justify-between text-[10px]">
-                        <span className="text-slate-400 font-mono">{entries.length} entry log{entries.length === 1 ? '' : 's'}</span>
-                        <span className={`font-mono font-bold ${percent >= 100 ? 'text-amber-400' : 'text-emerald-400'}`}>
-                          {percent}% Target Met
+                      <div className="flex items-center justify-between text-[10px] font-mono">
+                        <span className="text-slate-400">
+                          {revEntries.length} revenue log{revEntries.length === 1 ? '' : 's'}, {costEntries.length} expense{costEntries.length === 1 ? '' : 's'}
+                        </span>
+                        <span className="text-emerald-400 font-bold">
+                          {hustleMargin}% Net Margin
                         </span>
                       </div>
 
                       <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
                         <div 
-                          className={`h-full transition-all duration-300 ${
-                            percent >= 100 
-                              ? 'bg-gradient-to-r from-amber-400 to-emerald-400' 
-                              : 'bg-gradient-to-r from-indigo-500 to-emerald-400'
-                          }`}
-                          style={{ width: `${percent}%` }}
+                          className="bg-gradient-to-r from-emerald-500 via-amber-400 to-indigo-500 h-full transition-all duration-300"
+                          style={{ width: `${percentTarget}%` }}
                         />
                       </div>
                     </div>
                   </div>
 
-                  {/* Expanded Logging Form & History Drawer */}
+                  {/* Expanded Logging Drawer */}
                   {isExpanded && (
-                    <div className="p-3.5 border-t border-slate-800/80 bg-slate-900/60 rounded-b-xl space-y-3">
+                    <div className="p-3.5 border-t border-slate-800/80 bg-slate-900/60 rounded-b-xl space-y-4">
                       
-                      {/* Quick Input Form */}
+                      {/* Form Mode Toggle: Add Revenue vs Add Expense */}
                       <div className="space-y-2">
-                        <span className="text-[10px] font-bold uppercase text-slate-400 block font-mono">
-                          + Add New Earnings Log
-                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold uppercase text-slate-400 font-mono">
+                            Add Financial Entry
+                          </span>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                          <div className="relative">
-                            <DollarSign className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5" />
-                            <input
-                              type="number"
-                              placeholder="Amount ($)"
-                              value={inputAmount}
-                              onChange={(e) => setInputAmount(e.target.value)}
-                              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-7 pr-2 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                            />
+                          <div className="flex items-center gap-1 bg-slate-950 p-0.5 rounded-lg border border-slate-800 text-[11px]">
+                            <button
+                              onClick={() => setEntryType('revenue')}
+                              className={`px-2.5 py-1 rounded font-medium flex items-center gap-1 transition-all ${
+                                entryType === 'revenue' 
+                                  ? 'bg-emerald-600 text-white' 
+                                  : 'text-slate-400 hover:text-slate-200'
+                              }`}
+                            >
+                              <Plus className="w-3 h-3 text-emerald-300" />
+                              <span>Earnings</span>
+                            </button>
+
+                            <button
+                              onClick={() => setEntryType('cost')}
+                              className={`px-2.5 py-1 rounded font-medium flex items-center gap-1 transition-all ${
+                                entryType === 'cost' 
+                                  ? 'bg-rose-600 text-white' 
+                                  : 'text-slate-400 hover:text-slate-200'
+                              }`}
+                            >
+                              <Minus className="w-3 h-3 text-rose-300" />
+                              <span>Operational Cost</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Input Form */}
+                        <div className="space-y-2 bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            
+                            <div className="relative">
+                              <DollarSign className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5" />
+                              <input
+                                type="number"
+                                placeholder={entryType === 'revenue' ? "Revenue ($)" : "Expense ($)"}
+                                value={inputAmount}
+                                onChange={(e) => setInputAmount(e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-800 rounded-lg pl-7 pr-2 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                              />
+                            </div>
+
+                            {entryType === 'cost' ? (
+                              <select
+                                value={inputCategory}
+                                onChange={(e) => setInputCategory(e.target.value)}
+                                className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-slate-300 focus:outline-none"
+                              >
+                                <option value="Software / API">Software / API (OpenAI, Zapier)</option>
+                                <option value="Hosting & Domain">Hosting & Domain (Vercel, Namecheap)</option>
+                                <option value="Marketing & Ads">Marketing & Ads</option>
+                                <option value="Contractor & Tools">Contractor & Design Tools</option>
+                                <option value="Other">Other Operational Fee</option>
+                              </select>
+                            ) : (
+                              <input
+                                type="date"
+                                value={inputDate}
+                                onChange={(e) => setInputDate(e.target.value)}
+                                className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-slate-300 focus:outline-none"
+                              />
+                            )}
+
+                            <button
+                              onClick={() => {
+                                if (entryType === 'revenue') {
+                                  handleAddRevenueLog(hustle.id);
+                                } else {
+                                  handleAddCostLog(hustle.id);
+                                }
+                              }}
+                              className={`px-3 py-1.5 rounded-lg text-white font-medium text-xs flex items-center justify-center gap-1 shadow-sm transition-all ${
+                                entryType === 'revenue' 
+                                  ? 'bg-emerald-600 hover:bg-emerald-500' 
+                                  : 'bg-rose-600 hover:bg-rose-500'
+                              }`}
+                            >
+                              {entryType === 'revenue' ? <Plus className="w-3.5 h-3.5" /> : <Minus className="w-3.5 h-3.5" />}
+                              <span>{entryType === 'revenue' ? 'Log Earnings' : 'Log Expense'}</span>
+                            </button>
+
                           </div>
 
                           <input
-                            type="date"
-                            value={inputDate}
-                            onChange={(e) => setInputDate(e.target.value)}
-                            className="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                            type="text"
+                            placeholder={entryType === 'revenue' ? "Optional note (e.g. Stripe client deposit)" : "Optional note (e.g. OpenAI API monthly bill)"}
+                            value={inputNote}
+                            onChange={(e) => setInputNote(e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 placeholder-slate-500 focus:outline-none"
                           />
-
-                          <button
-                            onClick={() => handleAddLog(hustle.id)}
-                            className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs flex items-center justify-center gap-1 shadow-sm"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                            <span>Log Earnings</span>
-                          </button>
                         </div>
-
-                        <input
-                          type="text"
-                          placeholder="Optional note (e.g., Client deposit, Stripe payout...)"
-                          value={inputNote}
-                          onChange={(e) => setInputNote(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                        />
                       </div>
 
-                      {/* History Log */}
-                      {entries.length > 0 ? (
-                        <div className="space-y-1.5 pt-2 border-t border-slate-800/60">
-                          <span className="text-[10px] font-bold uppercase text-slate-400 block font-mono">
-                            Recent Logged Earnings
+                      {/* Financial History Logs Grid (Revenue vs Costs) */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-800/60">
+                        
+                        {/* Revenue List */}
+                        <div className="space-y-1.5">
+                          <span className="text-[10px] font-bold uppercase text-emerald-400 block font-mono">
+                            Earnings Log (+${gross.toLocaleString()})
                           </span>
-                          
-                          <div className="space-y-1 max-h-40 overflow-y-auto">
-                            {entries.map((entry) => (
-                              <div 
-                                key={entry.id} 
-                                className="bg-slate-950 border border-slate-800/80 rounded-lg p-2 flex items-center justify-between text-xs"
-                              >
-                                <div>
-                                  <span className="font-bold text-emerald-400 font-mono mr-2">+${entry.amount.toLocaleString()}</span>
-                                  <span className="text-slate-300">{entry.note}</span>
-                                </div>
 
-                                <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono">
-                                  <span>{entry.date}</span>
-                                  <button
-                                    onClick={() => handleDeleteLog(hustle.id, entry.id)}
-                                    className="p-1 rounded hover:bg-rose-950 text-slate-500 hover:text-rose-400"
-                                    title="Delete log"
-                                  >
-                                    <Trash2 className="w-3.5 h-3.5" />
-                                  </button>
+                          {revEntries.length > 0 ? (
+                            <div className="space-y-1 max-h-36 overflow-y-auto">
+                              {revEntries.map((entry) => (
+                                <div key={entry.id} className="bg-slate-950 border border-slate-800/80 rounded-lg p-2 flex items-center justify-between text-xs">
+                                  <div>
+                                    <span className="font-bold text-emerald-400 font-mono mr-1.5">+${entry.amount.toLocaleString()}</span>
+                                    <span className="text-slate-300">{entry.note}</span>
+                                  </div>
+
+                                  <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono">
+                                    <span>{entry.date}</span>
+                                    <button
+                                      onClick={() => handleDeleteRevenueLog(hustle.id, entry.id)}
+                                      className="p-1 rounded hover:bg-rose-950 text-slate-500 hover:text-rose-400"
+                                      title="Delete"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
-                          </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-[10px] text-slate-500 italic">No revenue logged yet.</p>
+                          )}
                         </div>
-                      ) : (
-                        <p className="text-[11px] text-slate-500 italic pt-1">No revenue logs added yet for this hustle.</p>
-                      )}
+
+                        {/* Operational Expenses List */}
+                        <div className="space-y-1.5">
+                          <span className="text-[10px] font-bold uppercase text-rose-400 block font-mono">
+                            Operational Costs (-${costs.toLocaleString()})
+                          </span>
+
+                          {costEntries.length > 0 ? (
+                            <div className="space-y-1 max-h-36 overflow-y-auto">
+                              {costEntries.map((entry) => (
+                                <div key={entry.id} className="bg-slate-950 border border-slate-800/80 rounded-lg p-2 flex items-center justify-between text-xs">
+                                  <div>
+                                    <span className="font-bold text-rose-400 font-mono mr-1.5">-${entry.amount.toLocaleString()}</span>
+                                    <span className="text-slate-300">{entry.note}</span>
+                                    <span className="ml-1 text-[9px] px-1 bg-slate-900 border border-slate-800 rounded text-slate-400">{entry.category}</span>
+                                  </div>
+
+                                  <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono">
+                                    <span>{entry.date}</span>
+                                    <button
+                                      onClick={() => handleDeleteCostLog(hustle.id, entry.id)}
+                                      className="p-1 rounded hover:bg-rose-950 text-slate-500 hover:text-rose-400"
+                                      title="Delete"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-[10px] text-slate-500 italic">No operational costs logged yet.</p>
+                          )}
+
+                        </div>
+
+                      </div>
 
                     </div>
                   )}
@@ -549,3 +755,4 @@ export const RevenueTracker: React.FC<RevenueTrackerProps> = ({ savedHustles, on
     </div>
   );
 };
+
