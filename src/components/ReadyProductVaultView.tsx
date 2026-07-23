@@ -17,7 +17,7 @@ const READY_PRODUCTS: ReadyProduct[] = [
     title: '50 AI Solopreneur Prompts Vault',
     price: '£2.99',
     category: 'Prompt Kits',
-    file: 'ready-to-sell-assets/01-AI-Solopreneur-Prompt-Vault.md',
+    file: '/ready-to-sell-assets/pdf/01-solopreneur-prompt-vault.pdf',
     description: 'High-converting copy, product launch, and local pitch prompts for ChatGPT / Claude.',
     platforms: ['Gumroad', 'Etsy', 'Substack']
   },
@@ -26,7 +26,7 @@ const READY_PRODUCTS: ReadyProduct[] = [
     title: '4K OLED Wallpaper Prompt Pack',
     price: '£1.99',
     category: 'Wallpapers & Art',
-    file: 'ready-to-sell-assets/02-4K-OLED-Wallpaper-Prompt-Pack.md',
+    file: '/ready-to-sell-assets/pdf/02-wallpaper-prompt-pack.pdf',
     description: '10 Midjourney v6 / Flux.1 prompts for luxury watch faces, fluid silk & cyberpunk neon art.',
     platforms: ['Gumroad', 'Etsy', 'Kofi']
   },
@@ -35,7 +35,7 @@ const READY_PRODUCTS: ReadyProduct[] = [
     title: 'Local SEO Audit & Meta Pitch Pack',
     price: '£25.00',
     category: 'Agency Audits',
-    file: 'ready-to-sell-assets/03-Local-SEO-Pitch-Pack.md',
+    file: '/ready-to-sell-assets/pdf/03-local-seo-kit.pdf',
     description: '5 free meta descriptions audit email template for direct PayPal payouts.',
     platforms: ['Direct Email', 'Fiverr', 'LinkedIn']
   },
@@ -44,7 +44,7 @@ const READY_PRODUCTS: ReadyProduct[] = [
     title: 'Executive Resume Polish Kit',
     price: '£15.00',
     category: 'Document Polish',
-    file: 'ready-to-sell-assets/04-Executive-Resume-Polish-Kit.md',
+    file: '/ready-to-sell-assets/pdf/04-resume-polish-kit.pdf',
     description: 'ATS-friendly resume overhaul templates + cold outreach strategy for Reddit/Fiverr.',
     platforms: ['Fiverr', 'Reddit', 'Gumroad']
   },
@@ -53,7 +53,7 @@ const READY_PRODUCTS: ReadyProduct[] = [
     title: 'ChatGPT AI Coding Cheatsheet',
     price: '£1.99',
     category: 'Cheatsheets',
-    file: 'ready-to-sell-assets/05-ChatGPT-AI-Coding-Cheatsheet.md',
+    file: '/ready-to-sell-assets/pdf/05-ai-coding-cheatsheet.pdf',
     description: 'Essential prompt framework for instant bug fixing, full-stack boilerplate generation.',
     platforms: ['Gumroad', 'Dev.to', 'Twitter']
   },
@@ -62,7 +62,7 @@ const READY_PRODUCTS: ReadyProduct[] = [
     title: 'TikTok & Reels Viral Hook Vault',
     price: '£1.99',
     category: 'Social Media',
-    file: 'ready-to-sell-assets/06-TikTok-Reels-Viral-Hook-Vault.md',
+    file: '/ready-to-sell-assets/pdf/06-tiktok-hooks.pdf',
     description: '100 retention hooks & visual framing concepts for vertical short-form videos.',
     platforms: ['Gumroad', 'Etsy', 'Instagram']
   },
@@ -71,21 +71,34 @@ const READY_PRODUCTS: ReadyProduct[] = [
     title: '100 High-Converting Cold Email Templates',
     price: '£2.99',
     category: 'B2B Sales',
-    file: 'ready-to-sell-assets/07-100-High-Converting-Cold-Email-Templates.md',
+    file: '/ready-to-sell-assets/pdf/07-cold-email-templates.pdf',
     description: 'Battle-tested email sequences for local agencies, SaaS sales, and freelance outreach.',
     platforms: ['Gumroad', 'Substack', 'Cold Email']
+  },
+  {
+    id: '08',
+    title: 'Obsidian AI Second Brain',
+    price: '£4.99',
+    category: 'Productivity',
+    file: '/ready-to-sell-assets/pdf/08-obsidian-second-brain.pdf',
+    description: 'A complete PKM (Personal Knowledge Management) setup guide with AI integration.',
+    platforms: ['Gumroad', 'Etsy', 'Notion']
   }
 ];
 
 const GENERATED_IMAGES = [
-  { name: 'OLED Cyberpunk Neon', path: '/ ready-to-sell-assets/images/oled_cyberpunk_neon_wallpaper_1784821286565.png', type: 'Wallpaper' },
-  { name: 'Luxury Chronograph Watchface', path: '/ready-to-sell-assets/images/luxury_chronograph_watchface_1784821298292.png', type: 'WearOS' },
-  { name: 'Emerald Fluid Silk', path: '/ready-to-sell-assets/images/emerald_fluid_silk_wallpaper_1784821308066.png', type: 'Wallpaper' },
-  { name: 'Solopreneur AI Vault Cover', path: '/ready-to-sell-assets/images/solopreneur_ai_vault_cover_1784821318542.png', type: 'Product Cover' },
-  { name: 'AMOLED Golden Hour', path: '/ready-to-sell-assets/images/amoled_golden_hour_wallpaper_1784821401640.png', type: 'Wallpaper' },
-  { name: 'Cyber Red Grid', path: '/ready-to-sell-assets/images/cyber_red_grid_wallpaper_1784821409783.png', type: 'Wallpaper' },
-  { name: 'ChatGPT Coding Cover', path: '/ready-to-sell-assets/images/chatgpt_coding_cheatsheet_cover_1784821421650.png', type: 'Product Cover' },
-  { name: 'TikTok Hook Vault Cover', path: '/ready-to-sell-assets/images/tiktok_viral_hook_vault_cover_1784821434202.png', type: 'Product Cover' }
+  { name: 'AMOLED Golden Hour', path: '/ready-to-sell-assets/images/01-amoled-golden-hour.png', type: 'Wallpaper' },
+  { name: 'Cyberpunk Neon', path: '/ready-to-sell-assets/images/02-cyberpunk-neon.png', type: 'Wallpaper' },
+  { name: 'Emerald Fluid Silk', path: '/ready-to-sell-assets/images/03-emerald-fluid-silk.png', type: 'Wallpaper' },
+  { name: 'Cyber Red Grid', path: '/ready-to-sell-assets/images/04-cyber-red-grid.png', type: 'Wallpaper' },
+  { name: 'Diamond Prism', path: '/ready-to-sell-assets/images/05-diamond-prism.png', type: 'Wallpaper' },
+  { name: 'Luxury Chronograph', path: '/ready-to-sell-assets/images/06-luxury-chronograph-watchface.png', type: 'WearOS' },
+  { name: 'Futuristic WearOS', path: '/ready-to-sell-assets/images/07-futuristic-wearos-watchface.png', type: 'WearOS' },
+  { name: 'Emerald Orb', path: '/ready-to-sell-assets/images/08-emerald-orb.png', type: 'Wallpaper' },
+  { name: 'Cyan Rings', path: '/ready-to-sell-assets/images/09-cyan-rings.png', type: 'Wallpaper' },
+  { name: 'Violet Aurora', path: '/ready-to-sell-assets/images/10-violet-aurora.png', type: 'Wallpaper' },
+  { name: 'Amber Goldenhour', path: '/ready-to-sell-assets/images/11-amber-goldenhour.png', type: 'Wallpaper' },
+  { name: 'Duotone Mesh', path: '/ready-to-sell-assets/images/12-duotone-mesh.png', type: 'Wallpaper' },
 ];
 
 export const ReadyProductVaultView: React.FC = () => {
@@ -118,29 +131,13 @@ export const ReadyProductVaultView: React.FC = () => {
   };
 
   // Task 2: Browser PDF Exporter
-  const handleExportPDF = (title: string) => {
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>${title} - PDF Print Pack</title>
-          <style>
-            body { font-family: system-ui, sans-serif; padding: 40px; background: #0f172a; color: #f8fafc; }
-            h1 { color: #34d399; font-size: 24px; border-bottom: 2px solid #334155; padding-bottom: 12px; }
-            p { color: #cbd5e1; font-size: 14px; line-height: 1.6; }
-            .badge { background: #1e293b; color: #38bdf8; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-family: monospace; }
-          </style>
-        </head>
-        <body>
-          <h1>${title}</h1>
-          <p><span class="badge">VERIFIED DIGITAL PRODUCT</span></p>
-          <p>This is your formatted digital download pack ready for distribution.</p>
-          <script>window.onload = function() { window.print(); }</script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+  const handleExportPDF = (title: string, file: string) => {
+    const link = document.createElement('a');
+    link.href = file;
+    link.download = file.split('/').pop() || 'download.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Task 3: 3D Canvas Product Mockup Generator
@@ -225,7 +222,7 @@ export const ReadyProductVaultView: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-1.5 pt-1">
                   <button
-                    onClick={() => handleExportPDF(prod.title)}
+                    onClick={() => handleExportPDF(prod.title, prod.file)}
                     className="w-1/2 py-1 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 transition-colors"
                   >
                     <Download className="w-3 h-3 text-indigo-400" />
@@ -258,9 +255,9 @@ export const ReadyProductVaultView: React.FC = () => {
               key={idx}
               className="bg-slate-900/60 border border-slate-800 hover:border-purple-500/40 rounded-2xl overflow-hidden group transition-all"
             >
-              <div className="h-32 bg-slate-950 flex items-center justify-center p-3 relative">
-                <ImageIcon className="w-8 h-8 text-slate-700 group-hover:text-purple-400 transition-colors" />
-                <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-slate-900/90 text-purple-300 text-[10px] font-mono border border-purple-500/20">
+              <div className="h-32 bg-slate-950 flex items-center justify-center p-3 relative overflow-hidden">
+                <img src={img.path} alt={img.name} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-slate-900/90 text-purple-300 text-[10px] font-mono border border-purple-500/20 z-10">
                   {img.type}
                 </span>
               </div>
