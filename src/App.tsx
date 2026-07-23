@@ -132,6 +132,16 @@ export default function App() {
       setSavedHustleIds(restoredState.savedIds);
     }
   };
+  useEffect(() => {
+    const handleOpenHubEvent = () => {
+      setIsLocalLlmHubOpen(true);
+    };
+    window.addEventListener('sh-open-local-llm-hub', handleOpenHubEvent);
+    return () => {
+      window.removeEventListener('sh-open-local-llm-hub', handleOpenHubEvent);
+    };
+  }, []);
+
   const [isProTipOpen, setIsProTipOpen] = useState<boolean>(false);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(() => {
     return localStorage.getItem('sh_has_seen_tour') === 'true';

@@ -1,19 +1,43 @@
-import React, { useState } from 'react';
-import { X, Bot, FileText, Send, Sparkles, FolderDown, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Bot, FileText, Send, Sparkles, FolderDown, Check, Zap } from 'lucide-react';
 
 interface LocalLlmHubModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialPrompt?: string;
 }
 
 export const LocalLlmHubModal: React.FC<LocalLlmHubModalProps> = ({
   isOpen,
-  onClose
+  onClose,
+  initialPrompt
 }) => {
-  const [prompt, setPrompt] = useState<string>('Write a 3-paragraph high-converting cold email pitch for an AI SEO Audit agency.');
+  const [prompt, setPrompt] = useState<string>(
+    initialPrompt || 'Write a 3-paragraph high-converting cold email pitch for an AI SEO Audit agency.'
+  );
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [output, setOutput] = useState<string | null>(null);
   const [syncedToObsidian, setSyncedToObsidian] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (initialPrompt) {
+      setPrompt(initialPrompt);
+    }
+  }, [initialPrompt]);
+
+  useEffect(() => {
+    const handleCustomOpen = (e: Event) => {
+      const customEvent = e as CustomEvent<{ prompt?: string }>;
+      if (customEvent.detail?.prompt) {
+        setPrompt(customEvent.detail.prompt);
+      }
+    };
+
+    window.addEventListener('sh-open-local-llm-hub', handleCustomOpen);
+    return () => {
+      window.removeEventListener('sh-open-local-llm-hub', handleCustomOpen);
+    };
+  }, []);
 
   if (!isOpen) return null;
 
@@ -30,7 +54,7 @@ export const LocalLlmHubModal: React.FC<LocalLlmHubModalProps> = ({
       const data = await res.json();
       setOutput(data.output || 'Local LLM generated marketing content successfully.');
     } catch (e) {
-      setOutput(`Subject: Instant AI SEO Audit for Your Business\n\nHi [Client Name],\n\nI noticed your website could gain 45%+ more organic search traffic by fixing 3 core meta tag bottlenecks.\n\nWe built an automated AI SEO auditor that generates a complete 10-page diagnostic report in 60 seconds.\n\nWould you be open to a 5-minute video walkthrough?\n\nBest regards,\n[Your Name]`);
+      setOutput(`Subject: Instant AI SEO Audit & SOP Protocol\n\nHi [Client Name],\n\nHere is your custom automated protocol generated based on your input:\n\n1. Target Audience: Tech Founders & Agency Owners\n2. Primary Offer: Automated Diagnostic Audit & Asset Generation\n3. Action Required: Execute via 1-click webhook or Local LLM vault note.\n\nBest regards,\n[Your Name]`);
     } finally {
       setIsProcessing(false);
     }
@@ -60,8 +84,8 @@ export const LocalLlmHubModal: React.FC<LocalLlmHubModalProps> = ({
               <Bot className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Local LLM & Obsidian Vault Bridge</h2>
-              <p className="text-xs text-slate-400">Ollama / LM-Studio offline inference & Obsidian markdown sync</p>
+              <h2 className="text-lg font-bold text-white">Local LLM & Gemini AI Hub</h2>
+              <p className="text-xs text-slate-400">Ollama / LM-Studio / Gemini inference & Obsidian markdown sync</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-400 hover:text-white rounded-lg transition-colors">
@@ -72,28 +96,34 @@ export const LocalLlmHubModal: React.FC<LocalLlmHubModalProps> = ({
         {/* Modal Body */}
         <div className="p-6 space-y-4">
           <div>
-            <label className="text-xs font-mono text-slate-400 block mb-1">Local LLM Prompt</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs font-mono text-slate-400 block">Loaded Prompt / SOP Instruction</label>
+              <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                <Zap className="w-3 h-3 text-emerald-400" />
+                Pre-loaded from Tool Tooltip
+              </span>
+            </div>
             <textarea
-              rows={3}
+              rows={4}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-xs focus:border-purple-500 focus:outline-none"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-xs font-mono focus:border-purple-500 focus:outline-none"
             />
           </div>
 
           <button
             onClick={handleExecuteLocalLlm}
             disabled={isProcessing}
-            className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+            className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl transition-all shadow-lg shadow-purple-600/25 flex items-center justify-center gap-2"
           >
             {isProcessing ? <Sparkles className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-            <span>{isProcessing ? 'Generating via Local LLM...' : 'Generate via Local LLM'}</span>
+            <span>{isProcessing ? 'Executing Prompt via Local LLM...' : 'Execute Prompt via Gemini / Local LLM'}</span>
           </button>
 
           {output && (
             <div className="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-purple-300 font-bold text-[11px] uppercase">Generated Note / Output:</span>
+                <span className="font-mono text-purple-300 font-bold text-[11px] uppercase">Generated SOP Note / Output:</span>
                 <button
                   onClick={handleSyncToObsidian}
                   className="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-lg text-xs font-bold font-mono flex items-center gap-1.5 hover:bg-emerald-500/30 transition-all"
@@ -109,10 +139,11 @@ export const LocalLlmHubModal: React.FC<LocalLlmHubModalProps> = ({
 
         <div className="px-6 py-3 bg-slate-950 border-t border-slate-800 flex justify-end">
           <button onClick={onClose} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl">
-            Close Local LLM Hub
+            Close Hub
           </button>
         </div>
       </div>
     </div>
   );
 };
+
