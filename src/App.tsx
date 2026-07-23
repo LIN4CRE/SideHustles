@@ -23,6 +23,9 @@ import { SaleSuccessModal } from './components/SaleSuccessModal';
 import { RecipeMarketplaceModal } from './components/RecipeMarketplaceModal';
 import { GlobalMarketHeatmap } from './components/GlobalMarketHeatmap';
 import { TaskSchedulerWidget } from './components/TaskSchedulerWidget';
+import { GenAIAssetLibraryModal } from './components/GenAIAssetLibraryModal';
+import { GrowthAnalyticsChart } from './components/GrowthAnalyticsChart';
+import { AutomationProTipToast } from './components/AutomationProTipToast';
 import { 
   Sparkles, 
   Bot, 
@@ -37,7 +40,8 @@ import {
   DollarSign,
   Clock,
   ChevronRight,
-  Activity
+  Activity,
+  Download
 } from 'lucide-react';
 
 export default function App() {
@@ -76,10 +80,41 @@ export default function App() {
   const [isViralScoutOpen, setIsViralScoutOpen] = useState<boolean>(false);
   const [isSaleSuccessOpen, setIsSaleSuccessOpen] = useState<boolean>(false);
   const [isRecipeMarketplaceOpen, setIsRecipeMarketplaceOpen] = useState<boolean>(false);
+  const [isGenAIGalleryOpen, setIsGenAIGalleryOpen] = useState<boolean>(false);
+  const [proTipHustle, setProTipHustle] = useState<SideHustle | null>(null);
+  const [isProTipOpen, setIsProTipOpen] = useState<boolean>(false);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(() => {
     return localStorage.getItem('sh_has_seen_tour') === 'true';
   });
   const [drawerTab, setDrawerTab] = useState<'tracker' | 'items' | 'execution'>('tracker');
+
+  const handleExportCSV = () => {
+    if (savedHustles.length === 0) return;
+
+    const headers = ['ID', 'Title', 'Category', 'Difficulty', 'Monthly Potential ($)', 'Automation Score (%)', 'Margin (%)', 'Weekly Hours', 'Recommended Tools'];
+    const rows = savedHustles.map(h => [
+      `"${h.id}"`,
+      `"${h.title.replace(/"/g, '""')}"`,
+      `"${h.category}"`,
+      `"${h.difficulty}"`,
+      h.monthlyRevenuePotential,
+      h.automationScore,
+      h.marginPercentage,
+      h.weeklyHoursNeeded,
+      `"${h.recommendedTools.join(', ')}"`
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `hustle_portfolio_execution_log_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   const toggleSaveHustle = (id: string) => {
     setSavedHustleIds((prev) => {
@@ -140,6 +175,7 @@ export default function App() {
         onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
         onOpenViralScout={() => setIsViralScoutOpen(true)}
         onOpenRecipes={() => setIsRecipeMarketplaceOpen(true)}
+        onOpenGenAIGallery={() => setIsGenAIGalleryOpen(true)}
       />
 
       {/* Main Container */}
@@ -246,6 +282,12 @@ export default function App() {
           onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
         />
 
+        {/* Growth Analytics Recharts Engine */}
+        <GrowthAnalyticsChart
+          onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
+          onOpenAssetGen={() => setIsAssetGenOpen(true)}
+        />
+
         {/* Global Market Heatmap D3 Engine */}
         <GlobalMarketHeatmap
           onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
@@ -308,9 +350,15 @@ export default function App() {
                     hustle={hustle}
                     isSaved={savedHustleIds.includes(hustle.id)}
                     onToggleSave={toggleSaveHustle}
-                    onSelectHustle={(h) => setSelectedHustle(h)}
+                    onSelectHustle={(h) => {
+                      setSelectedHustle(h);
+                      setProTipHustle(h);
+                      setIsProTipOpen(true);
+                    }}
                     onOpenModeler={(h) => {
                       setSelectedHustle(h);
+                      setProTipHustle(h);
+                      setIsProTipOpen(true);
                     }}
                   />
                 </motion.div>
@@ -458,13 +506,21 @@ export default function App() {
                   )}
                 </div>
 
-                <div className="pt-4 border-t border-slate-800 space-y-2">
+                <div className="pt-4 border-t border-slate-800 flex flex-col gap-2">
+                  <button
+                    onClick={handleExportCSV}
+                    className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 font-medium text-xs flex items-center justify-center gap-2 transition-all font-mono shadow-sm"
+                  >
+                    <Download className="w-4 h-4 text-emerald-400" />
+                    <span>Download CSV Execution Log ({savedHustles.length} Hustles)</span>
+                  </button>
+
                   <button
                     onClick={() => {
                       setIsSavedDrawerOpen(false);
                       setIsCalculatorOpen(true);
                     }}
-                    className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs flex items-center justify-center gap-2"
+                    className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20"
                   >
                     <TrendingUp className="w-4 h-4" />
                     <span>Run Portfolio ROI Comparison</span>
@@ -593,6 +649,35 @@ export default function App() {
       <RecipeMarketplaceModal
         isOpen={isRecipeMarketplaceOpen}
         onClose={() => setIsRecipeMarketplaceOpen(false)}
+      />
+
+      {/* GENAI ASSET LIBRARY & STUDIO MODAL */}
+      <GenAIAssetLibraryModal
+        isOpen={isGenAIGalleryOpen}
+        onClose={() => setIsGenAIGalleryOpen(false)}
+        onOpenRecipes={() => {
+          setIsGenAIGalleryOpen(false);
+          setIsRecipeMarketplaceOpen(true);
+        }}
+        onOpen24hChallenge={() => {
+          setIsGenAIGalleryOpen(false);
+          setIs24hChallengeOpen(true);
+        }}
+      />
+
+      {/* CONTEXT-AWARE AUTOMATION PRO-TIP TOAST */}
+      <AutomationProTipToast
+        hustle={proTipHustle}
+        isOpen={isProTipOpen}
+        onClose={() => setIsProTipOpen(false)}
+        onExecuteAction={(actionType) => {
+          if (actionType === 'recipes') setIsRecipeMarketplaceOpen(true);
+          else if (actionType === '24h') setIs24hChallengeOpen(true);
+          else if (actionType === 'scout') setIsViralScoutOpen(true);
+          else if (actionType === 'genai') setIsGenAIGalleryOpen(true);
+          else if (actionType === 'hub') setIsLocalLlmHubOpen(true);
+          else if (actionType === 'payout') setIsPayoutModalOpen(true);
+        }}
       />
 
     </div>

@@ -32,6 +32,7 @@ interface NavbarProps {
   onOpen24hChallenge?: () => void;
   onOpenViralScout?: () => void;
   onOpenRecipes?: () => void;
+  onOpenGenAIGallery?: () => void;
 }
 
 const CATEGORIES: CategoryType[] = [
@@ -62,7 +63,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAutomationTour,
   onOpen24hChallenge,
   onOpenViralScout,
-  onOpenRecipes
+  onOpenRecipes,
+  onOpenGenAIGallery
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
@@ -171,6 +173,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <Workflow className="w-3.5 h-3.5 text-teal-400" />
                   <span>Recipes</span>
+                </button>
+              )}
+
+              {onOpenGenAIGallery && (
+                <button
+                  onClick={onOpenGenAIGallery}
+                  className="px-3 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/80 text-purple-200 font-bold text-xs border border-purple-500/30 flex items-center gap-1.5 transition-all shadow-sm shadow-purple-500/20"
+                  title="GenAI Asset Library - Generate & Manage Wallpapers, Watch Faces, Ringtones"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400 fill-purple-400" />
+                  <span>GenAI Studio</span>
                 </button>
               )}
 
