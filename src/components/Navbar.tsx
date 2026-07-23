@@ -37,6 +37,7 @@ interface NavbarProps {
   onOpenGenAIGallery?: () => void;
   onOpenSnapshotModal?: () => void;
   onOpenAutomatedFixModal?: () => void;
+  onOpenDirectLaunchpad?: () => void;
   voiceControlBar?: React.ReactNode;
 }
 
@@ -72,6 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenGenAIGallery,
   onOpenSnapshotModal,
   onOpenAutomatedFixModal,
+  onOpenDirectLaunchpad,
   voiceControlBar
 }) => {
   return (
@@ -203,6 +205,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Zap className="w-3.5 h-3.5 text-slate-950 fill-slate-950" />
                 <span>⚡ 1-Click Launch</span>
               </button>
+
+              {onOpenDirectLaunchpad && (
+                <button
+                  onClick={onOpenDirectLaunchpad}
+                  className="px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-extrabold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-emerald-500/20 hover:scale-105"
+                  title="Direct Action & Monetization Launchpad - Instant Setup Links & Prompts"
+                >
+                  <Building2 className="w-3.5 h-3.5 text-slate-950" />
+                  <span>💰 Direct £ Launchpad</span>
+                </button>
+              )}
 
               {onOpenAutomatedFixModal && (
                 <button

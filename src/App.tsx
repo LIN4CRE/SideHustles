@@ -31,6 +31,7 @@ import { SmartHudOverlay } from './components/SmartHudOverlay';
 import { VoiceControlBar } from './components/VoiceControlBar';
 import { SetupSnapshotManagerModal } from './components/SetupSnapshotManagerModal';
 import { AutomatedFixModal } from './components/AutomatedFixModal';
+import { DirectActionLaunchpadModal } from './components/DirectActionLaunchpadModal';
 import { 
   Sparkles, 
   Bot, 
@@ -90,6 +91,7 @@ export default function App() {
   const [isGenAIGalleryOpen, setIsGenAIGalleryOpen] = useState<boolean>(false);
   const [isSnapshotModalOpen, setIsSnapshotModalOpen] = useState<boolean>(false);
   const [isAutomatedFixOpen, setIsAutomatedFixOpen] = useState<boolean>(false);
+  const [isDirectLaunchpadOpen, setIsDirectLaunchpadOpen] = useState<boolean>(false);
   const [proTipHustle, setProTipHustle] = useState<SideHustle | null>(null);
 
   const handleExecuteMacroAction = (actionType: string) => {
@@ -220,6 +222,7 @@ export default function App() {
         onOpenGenAIGallery={() => setIsGenAIGalleryOpen(true)}
         onOpenSnapshotModal={() => setIsSnapshotModalOpen(true)}
         onOpenAutomatedFixModal={() => setIsAutomatedFixOpen(true)}
+        onOpenDirectLaunchpad={() => setIsDirectLaunchpadOpen(true)}
         voiceControlBar={<VoiceControlBar onExecuteCommand={handleExecuteMacroAction} />}
       />
 
@@ -810,6 +813,13 @@ export default function App() {
       <AutomatedFixModal
         isOpen={isAutomatedFixOpen}
         onClose={() => setIsAutomatedFixOpen(false)}
+      />
+
+      {/* DIRECT ACTION & MONETIZATION LAUNCHPAD MODAL */}
+      <DirectActionLaunchpadModal
+        isOpen={isDirectLaunchpadOpen}
+        onClose={() => setIsDirectLaunchpadOpen(false)}
+        onSelectHustle={(hustle) => setSelectedHustle(hustle)}
       />
 
       {/* FLOATING CONTEXT-SENSITIVE SMART HUD OVERLAY */}
