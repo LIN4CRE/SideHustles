@@ -36,6 +36,8 @@ import { SaleNotificationCenter } from './components/SaleNotificationCenter';
 import { ReadyProductVaultView } from './components/ReadyProductVaultView';
 import { SystemAutomationHealthView } from './components/SystemAutomationHealthView';
 import { MultiPlatformExporterModal } from './components/MultiPlatformExporterModal';
+import { FinancialCalculatorModal } from './components/FinancialCalculatorModal';
+import { LocalLlmHubModal } from './components/LocalLlmHubModal';
 import { 
   Sparkles, 
   Bot, 
@@ -104,6 +106,7 @@ export default function App() {
   const [isDirectLaunchpadOpen, setIsDirectLaunchpadOpen] = useState<boolean>(false);
   const [isSaleNotificationsOpen, setIsSaleNotificationsOpen] = useState<boolean>(false);
   const [isMultiExporterOpen, setIsMultiExporterOpen] = useState<boolean>(false);
+  const [isFinancialCalculatorOpen, setIsFinancialCalculatorOpen] = useState<boolean>(false);
   const [proTipHustle, setProTipHustle] = useState<SideHustle | null>(null);
   const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'catalog' | 'vault' | 'analytics' | 'system'>('catalog');
 
@@ -919,6 +922,18 @@ export default function App() {
       <MultiPlatformExporterModal
         isOpen={isMultiExporterOpen}
         onClose={() => setIsMultiExporterOpen(false)}
+      />
+
+      {/* MONTE CARLO SALES FORECASTING SIMULATOR MODAL (Task 16) */}
+      <FinancialCalculatorModal
+        isOpen={isFinancialCalculatorOpen}
+        onClose={() => setIsFinancialCalculatorOpen(false)}
+      />
+
+      {/* LOCAL LLM & OBSIDIAN VAULT BRIDGE MODAL (Tasks 13 & 14) */}
+      <LocalLlmHubModal
+        isOpen={isLocalLlmHubOpen}
+        onClose={() => setIsLocalLlmHubOpen(false)}
       />
 
       {/* FLOATING CONTEXT-SENSITIVE SMART HUD OVERLAY */}
