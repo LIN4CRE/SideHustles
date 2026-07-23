@@ -26,6 +26,7 @@ interface NavbarProps {
   onOpenPayoutModal: () => void;
   onOpenFoolproofWizard: () => void;
   onOpenLocalLlmHub?: () => void;
+  onOpenAutomationTour?: () => void;
 }
 
 const CATEGORIES: CategoryType[] = [
@@ -52,7 +53,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAssetGen,
   onOpenPayoutModal,
   onOpenFoolproofWizard,
-  onOpenLocalLlmHub
+  onOpenLocalLlmHub,
+  onOpenAutomationTour
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
@@ -148,6 +150,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <Cpu className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
                   <span>Local LLM & MCP</span>
+                </button>
+              )}
+
+              {onOpenAutomationTour && (
+                <button
+                  onClick={onOpenAutomationTour}
+                  className="px-3 py-2 rounded-xl bg-indigo-950/60 hover:bg-indigo-900/80 text-indigo-200 font-bold text-xs border border-indigo-500/30 flex items-center gap-1.5 transition-all shadow-sm shadow-indigo-500/20"
+                  title="Guided Step-by-Step Automation Tour"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Setup Tour</span>
                 </button>
               )}
 

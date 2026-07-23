@@ -26,17 +26,20 @@ import {
   BookOpen
 } from 'lucide-react';
 import { SideHustle } from '../types';
+import { TrendMonitor } from './TrendMonitor';
 
 interface LocalLlmMcpHubModalProps {
   isOpen: boolean;
   onClose: () => void;
   onImportHustle?: (hustle: SideHustle) => void;
+  savedHustleIds?: string[];
 }
 
 export const LocalLlmMcpHubModal: React.FC<LocalLlmMcpHubModalProps> = ({
   isOpen,
   onClose,
-  onImportHustle
+  onImportHustle,
+  savedHustleIds = []
 }) => {
   const [activeTab, setActiveTab] = useState<'llm' | 'mcp' | 'tools' | 'github'>('llm');
 
@@ -493,70 +496,13 @@ export const LocalLlmMcpHubModal: React.FC<LocalLlmMcpHubModalProps> = ({
             </div>
           )}
 
-          {/* TAB 4: TRENDING GITHUB AI SCRAPER */}
+          {/* TAB 4: TRENDING GITHUB AI SCRAPER & TREND MONITOR */}
           {activeTab === 'github' && (
             <div className="space-y-4 animate-fadeIn">
-              <div className="flex items-center justify-between bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs">
-                <div className="flex items-center gap-2">
-                  <Github className="w-4 h-4 text-amber-400" />
-                  <span className="font-bold text-white font-mono">Trending AI Agent Repositories</span>
-                </div>
-                <span className="text-[10px] text-slate-400 font-mono">Scraped Real-Time from GitHub</span>
-              </div>
-
-              <div className="space-y-3">
-                {trendingGithubProjects.map((repo) => {
-                  const isImported = importedRepoId === repo.id;
-
-                  return (
-                    <div key={repo.id} className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3 hover:border-slate-700 transition-all">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-900 pb-2">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-xs font-bold text-white font-mono text-indigo-300">{repo.name}</h4>
-                            <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-amber-300 font-mono font-bold">
-                              ★ {repo.stars}
-                            </span>
-                          </div>
-                          <span className="text-[10px] text-slate-500 font-mono">{repo.language}</span>
-                        </div>
-
-                        <button
-                          onClick={() => handleImportRepo(repo)}
-                          disabled={isScrapingGithub}
-                          className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 text-white font-bold text-xs flex items-center gap-1.5 font-mono shadow-md transition-all shrink-0"
-                        >
-                          {isImported ? (
-                            <>
-                              <Check className="w-3.5 h-3.5 text-white" />
-                              <span>Added to Dashboard!</span>
-                            </>
-                          ) : (
-                            <>
-                              <Plus className="w-3.5 h-3.5" />
-                              <span>Convert to Side Hustle</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-
-                      <p className="text-xs text-slate-300 leading-relaxed">
-                        {repo.description}
-                      </p>
-
-                      <div className="p-2.5 bg-slate-900 rounded-lg border border-slate-800/80 text-xs space-y-1">
-                        <span className="text-[10px] uppercase font-mono text-amber-400 font-bold block">
-                          Monetization Blueprint:
-                        </span>
-                        <p className="text-slate-200 font-medium">{repo.monetizationIdea}</p>
-                        <span className="text-[11px] text-emerald-400 font-mono block pt-0.5">
-                          Potential: ${repo.convertedHustle.monthlyRevenuePotential}/mo
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              <TrendMonitor 
+                onImportHustle={onImportHustle}
+                savedHustleIds={savedHustleIds}
+              />
             </div>
           )}
 

@@ -14,6 +14,7 @@ import { FoolproofAutoLauncherModal } from './components/FoolproofAutoLauncherMo
 import { ExecutionLog } from './components/ExecutionLog';
 import { SavedHustleHealthCard } from './components/SavedHustleHealthCard';
 import { LocalLlmMcpHubModal } from './components/LocalLlmMcpHubModal';
+import { AutomationTourModal } from './components/AutomationTourModal';
 import { 
   Sparkles, 
   Bot, 
@@ -62,12 +63,26 @@ export default function App() {
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState<boolean>(false);
   const [isFoolproofWizardOpen, setIsFoolproofWizardOpen] = useState<boolean>(false);
   const [isLocalLlmHubOpen, setIsLocalLlmHubOpen] = useState<boolean>(false);
+  const [isAutomationTourOpen, setIsAutomationTourOpen] = useState<boolean>(false);
+  const [hasSeenTour, setHasSeenTour] = useState<boolean>(() => {
+    return localStorage.getItem('sh_has_seen_tour') === 'true';
+  });
   const [drawerTab, setDrawerTab] = useState<'tracker' | 'items' | 'execution'>('tracker');
 
   const toggleSaveHustle = (id: string) => {
-    setSavedHustleIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+    setSavedHustleIds((prev) => {
+      const isSavingNew = !prev.includes(id);
+      if (isSavingNew && !hasSeenTour) {
+        setIsAutomationTourOpen(true);
+        setHasSeenTour(true);
+        try {
+          localStorage.setItem('sh_has_seen_tour', 'true');
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      return isSavingNew ? [...prev, id] : prev.filter((item) => item !== id);
+    });
   };
 
   // Filtered Hustles
@@ -109,6 +124,7 @@ export default function App() {
         onOpenPayoutModal={() => setIsPayoutModalOpen(true)}
         onOpenFoolproofWizard={() => setIsFoolproofWizardOpen(true)}
         onOpenLocalLlmHub={() => setIsLocalLlmHubOpen(true)}
+        onOpenAutomationTour={() => setIsAutomationTourOpen(true)}
       />
 
       {/* Main Container */}
@@ -467,11 +483,31 @@ export default function App() {
       <LocalLlmMcpHubModal
         isOpen={isLocalLlmHubOpen}
         onClose={() => setIsLocalLlmHubOpen(false)}
+        savedHustleIds={savedHustleIds}
         onImportHustle={(importedHustle) => {
           if (!savedHustleIds.includes(importedHustle.id)) {
             toggleSaveHustle(importedHustle.id);
           }
           setSelectedHustle(importedHustle);
+        }}
+      />
+
+      {/* GUIDED AUTOMATION SETUP TOUR */}
+      <AutomationTourModal
+        isOpen={isAutomationTourOpen}
+        onClose={() => setIsAutomationTourOpen(false)}
+        onOpenLocalLlmHub={() => {
+          setIsAutomationTourOpen(false);
+          setIsLocalLlmHubOpen(true);
+        }}
+        onOpenPayoutModal={() => {
+          setIsAutomationTourOpen(false);
+          setIsPayoutModalOpen(true);
+        }}
+        onOpenExecutionLogs={() => {
+          setIsAutomationTourOpen(false);
+          setIsSavedDrawerOpen(true);
+          setDrawerTab('execution');
         }}
       />
 
