@@ -37,8 +37,8 @@ const PRESET_SYSTEM_ISSUES: SystemIssue[] = [
     title: 'PayPal Auto-Payout Account Link Unverified',
     description: 'Auto-payout routing requires a confirmed PayPal.me or Sort Code configuration to sweep funds into bank instantly upon customer purchase.',
     severity: 'critical',
-    directSetupUrl: 'https://www.paypal.me/',
-    directPageLabel: 'PayPal.me Official Creation Page',
+    directSetupUrl: 'https://www.paypal.com/myaccount/settings/',
+    directPageLabel: 'PayPal → Account Settings (Direct)',
     autoFixPayload: {
       accountHolder: 'MR DAVID CHRISTOPHER LINACRE',
       sortCode: '••-••-30',
@@ -54,8 +54,8 @@ const PRESET_SYSTEM_ISSUES: SystemIssue[] = [
     title: 'n8n Workflow Webhook Listener Endpoint Silent',
     description: 'The automated execution node trigger is awaiting active HTTP POST handshake verification from the external n8n node cloud.',
     severity: 'warning',
-    directSetupUrl: 'https://n8n.io/cloud/',
-    directPageLabel: 'n8n Cloud Webhooks Dashboard',
+    directSetupUrl: 'https://app.n8n.cloud/workflows/new',
+    directPageLabel: 'n8n → New Workflow (Direct)',
     autoFixPayload: {
       webhookUrl: 'https://automation-engine-node.railway.app/webhook/sidehustle-autopayout',
       secretKey: 'whsec_auto_fixed_98213891029312093',
@@ -69,8 +69,8 @@ const PRESET_SYSTEM_ISSUES: SystemIssue[] = [
     title: 'Gumroad 1p Micro-Asset Storefront Ping Key Unlinked',
     description: '1p - 10p micro-wallpapers and prompt packs require direct webhooks to log sale progress towards the £1,000 milestone.',
     severity: 'warning',
-    directSetupUrl: 'https://gumroad.com/settings/advanced#webhooks',
-    directPageLabel: 'Gumroad Official Webhook Settings',
+    directSetupUrl: 'https://app.gumroad.com/settings/advanced#webhooks',
+    directPageLabel: 'Gumroad → Webhook Settings (Direct)',
     autoFixPayload: {
       gumroadProductId: 'prod_micro_asset_pack_01',
       pingWebhookUrl: 'https://sidehustle-studio.app/api/gumroad-ping',
@@ -85,7 +85,7 @@ const PRESET_SYSTEM_ISSUES: SystemIssue[] = [
     description: 'Client confirmation receipts and sales alert SMS notifications require API key authorization to dispatch alerts.',
     severity: 'info',
     directSetupUrl: 'https://resend.com/api-keys',
-    directPageLabel: 'Resend Official API Keys Portal',
+    directPageLabel: 'Resend → API Keys Page (Direct)',
     autoFixPayload: {
       resendApiKey: 're_live_9481029381029312893821',
       senderDomain: 'receipts@sidehustle-studio.app',
@@ -99,8 +99,8 @@ const PRESET_SYSTEM_ISSUES: SystemIssue[] = [
     title: 'Firestore Real-Time Cloud Persistence Sync Verification',
     description: 'User portfolio database doc state is validating background anonymous re-authentication token.',
     severity: 'info',
-    directSetupUrl: 'https://console.firebase.google.com/',
-    directPageLabel: 'Firebase Firestore Console',
+    directSetupUrl: 'https://console.firebase.google.com/project/_/firestore',
+    directPageLabel: 'Firebase → Firestore Console (Direct)',
     autoFixPayload: {
       cloudSyncMode: 'active',
       autoBackupFrequency: 'realtime',

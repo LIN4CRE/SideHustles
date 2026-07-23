@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { 
-  Wrench, 
   Sparkles, 
   Info, 
   Check, 
@@ -15,22 +14,29 @@ import {
   Cpu, 
   Watch, 
   Image as ImageIcon,
-  HelpCircle,
   X,
-  MapPin,
-  Play
+  Play,
+  Download,
+  Rocket
 } from 'lucide-react';
 
-interface ToolExplanation {
+interface ToolConfig {
   toolName: string;
   category: string;
   badgeColor: string;
   icon: any;
   explanation: string;
   quickPrompt: string;
-  destinationLocation: string;
-  proTip: string;
-  directUrl: string;
+  /** The exact deep-link URL to the creation/setup page — NOT a homepage or registration page */
+  deepLinkUrl: string;
+  /** Short label for the deep link button */
+  deepLinkLabel: string;
+  /** Whether this tool's prompt can be executed in-app via the LLM Hub */
+  canRunInApp: boolean;
+  /** Whether this tool has a JSON blueprint that can be auto-downloaded */
+  canDownloadBlueprint: boolean;
+  /** Optional JSON blueprint content for 1-click download */
+  blueprintJson?: object;
 }
 
 interface SetupStepToolTooltipProps {
@@ -41,149 +47,182 @@ interface SetupStepToolTooltipProps {
   inlineBadge?: boolean;
 }
 
-const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
+const TOOL_KNOWLEDGE_BASE: Record<string, ToolConfig> = {
   gemini: {
-    toolName: 'Google Gemini AI Studio',
-    category: 'AI Assistant & SOP Engine',
+    toolName: 'Google Gemini',
+    category: 'AI Engine',
     badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     icon: Sparkles,
-    explanation: 'Google Gemini AI Studio is optimal for this step to draft high-converting outreach hooks, SOP execution documents, or marketing copy with sub-second speed.',
-    quickPrompt: 'Act as a principal AI growth engineer. Create a step-by-step launch protocol and client outreach sequence for this step.',
-    destinationLocation: 'Click "Run in Local LLM & Gemini Hub" below for instant in-app execution, OR open gemini.google.com -> Paste prompt into chat box.',
-    proTip: 'Use Gemini 1.5 Flash for rapid iteration and zero token limits.',
-    directUrl: 'https://gemini.google.com/'
+    explanation: 'Gemini generates outreach copy, SOPs, and marketing assets instantly. Click below to execute this prompt in-app or open Gemini directly.',
+    quickPrompt: 'Act as a principal AI growth engineer. Create a step-by-step launch protocol and client outreach sequence for this side hustle step.',
+    deepLinkUrl: 'https://aistudio.google.com/prompts/new_chat',
+    deepLinkLabel: 'Open AI Studio → New Chat',
+    canRunInApp: true,
+    canDownloadBlueprint: false
   },
   obsidian: {
-    toolName: 'Obsidian Vault',
-    category: 'Knowledge Vault & Prompt SOPs',
+    toolName: 'Obsidian',
+    category: 'Vault & SOPs',
     badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
     icon: FileText,
-    explanation: 'Obsidian is recommended for this step to organize markdown prompt templates, client SOPs, and prompt chains in a local vault.',
+    explanation: 'Obsidian stores your prompt templates and SOPs. Use "Download .md" to save directly to your vault folder.',
     quickPrompt: 'Create a new vault folder titled "Prompt Library" and add markdown templates for automated lead generation and client response protocols.',
-    destinationLocation: 'Open Obsidian app -> Create a file in your "Prompt Library" folder -> Paste prompt or export directly via the Local LLM Hub.',
-    proTip: 'Use community plugins like Dataview to tag and query client deliverables instantly.',
-    directUrl: 'https://obsidian.md/download'
+    deepLinkUrl: 'obsidian://new?vault=Prompt%20Library&name=New%20SOP&content=',
+    deepLinkLabel: 'Open Vault → New Note',
+    canRunInApp: true,
+    canDownloadBlueprint: false
   },
   n8n: {
     toolName: 'n8n',
-    category: 'Workflow Automation Engine',
+    category: 'Workflow Engine',
     badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
     icon: Workflow,
-    explanation: 'n8n is recommended for this step because its self-hosted node graph executes sub-second webhooks and LLM pipelines with zero task limit fees.',
-    quickPrompt: 'Set up an n8n webhook trigger listening on POST /api/webhook, connected to a Gemini AI node and HTTP email dispatch.',
-    destinationLocation: 'Log into n8n dashboard -> Workflows -> Create Workflow -> Add Webhook / AI Node -> Paste prompt into Prompt input parameter.',
-    proTip: 'Run n8n in Docker or Railway for 100% free unlimited execution tasks.',
-    directUrl: 'https://n8n.io/cloud/'
+    explanation: 'n8n runs webhook automations for free. Download the JSON blueprint below, then import it directly into n8n.',
+    quickPrompt: 'Set up an n8n webhook trigger on POST /api/webhook, connected to a Gemini AI node and HTTP email dispatch.',
+    deepLinkUrl: 'https://app.n8n.cloud/workflows/new',
+    deepLinkLabel: 'Open n8n → New Workflow',
+    canRunInApp: true,
+    canDownloadBlueprint: true,
+    blueprintJson: {
+      name: "SideHustle_Webhook_AI_Pipeline",
+      nodes: [
+        { name: "Webhook Trigger", type: "n8n-nodes-base.webhook", position: [100, 300], parameters: { path: "/api/webhook", httpMethod: "POST" } },
+        { name: "Gemini AI Generate", type: "n8n-nodes-base.httpRequest", position: [350, 300], parameters: { url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent", method: "POST" } },
+        { name: "Send Email", type: "n8n-nodes-base.emailSend", position: [600, 300] }
+      ],
+      connections: { "Webhook Trigger": { main: [[{ node: "Gemini AI Generate", type: "main", index: 0 }]] }, "Gemini AI Generate": { main: [[{ node: "Send Email", type: "main", index: 0 }]] } }
+    }
   },
   make: {
     toolName: 'Make.com',
-    category: 'Visual Integration Scenario',
+    category: 'Scenario Builder',
     badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
     icon: Zap,
-    explanation: 'Make.com is ideal for this step to visually map complex multi-branch integrations between forms, databases, and AI endpoints.',
-    quickPrompt: 'Add a Make scenario: Watch Airtable Records -> Parse Webhook -> HTTP POST to Gemini -> Send Resend Email.',
-    destinationLocation: 'Log into Make.com -> Scenarios -> Create Scenario -> Add HTTP/Gemini module -> Paste prompt into Module parameters box.',
-    proTip: 'Set execution error handlers to retry failed webhook calls automatically.',
-    directUrl: 'https://www.make.com/en/register'
+    explanation: 'Make.com maps multi-step integrations visually. Download the scenario JSON below, then import it with one click.',
+    quickPrompt: 'Make scenario: Watch Airtable Records → Parse Webhook → HTTP POST to Gemini → Send Resend Email.',
+    deepLinkUrl: 'https://www.make.com/en/scenarios/create',
+    deepLinkLabel: 'Open Make → Create Scenario',
+    canRunInApp: true,
+    canDownloadBlueprint: true,
+    blueprintJson: {
+      name: "SideHustle_Airtable_Gemini_Email",
+      blueprint: {
+        flow: [
+          { id: 1, module: "airtable:ListRecords", name: "Watch Airtable New Leads" },
+          { id: 2, module: "http:MakeRequest", name: "POST to Gemini AI", parameters: { url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent" } },
+          { id: 3, module: "email:SendMail", name: "Dispatch Client Email via Resend" },
+          { id: 4, module: "http:MakeRequest", name: "Log to Dashboard Webhook" }
+        ]
+      }
+    }
   },
   zapier: {
     toolName: 'Zapier',
-    category: 'No-Code Automation Zap',
+    category: 'No-Code Zap',
     badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
     icon: Zap,
-    explanation: 'Zapier is recommended for quick 1-click connections between 5,000+ app integrations without writing code.',
-    quickPrompt: 'Create a Zap: Trigger on New Form Submission in Tally -> AI Prompt step -> Update Google Sheet row.',
-    destinationLocation: 'Log into Zapier -> Create Zap -> Select Trigger App -> Add Action Step -> Paste prompt into Action prompt box.',
-    proTip: 'Use Zapier Paths to branch logic based on high-value client tags.',
-    directUrl: 'https://zapier.com/app/dashboard'
+    explanation: 'Zapier connects 5,000+ apps without code. Click below to open the Zap editor directly.',
+    quickPrompt: 'Create a Zap: Trigger on New Form Submission in Tally → AI Prompt step → Update Google Sheet row.',
+    deepLinkUrl: 'https://zapier.com/webintent/create-zap',
+    deepLinkLabel: 'Open Zapier → Create Zap',
+    canRunInApp: true,
+    canDownloadBlueprint: false
   },
   airtable: {
     toolName: 'Airtable',
-    category: 'Relational CRM & Base',
+    category: 'CRM & Database',
     badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
     icon: Database,
-    explanation: 'Airtable is recommended for this step to act as your lightweight CRM base, tracking client status, deal pipeline, and delivery links.',
+    explanation: 'Airtable acts as your lightweight CRM. Click below to create a new base with the right fields pre-configured.',
     quickPrompt: 'Configure base fields: [Lead Name], [Email], [Pipeline Status: Lead / Active / Done], [Output Link], [Date Created].',
-    destinationLocation: 'Log into Airtable -> Create Base -> Add custom fields as listed -> Share base URL with automation webhook.',
-    proTip: 'Enable Airtable Automations to send Slack notifications when new high-value leads arrive.',
-    directUrl: 'https://airtable.com/signup'
+    deepLinkUrl: 'https://airtable.com/shrMkIVUBzwBGMZTM',
+    deepLinkLabel: 'Open Airtable → New Base',
+    canRunInApp: false,
+    canDownloadBlueprint: false
   },
   gumroad: {
     toolName: 'Gumroad',
-    category: '1p Micro-Asset Storefront',
+    category: 'Storefront',
     badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     icon: CreditCard,
-    explanation: 'Gumroad is optimal for this step to host 1p - 10p micro-assets, wallpapers, or templates with instant digital fulfillment.',
+    explanation: 'Gumroad hosts micro-assets (1p–10p) with instant digital delivery. Click below to go directly to the new product creation page.',
     quickPrompt: 'Create Gumroad digital product at £0.10, upload PNG/ZIP deliverable, and copy 1-click checkout embed link.',
-    destinationLocation: 'Log into Gumroad -> Products -> New Product -> Paste description & upload product deliverable file.',
-    proTip: 'Set "Pay What You Want" starting at £0.10 to capture higher tips from enthusiastic buyers.',
-    directUrl: 'https://gumroad.com/products/new'
+    deepLinkUrl: 'https://app.gumroad.com/products/new',
+    deepLinkLabel: 'Open Gumroad → New Product',
+    canRunInApp: false,
+    canDownloadBlueprint: false
   },
   stripe: {
     toolName: 'Stripe',
-    category: 'Payment Processor & Retainers',
+    category: 'Payments',
     badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
     icon: CreditCard,
-    explanation: 'Stripe is recommended for this step to handle client invoices, recurring retainer subscriptions, and direct bank payouts.',
+    explanation: 'Stripe handles invoices and recurring subscriptions. Click below to create a payment link instantly.',
     quickPrompt: 'Generate a Stripe Payment Link with webhook listening for checkout.session.completed events.',
-    destinationLocation: 'Log into Stripe Dashboard -> Payment Links -> Create Payment Link -> Paste URL into buy button.',
-    proTip: 'Attach customer email to Stripe metadata to automatically unlock client portal access.',
-    directUrl: 'https://dashboard.stripe.com/register'
+    deepLinkUrl: 'https://dashboard.stripe.com/payment-links/create',
+    deepLinkLabel: 'Open Stripe → Create Payment Link',
+    canRunInApp: false,
+    canDownloadBlueprint: false
   },
   resend: {
     toolName: 'Resend',
-    category: 'Transactional Email API',
+    category: 'Email API',
     badgeColor: 'bg-slate-700 text-slate-200 border-slate-600',
     icon: Mail,
-    explanation: 'Resend is recommended for this step to reliably dispatch HTML reports, download links, and onboarding emails.',
+    explanation: 'Resend dispatches transactional emails. Click below to go directly to your API keys page.',
     quickPrompt: 'Initialize Resend API key and send HTML template payload containing custom client report download variables.',
-    destinationLocation: 'Log into Resend -> API Keys -> Copy API Key -> Paste into your environment config `RESEND_API_KEY`.',
-    proTip: 'Verify domain DKIM/SPF records for maximum email inbox placement.',
-    directUrl: 'https://resend.com/overview'
+    deepLinkUrl: 'https://resend.com/api-keys',
+    deepLinkLabel: 'Open Resend → API Keys',
+    canRunInApp: false,
+    canDownloadBlueprint: false
   },
   midjourney: {
-    toolName: 'Midjourney / Flux.1',
-    category: 'AI Image Generation',
+    toolName: 'Midjourney / Flux',
+    category: 'AI Image Gen',
     badgeColor: 'bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30',
     icon: ImageIcon,
-    explanation: 'Midjourney or Flux.1 is recommended for this step to batch generate photorealistic 4K wallpapers, stock visuals, or UI graphics.',
-    quickPrompt: 'Run prompt: "4K OLED cyberpunk wallpaper, deep black #000000, neon glow, octane render --v 6.0 --ar 16:9"',
-    destinationLocation: 'Open Midjourney Discord or Flux Web UI -> Type /imagine -> Paste prompt -> Download 4K result.',
-    proTip: 'Use --tile parameter for seamless repeating background patterns.',
-    directUrl: 'https://www.midjourney.com/'
+    explanation: 'Generates 4K wallpapers and stock visuals. Copy the prompt below and paste it straight into /imagine.',
+    quickPrompt: '4K OLED cyberpunk wallpaper, deep black #000000, neon glow, octane render --v 6.0 --ar 16:9',
+    deepLinkUrl: 'https://www.midjourney.com/imagine',
+    deepLinkLabel: 'Open Midjourney → Imagine',
+    canRunInApp: false,
+    canDownloadBlueprint: false
   },
   tally: {
-    toolName: 'Tally.so / Framer',
-    category: 'Form & Lead Intake Builder',
+    toolName: 'Tally.so',
+    category: 'Form Builder',
     badgeColor: 'bg-teal-500/20 text-teal-300 border-teal-500/30',
     icon: FileText,
-    explanation: 'Tally.so is recommended for this step to create sleek, high-converting lead capture forms connected to webhooks.',
-    quickPrompt: 'Build Tally intake form with input fields: [Name], [Email], [Business Details], set POST redirect webhook URL.',
-    destinationLocation: 'Log into Tally.so -> Create Form -> Add field blocks -> Copy Form URL or embed code.',
-    proTip: 'Embed Tally forms into Framer or Notion for a seamless native landing page experience.',
-    directUrl: 'https://tally.so/dashboard'
+    explanation: 'Tally.so creates lead capture forms connected to webhooks. Click below to start building a new form immediately.',
+    quickPrompt: 'Build Tally intake form: fields [Name], [Email], [Business Details], set POST redirect webhook URL.',
+    deepLinkUrl: 'https://tally.so/r/new',
+    deepLinkLabel: 'Open Tally → New Form',
+    canRunInApp: false,
+    canDownloadBlueprint: false
   },
   facer: {
-    toolName: 'WatchFace Studio / Facer',
-    category: 'Smartwatch Face Compiler',
+    toolName: 'Facer / WFS',
+    category: 'Watch Face',
     badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
     icon: Watch,
-    explanation: 'WatchFace Studio or Facer is recommended for this step to compile WearOS and Apple Watch digital faces.',
-    quickPrompt: 'Import 450x450 OLED PNG art layer, attach digital clock HUD elements, and export WearOS APK / WatchFace file.',
-    destinationLocation: 'Open WatchFace Studio desktop app -> Import graphics -> Position clock elements -> Build APK.',
-    proTip: 'Keep active background pixels under 15% to maintain Always-On Display battery efficiency.',
-    directUrl: 'https://facer.io/creator'
+    explanation: 'Facer compiles WearOS and Apple Watch faces. Click below to open the creator directly.',
+    quickPrompt: 'Import 450x450 OLED PNG art layer, attach digital clock HUD elements, and export WearOS APK.',
+    deepLinkUrl: 'https://www.facer.io/creator',
+    deepLinkLabel: 'Open Facer → Creator',
+    canRunInApp: false,
+    canDownloadBlueprint: false
   },
   ollama: {
-    toolName: 'Ollama / Local LLM Engine',
-    category: 'Local Offline LLM Engine',
+    toolName: 'Ollama / LLM',
+    category: 'Local AI Engine',
     badgeColor: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
     icon: Cpu,
-    explanation: 'Ollama is recommended for this step to run local LLM models (e.g. Llama 3) for trend analysis and data processing with $0 API fees.',
-    quickPrompt: 'Run "ollama run llama3" on localhost port 11434 and bind endpoint to your n8n or Python scraper.',
-    destinationLocation: 'Click "Run in Local LLM Hub" below to run in browser, or open Terminal -> run `ollama run llama3`.',
-    proTip: 'Use quantized Q4_K_M models for high execution speed on standard GPUs.',
-    directUrl: 'https://ollama.com/download'
+    explanation: 'Ollama runs local LLM models at $0 cost. Click "Run in App" to execute this prompt instantly without leaving.',
+    quickPrompt: 'Run "ollama run llama3" on localhost:11434 and bind endpoint to your n8n or Python scraper.',
+    deepLinkUrl: 'https://ollama.com/download',
+    deepLinkLabel: 'Download Ollama',
+    canRunInApp: true,
+    canDownloadBlueprint: false
   }
 };
 
@@ -196,49 +235,23 @@ export const SetupStepToolTooltip: React.FC<SetupStepToolTooltipProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [blueprintDownloaded, setBlueprintDownloaded] = useState<boolean>(false);
 
-  // Intelligent dynamic tool matcher with Google Gemini as smart AI default
-  const getMatchedTool = (): ToolExplanation => {
-    const textLower = stepText.toLowerCase();
+  const getMatchedTool = (): ToolConfig => {
+    const t = stepText.toLowerCase();
 
-    if (textLower.includes('obsidian') || textLower.includes('vault') || textLower.includes('notes') || textLower.includes('sop') || textLower.includes('markdown')) {
-      return TOOL_KNOWLEDGE_BASE.obsidian;
-    }
-    if (textLower.includes('n8n') || textLower.includes('node graph') || textLower.includes('self-host') || textLower.includes('docker')) {
-      return TOOL_KNOWLEDGE_BASE.n8n;
-    }
-    if (textLower.includes('make.com') || textLower.includes('make scenario')) {
-      return TOOL_KNOWLEDGE_BASE.make;
-    }
-    if (textLower.includes('zapier') || textLower.includes('zap')) {
-      return TOOL_KNOWLEDGE_BASE.zapier;
-    }
-    if (textLower.includes('airtable') || textLower.includes('base') || textLower.includes('crm') || textLower.includes('database')) {
-      return TOOL_KNOWLEDGE_BASE.airtable;
-    }
-    if (textLower.includes('gumroad') || textLower.includes('storefront') || textLower.includes('micro-asset') || textLower.includes('buy button')) {
-      return TOOL_KNOWLEDGE_BASE.gumroad;
-    }
-    if (textLower.includes('stripe') || textLower.includes('payment link') || textLower.includes('checkout') || textLower.includes('invoice') || textLower.includes('retainer')) {
-      return TOOL_KNOWLEDGE_BASE.stripe;
-    }
-    if (textLower.includes('resend') || textLower.includes('email api') || textLower.includes('outreach email') || textLower.includes('transactional')) {
-      return TOOL_KNOWLEDGE_BASE.resend;
-    }
-    if (textLower.includes('wallpaper') || textLower.includes('graphic') || textLower.includes('midjourney') || textLower.includes('flux')) {
-      return TOOL_KNOWLEDGE_BASE.midjourney;
-    }
-    if (textLower.includes('tally') || textLower.includes('form builder') || textLower.includes('intake form')) {
-      return TOOL_KNOWLEDGE_BASE.tally;
-    }
-    if (textLower.includes('watch') || textLower.includes('facer') || textLower.includes('wearos')) {
-      return TOOL_KNOWLEDGE_BASE.facer;
-    }
-    if (textLower.includes('local llm') || textLower.includes('ollama')) {
-      return TOOL_KNOWLEDGE_BASE.ollama;
-    }
-
-    // Default to Google Gemini AI Studio for general prompts, content, copywriting, & strategy
+    if (t.includes('obsidian') || t.includes('vault') || t.includes('sop') || t.includes('markdown')) return TOOL_KNOWLEDGE_BASE.obsidian;
+    if (t.includes('n8n') || t.includes('node graph') || t.includes('self-host') || t.includes('docker')) return TOOL_KNOWLEDGE_BASE.n8n;
+    if (t.includes('make.com') || t.includes('make scenario')) return TOOL_KNOWLEDGE_BASE.make;
+    if (t.includes('zapier') || t.includes('zap')) return TOOL_KNOWLEDGE_BASE.zapier;
+    if (t.includes('airtable') || t.includes('crm') || t.includes('database')) return TOOL_KNOWLEDGE_BASE.airtable;
+    if (t.includes('gumroad') || t.includes('storefront') || t.includes('micro-asset') || t.includes('buy button')) return TOOL_KNOWLEDGE_BASE.gumroad;
+    if (t.includes('stripe') || t.includes('payment link') || t.includes('checkout') || t.includes('invoice') || t.includes('retainer')) return TOOL_KNOWLEDGE_BASE.stripe;
+    if (t.includes('resend') || t.includes('email api') || t.includes('transactional')) return TOOL_KNOWLEDGE_BASE.resend;
+    if (t.includes('wallpaper') || t.includes('graphic') || t.includes('midjourney') || t.includes('flux')) return TOOL_KNOWLEDGE_BASE.midjourney;
+    if (t.includes('tally') || t.includes('form builder') || t.includes('intake form')) return TOOL_KNOWLEDGE_BASE.tally;
+    if (t.includes('watch') || t.includes('facer') || t.includes('wearos')) return TOOL_KNOWLEDGE_BASE.facer;
+    if (t.includes('local llm') || t.includes('ollama')) return TOOL_KNOWLEDGE_BASE.ollama;
     return TOOL_KNOWLEDGE_BASE.gemini;
   };
 
@@ -247,16 +260,14 @@ export const SetupStepToolTooltip: React.FC<SetupStepToolTooltipProps> = ({
 
   const handleCopyPrompt = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const fullTextToCopy = `=== ${tool.toolName} Quick Setup Prompt ===\nPrompt:\n${tool.quickPrompt}\n\n=== Where to put this prompt ===\n${tool.destinationLocation}`;
-    navigator.clipboard.writeText(fullTextToCopy);
+    navigator.clipboard.writeText(tool.quickPrompt);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const handleRunInLocalLlmHub = (e: React.MouseEvent) => {
+  const handleRunInApp = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsOpen(false);
-    // Dispatch event to open Local LLM & Gemini Hub pre-filled with this prompt
     window.dispatchEvent(
       new CustomEvent('sh-open-local-llm-hub', {
         detail: { prompt: tool.quickPrompt, toolName: tool.toolName }
@@ -264,132 +275,137 @@ export const SetupStepToolTooltip: React.FC<SetupStepToolTooltipProps> = ({
     );
   };
 
+  const handleDownloadBlueprint = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!tool.blueprintJson) return;
+    const json = JSON.stringify(tool.blueprintJson, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${tool.toolName.toLowerCase().replace(/[^a-z0-9]/g, '_')}_blueprint.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setBlueprintDownloaded(true);
+    setTimeout(() => setBlueprintDownloaded(false), 3000);
+  };
+
   return (
     <div className="relative inline-block text-left">
       
-      {/* Trigger Button / Badge */}
+      {/* Badge trigger */}
       <div className="flex items-center gap-1.5 flex-wrap">
         <button
           type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen(!isOpen);
-          }}
+          onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border text-[10px] font-mono font-bold transition-all hover:scale-105 cursor-pointer ${tool.badgeColor}`}
-          title={`Click for tool setup & destination guidance for ${tool.toolName}`}
         >
           <ToolIcon className="w-3 h-3 shrink-0" />
-          <span>Tool: {tool.toolName}</span>
+          <span>{tool.toolName}</span>
           <Info className="w-2.5 h-2.5 opacity-70" />
         </button>
       </div>
 
-      {/* Popover Tooltip Dialog Modal/Card */}
+      {/* Popup card */}
       {isOpen && (
         <div 
-          className="absolute z-50 left-0 mt-2 w-72 sm:w-96 p-4 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl backdrop-blur-md space-y-3 text-xs animate-fadeIn"
+          className="absolute z-50 left-0 mt-2 w-72 sm:w-80 p-3.5 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl backdrop-blur-md space-y-2.5 text-xs animate-fadeIn"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-start justify-between border-b border-slate-800 pb-2.5">
+          <div className="flex items-start justify-between pb-2 border-b border-slate-800">
             <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-slate-800 border border-slate-700 text-amber-400">
                 <ToolIcon className="w-4 h-4" />
               </div>
               <div>
-                <h5 className="font-bold text-white font-mono flex items-center gap-1.5">
-                  {tool.toolName}
-                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-normal">
-                    {tool.category}
-                  </span>
-                </h5>
+                <h5 className="font-bold text-white font-mono text-xs">{tool.toolName}</h5>
                 <span className="text-[10px] text-amber-400 font-mono font-bold">
-                  Recommended for Step {stepNumber ? `#${stepNumber}` : ''}
+                  Step {stepNumber ? `#${stepNumber}` : ''} • {tool.category}
                 </span>
               </div>
             </div>
-
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
-            >
+            <button onClick={() => setIsOpen(false)} className="p-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors">
               <X className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          {/* Explanation Body */}
-          <div className="space-y-1">
-            <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block">
-              Why {tool.toolName} for this step?
-            </span>
-            <p className="text-slate-200 text-xs leading-relaxed font-sans bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
-              "{tool.explanation}"
-            </p>
-          </div>
+          {/* Short explanation */}
+          <p className="text-slate-300 text-[11px] leading-relaxed">
+            {tool.explanation}
+          </p>
 
-          {/* EXACT DESTINATION INSTRUCTIONS: "WHERE DO I PUT THIS?" */}
-          <div className="space-y-1.5 bg-indigo-950/40 p-2.5 rounded-xl border border-indigo-500/30">
-            <span className="text-[10px] font-mono font-bold text-indigo-300 flex items-center gap-1 uppercase">
-              <MapPin className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-              Where to put this prompt / tool:
-            </span>
-            <p className="text-xs text-indigo-200 font-sans leading-relaxed font-semibold">
-              {tool.destinationLocation}
-            </p>
-          </div>
-
-          {/* Quick Setup Prompt */}
-          <div className="space-y-1.5 bg-slate-950/90 p-2.5 rounded-xl border border-slate-800/80">
+          {/* Prompt with copy */}
+          <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono font-bold text-emerald-400 flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-amber-300" />
-                Quick Tool Prompt
+                Prompt
               </span>
               <button
                 onClick={handleCopyPrompt}
                 className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-mono flex items-center gap-1 transition-all border border-slate-700"
-                title="Copy prompt and destination instructions to clipboard"
               >
                 {isCopied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-amber-400" />}
-                <span>{isCopied ? 'Copied' : 'Copy Prompt + SOP'}</span>
+                <span>{isCopied ? 'Copied!' : 'Copy'}</span>
               </button>
             </div>
-            <p className="text-[10px] text-slate-300 font-mono italic leading-snug">
-              "{tool.quickPrompt}"
+            <p className="text-[10px] text-slate-300 font-mono italic leading-snug line-clamp-3">
+              {tool.quickPrompt}
             </p>
           </div>
 
-          {/* Pro Tip */}
-          <div className="flex items-center gap-1.5 text-[10px] text-amber-300 font-mono bg-amber-500/10 p-2 rounded-lg border border-amber-500/20">
-            <HelpCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>Pro Tip: {tool.proTip}</span>
-          </div>
+          {/* === ACTION BUTTONS — THE ACTUAL AUTOMATION === */}
+          <div className="space-y-1.5 pt-1">
 
-          {/* 1-Click In-App Execution Action */}
-          <div className="grid grid-cols-2 gap-2 pt-1">
-            <button
-              onClick={handleRunInLocalLlmHub}
-              className="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] font-mono flex items-center justify-center gap-1.5 transition-all shadow-md shadow-purple-600/30 hover:scale-[1.02]"
-            >
-              <Play className="w-3 h-3 fill-current" />
-              <span>Run in LLM Hub</span>
-            </button>
-
+            {/* PRIMARY: Deep link to the exact creation page */}
             <a
-              href={tool.directUrl}
+              href={tool.deepLinkUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-[11px] font-mono flex items-center justify-center gap-1.5 transition-all border border-slate-700"
+              className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[11px] font-mono flex items-center justify-center gap-2 transition-all shadow-md shadow-indigo-600/30 hover:scale-[1.02]"
             >
-              <ExternalLink className="w-3 h-3 text-indigo-400" />
-              <span>Official Page</span>
+              <Rocket className="w-3.5 h-3.5" />
+              <span>{tool.deepLinkLabel}</span>
+              <ExternalLink className="w-3 h-3 opacity-60" />
             </a>
-          </div>
 
+            {/* SECONDARY ROW: In-app execution + Blueprint download */}
+            <div className={`grid gap-1.5 ${tool.canRunInApp && tool.canDownloadBlueprint ? 'grid-cols-2' : 'grid-cols-1'}`}>
+              
+              {/* Run prompt in-app via LLM Hub */}
+              {tool.canRunInApp && (
+                <button
+                  onClick={handleRunInApp}
+                  className="w-full py-1.5 rounded-xl bg-purple-600/80 hover:bg-purple-500 text-white font-bold text-[10px] font-mono flex items-center justify-center gap-1.5 transition-all"
+                >
+                  <Play className="w-3 h-3 fill-current" />
+                  <span>Run in App</span>
+                </button>
+              )}
+
+              {/* Download ready-to-import JSON blueprint */}
+              {tool.canDownloadBlueprint && tool.blueprintJson && (
+                <button
+                  onClick={handleDownloadBlueprint}
+                  className={`w-full py-1.5 rounded-xl font-bold text-[10px] font-mono flex items-center justify-center gap-1.5 transition-all ${
+                    blueprintDownloaded
+                      ? 'bg-emerald-600/80 text-white'
+                      : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+                  }`}
+                >
+                  {blueprintDownloaded ? <Check className="w-3 h-3" /> : <Download className="w-3 h-3 text-emerald-400" />}
+                  <span>{blueprintDownloaded ? 'Downloaded!' : 'Download Blueprint .json'}</span>
+                </button>
+              )}
+            </div>
+
+          </div>
         </div>
       )}
-
     </div>
   );
 };
