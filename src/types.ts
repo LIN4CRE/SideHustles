@@ -144,6 +144,10 @@ export interface SideHustle {
   isFreeStarterSet?: boolean;
   freeStarterSet?: FreeStarterSetInfo;
 
+  // Ground Truth & Same-Week Realism
+  realisticWeek1Earnings: string; // e.g. "£0.00 - £25.00 (Requires sending 10-15 pitches)"
+  honestRealityCheck: string; // Ground truth explanation of week 1 expectations
+
   // Initial Viability Score (base)
   baseViabilityScore: number;
 }

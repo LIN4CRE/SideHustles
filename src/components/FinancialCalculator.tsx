@@ -54,6 +54,16 @@ export const FinancialCalculator: React.FC<FinancialCalculatorProps> = ({
         {/* Body */}
         <div className="p-6 overflow-y-auto space-y-6">
           
+          {/* Ground Truth Banner */}
+          <div className="bg-gradient-to-r from-emerald-950/80 via-slate-950 to-indigo-950/80 p-3.5 rounded-xl border border-emerald-500/30 flex items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span className="text-slate-300">
+                <strong className="text-emerald-300">Ground Truth Principle:</strong> Monthly profits are scaled goals reached after 30-90 days. Week 1 realistic income starts at <strong className="text-white">0p to £25</strong> while warming domains, listing services, and sending direct pitches.
+              </span>
+            </div>
+          </div>
+
           {/* Target Slider */}
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -98,6 +108,7 @@ export const FinancialCalculator: React.FC<FinancialCalculatorProps> = ({
                 <tr>
                   <th className="p-3">Side Hustle</th>
                   <th className="p-3">Startup Cost</th>
+                  <th className="p-3">Week 1 Ground Truth</th>
                   <th className="p-3">Target Margin</th>
                   <th className="p-3">Monthly Profit</th>
                   <th className="p-3">Automation</th>
@@ -115,6 +126,9 @@ export const FinancialCalculator: React.FC<FinancialCalculatorProps> = ({
                       </td>
                       <td className="p-3 text-slate-300 font-mono">
                         ${hustle.startupCost}
+                      </td>
+                      <td className="p-3 text-emerald-300 font-mono font-bold">
+                        {hustle.realisticWeek1Earnings || '£0.00 - £25.00'}
                       </td>
                       <td className="p-3 text-emerald-400 font-bold">
                         {hustle.marginPercentage}%

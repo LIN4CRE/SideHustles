@@ -58,6 +58,8 @@ export const INITIAL_TRENDING_REPOS: TrendingRepo[] = [
       },
       sampleHook: 'We found 3 critical speed glitches on your HVAC website - here is the fix.',
       sampleAudience: 'Local Trade Services & HVAC Contractors',
+      realisticWeek1Earnings: '£0.00 - £50.00 (Requires sending 15-20 direct web audit pitches)',
+      honestRealityCheck: 'Running Ollama and browser-use is 100% free locally. If you email 15 local HVAC or plumbing sites with a free audit preview, realistically 1 owner pays £50 in Week 1.',
       baseViabilityScore: 94
     }
   },
@@ -104,6 +106,8 @@ export const INITIAL_TRENDING_REPOS: TrendingRepo[] = [
       },
       sampleHook: 'The ultimate 2026 Python & AI agent cheat sheet vault for developers.',
       sampleAudience: 'Self-taught coders, AI hobbyists, productivity enthusiasts',
+      realisticWeek1Earnings: '10p - £15.00 (Pay-what-you-want Gumroad downloads start small)',
+      honestRealityCheck: 'Markdown vaults earn small initial downloads or micro-donations (10p to £1.50) in Week 1 from Reddit/X threads. Expect £0 to £15 total in your first 7 days.',
       baseViabilityScore: 92
     }
   },
@@ -150,6 +154,8 @@ export const INITIAL_TRENDING_REPOS: TrendingRepo[] = [
       },
       sampleHook: 'Never leave a Google review unresponded - auto-reply in 60 seconds.',
       sampleAudience: 'Local restaurants, dentists, plumbers, beauty salons',
+      realisticWeek1Earnings: '£0.00 - £199.00 (1 local client if pitched in person or phone call)',
+      honestRealityCheck: 'Multi-agent AutoGen setup takes 1-2 hours. Pitching local business owners directly yields 0 to 1 trial retainer ($199) in Week 1.',
       baseViabilityScore: 90
     }
   },
@@ -196,6 +202,8 @@ export const INITIAL_TRENDING_REPOS: TrendingRepo[] = [
       },
       sampleHook: 'Turn your old Android phone into a 24/7 lead finding machine.',
       sampleAudience: 'B2B sales reps, local marketing agencies, lead brokers',
+      realisticWeek1Earnings: '£0.00 - £50.00 (1 lead list sale to a B2B sales rep)',
+      honestRealityCheck: 'Termux runs on Android for $0 electricity cost. Reaching out to B2B sales reps or agency owners yields 0 to 1 lead list sale (£50) in Week 1.',
       baseViabilityScore: 93
     }
   },
@@ -242,6 +250,8 @@ export const INITIAL_TRENDING_REPOS: TrendingRepo[] = [
       },
       sampleHook: 'Automate client invoice generation and get paid direct to bank in minutes.',
       sampleAudience: 'Freelancers, agency owners, digital product sellers',
+      realisticWeek1Earnings: '£0.00 - £100.00 (Depends on active client proposals closed)',
+      honestRealityCheck: 'Auto-injecting PayPal/Bank routing allows instant checkout, but relies on pitching clients for your underlying service.',
       baseViabilityScore: 96
     }
   }

@@ -278,6 +278,27 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
           {activeTab === 'overview' && (
             <div className="space-y-6">
               
+              {/* Ground Truth & Same-Week Realism Banner */}
+              <div className="bg-gradient-to-r from-emerald-950/80 via-slate-900 to-indigo-950/80 border border-emerald-500/30 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                <div className="space-y-1 max-w-xl">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] uppercase font-bold border border-emerald-500/30">
+                      Truth In Earnings
+                    </span>
+                    <span className="text-xs font-bold text-white">Realistic Same-Week Cashflow Projection</span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {hustle.honestRealityCheck}
+                  </p>
+                </div>
+                <div className="px-3 py-2 rounded-xl bg-slate-950 border border-emerald-500/30 text-center shrink-0 w-full sm:w-auto">
+                  <span className="text-[10px] uppercase font-mono text-slate-400 block font-bold">Week 1 Ground Truth</span>
+                  <span className="text-sm font-extrabold text-emerald-400 font-mono block">
+                    {hustle.realisticWeek1Earnings || '£0.00 - £25.00'}
+                  </span>
+                </div>
+              </div>
+
               {/* Traditional vs Automated Comparison */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4">

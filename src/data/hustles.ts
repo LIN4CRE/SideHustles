@@ -72,6 +72,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'I analyzed your website and wrote 5 free Google meta tags for your business. Here they are—no cost or sign-up needed!',
     sampleAudience: 'Local plumbers, roofers, dentists, bakeries, auto repair shops',
+    realisticWeek1Earnings: '£0.00 - £50.00 (Requires sending 15-20 free sample emails)',
+    honestRealityCheck: 'Day 1 is $0 while researching local businesses. If you email 15 local plumbers or bakeries with 5 free meta tags, realistically 1-2 owners will accept a £25 site fix within 7 days.',
     baseViabilityScore: 98,
     zapierBlueprint: {
       blueprintName: 'Free Local SEO Tag Repair & Pitch Generator',
@@ -163,6 +165,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'Send me your messy resume bullet point and I will rewrite it with executive-level metrics in 10 seconds for FREE.',
     sampleAudience: 'Job seekers, college graduates, freelancers, sales representatives',
+    realisticWeek1Earnings: '£0.00 - £30.00 (0p on Day 1; £15-£30 if posted actively in job groups)',
+    honestRealityCheck: 'New Fiverr gigs take 3-5 days to index. Expect 0p on Day 1 unless you post sample rewrites directly in active groups on Reddit (r/Resumes) or LinkedIn to secure 1-2 orders in Week 1.',
     baseViabilityScore: 97
   },
   {
@@ -229,6 +233,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'I built a 1-page Notion Cheatsheet with 50 AI prompts for agency growth. Free download link below!',
     sampleAudience: 'Solopreneurs, agency owners, digital creators, students',
+    realisticWeek1Earnings: '10p - £5.00 (Pay-what-you-want organic downloads start small)',
+    honestRealityCheck: 'Gumroad pay-what-you-want templates start with micro-downloads (10p to 50p per user). With organic social sharing, expect 10p to £5 total in your first 7 days.',
     baseViabilityScore: 96
   },
   {
@@ -291,6 +297,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'We guarantee 10+ B2B sales meetings per month for marketing agencies using AI prospect enrichment or you pay $0.',
     sampleAudience: 'B2B SaaS companies, digital marketing agencies, high-ticket consultants',
+    realisticWeek1Earnings: '£0.00 (Week 1 is 100% domain warming, script drafting & prospect list scraping)',
+    honestRealityCheck: 'Cold email sending domains MUST warm up for 14 days before sending outreach. You will earn £0.00 in Week 1. Retainers ($2,500/mo) typically close in Weeks 3-5 after discovery calls.',
     baseViabilityScore: 92,
     zapierBlueprint: {
       blueprintName: 'Apollo to Gemini AI Enriched B2B Lead Generator',
@@ -409,6 +417,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'Stop spending 4 hours a week manually reformatting client reports. Transform raw PDFs into clean CSVs in 3 seconds.',
     sampleAudience: 'Freelancers, accountants, HR recruiters, real estate brokers',
+    realisticWeek1Earnings: '0p - £19.00 (1 beta subscriber if launched on Reddit/HackerNews)',
+    honestRealityCheck: 'Building and deploying the tool takes 2-3 days. Without an existing audience, Week 1 relies on community launches. Expect 0p to 1 subscriber ($19) in Week 1.',
     baseViabilityScore: 95,
     zapierBlueprint: {
       blueprintName: 'Stripe Webhook to Gemini Cloud API & Resend License Sync',
@@ -518,6 +528,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'The Complete Creator Operating System: 50+ AI Prompts, CRM, Content Calendar, and Finance Tracker in 1 click.',
     sampleAudience: 'Solopreneurs, content creators, agency owners, project managers',
+    realisticWeek1Earnings: '0p - £15.00 (1-2 digital downloads from social media)',
+    honestRealityCheck: 'New digital storefronts require organic search indexing or active social posts. Expect 0p to £15 total in Week 1.',
     baseViabilityScore: 94,
     zapierBlueprint: {
       blueprintName: 'Lemon Squeezy to Notion Auto-Duplicate & Upsell Loop',
@@ -617,6 +629,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'Join 12,000+ AI tech leaders receiving the 3-minute Monday rundown of breakthrough automation trends.',
     sampleAudience: 'Software engineers, CTOs, venture capitalists, startup founders',
+    realisticWeek1Earnings: '£0.00 (Sponsorship networks require 1,000+ active subscribers)',
+    honestRealityCheck: 'Newsletter sponsors do not pay until you have an active subscriber base. Week 1 earns £0.00 while growing your initial readership.',
     baseViabilityScore: 88,
     zapierBlueprint: {
       blueprintName: 'RSS Aggregator to Gemini AI Summarizer & Beehiiv Draft',
@@ -716,6 +730,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'Never lose another $500 plumbing job to voicemail. Convert missed calls to confirmed bookings automatically.',
     sampleAudience: 'Plumbers, HVAC repair, residential cleaners, dentists, auto mechanics',
+    realisticWeek1Earnings: '£0.00 - £100.00 (1 local trial setup if pitched in-person or via phone)',
+    honestRealityCheck: 'Setting up Twilio numbers and phone flows takes 1-2 days. Pitching local contractors in person yields 0 to 1 trial setup in Week 1.',
     baseViabilityScore: 91,
     zapierBlueprint: {
       blueprintName: 'Twilio Missed Call to Gemini AI SMS Conversational Booking Bot',
@@ -815,6 +831,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'Build a $5k/mo faceless video portfolio uploading 3 videos a day with zero camera time.',
     sampleAudience: 'Content creators, digital marketers, affiliate marketers',
+    realisticWeek1Earnings: '0p - 10p (Monetization requires watch hours and subscriber thresholds)',
+    honestRealityCheck: 'YouTube Shorts and TikTok require 30-90 days of consistent uploads to hit AdSense eligibility. Expect 0p to 10p in affiliate bio clicks in Week 1.',
     baseViabilityScore: 89,
     zapierBlueprint: {
       blueprintName: 'Gemini Scripting to TTS Audio Engine & YouTube API Publishing',
@@ -914,6 +932,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'Turn viral internet culture and micro-hobbies into a automated apparel brand with $0 upfront stock.',
     sampleAudience: 'E-commerce entrepreneurs, hobbyists, graphic designers, side-hustlers',
+    realisticWeek1Earnings: '0p - £15.00 (Etsy listings take 3-5 days to rank in search)',
+    honestRealityCheck: 'Etsy requires 5-10 indexed products for organic search visibility. Expect 0p to £15 in Week 1 unless driving external traffic.',
     baseViabilityScore: 86,
     zapierBlueprint: {
       blueprintName: 'Shopify / Etsy Order Sync to Printify Auto-Manufacturing',
@@ -1003,6 +1023,8 @@ export const SIDE_HUSTLES: SideHustle[] = [
     },
     sampleHook: 'Get an investor-ready 10-slide pitch deck that raised $2M+ built in 48 hours for a fraction of agency costs.',
     sampleAudience: 'Startup founders, pre-seed CEOs, real estate syndicators, agency founders',
+    realisticWeek1Earnings: '£0.00 (Week 1 is portfolio template setup & pitching pre-seed founder groups)',
+    honestRealityCheck: 'Pitch deck retainers ($2,500) require establishing trust with startup founders. Week 1 expectation is £0.00 while building sample decks and posting in founder communities.',
     baseViabilityScore: 90,
     zapierBlueprint: {
       blueprintName: 'Tally Form Intake to Gemini Deck Structure & Gamma Presentation',

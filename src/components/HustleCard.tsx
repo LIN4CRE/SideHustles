@@ -107,7 +107,7 @@ export const HustleCard: React.FC<HustleCardProps> = ({
         </p>
 
         {/* Key Metrics Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 mb-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 mb-3">
           <div>
             <span className="text-[10px] uppercase font-mono text-slate-500 block">Monthly Goal</span>
             <span className="text-sm font-bold text-emerald-400 flex items-center gap-0.5">
@@ -137,6 +137,22 @@ export const HustleCard: React.FC<HustleCardProps> = ({
               {hustle.weeklyHoursNeeded}h
             </span>
           </div>
+        </div>
+
+        {/* Ground Truth Week 1 Expectation */}
+        <div className="bg-slate-950/90 p-2.5 rounded-xl border border-emerald-500/20 mb-4 flex flex-col gap-1">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[10px] uppercase font-mono font-bold text-emerald-400 flex items-center gap-1">
+              <ShieldCheck className="w-3 h-3 text-emerald-400" />
+              Realistic Week 1 Expectation
+            </span>
+            <span className="text-xs font-bold text-emerald-300 font-mono">
+              {hustle.realisticWeek1Earnings || '£0.00 - £25.00'}
+            </span>
+          </div>
+          <p className="text-[10px] text-slate-400 leading-tight line-clamp-2">
+            {hustle.honestRealityCheck}
+          </p>
         </div>
 
         {/* Hustle Health Progress Bar */}
