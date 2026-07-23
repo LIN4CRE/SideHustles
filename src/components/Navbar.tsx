@@ -27,6 +27,7 @@ interface NavbarProps {
   onOpenFoolproofWizard: () => void;
   onOpenLocalLlmHub?: () => void;
   onOpenAutomationTour?: () => void;
+  onOpen24hChallenge?: () => void;
 }
 
 const CATEGORIES: CategoryType[] = [
@@ -54,20 +55,21 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenPayoutModal,
   onOpenFoolproofWizard,
   onOpenLocalLlmHub,
-  onOpenAutomationTour
+  onOpenAutomationTour,
+  onOpen24hChallenge
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
       {/* Top Banner */}
       <div 
-        onClick={onOpenFoolproofWizard}
-        className="bg-gradient-to-r from-emerald-950 via-indigo-950 to-purple-950 px-4 py-1.5 text-xs text-center border-b border-emerald-500/30 text-emerald-200 flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 transition-all font-mono"
+        onClick={onOpen24hChallenge || onOpenFoolproofWizard}
+        className="bg-gradient-to-r from-amber-950 via-emerald-950 to-indigo-950 px-4 py-1.5 text-xs text-center border-b border-amber-500/30 text-amber-200 flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 transition-all font-mono"
       >
         <Zap className="w-3.5 h-3.5 text-amber-300 animate-pulse shrink-0" />
         <span>
-          <strong>Zero Code & No Settings Required:</strong> Click here to launch a 1-click foolproof side hustle with auto-injected Bank/PayPal payout!
+          <strong>24-Hour 1p Sale Challenge:</strong> Deploy Wallpapers, WearOS Watch Faces, Ringtones, n8n JSONs or Obsidian Vaults for instant Day 1 sales!
         </span>
-        <ArrowRight className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+        <ArrowRight className="w-3.5 h-3.5 text-amber-400 shrink-0" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -133,9 +135,20 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Desktop Action Buttons */}
             <div className="hidden md:flex items-center gap-2">
+              {onOpen24hChallenge && (
+                <button
+                  onClick={onOpen24hChallenge}
+                  className="px-3 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-amber-500 to-emerald-500 hover:from-rose-500 hover:to-emerald-400 text-slate-950 font-extrabold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-rose-500/20 animate-pulse"
+                  title="24-Hour 1p Micro-Sale Challenge (Wallpapers, WearOS, Ringtones, n8n, ComfyUI, Obsidian)"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-slate-950 fill-slate-950" />
+                  <span>🔥 24h 1p Challenge</span>
+                </button>
+              )}
+
               <button
                 onClick={onOpenFoolproofWizard}
-                className="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-400 hover:to-teal-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-emerald-500/20 animate-pulse"
+                className="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-emerald-600 to-teal-600 hover:from-amber-400 hover:to-teal-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-emerald-500/20"
                 title="Foolproof 1-Click Zero-Code Side Hustle Wizard"
               >
                 <Zap className="w-3.5 h-3.5 text-slate-950 fill-slate-950" />

@@ -1063,5 +1063,570 @@ export const SIDE_HUSTLES: SideHustle[] = [
         }
       ]
     }
+  },
+  {
+    id: '4k-wallpaper-theme-vault',
+    title: '4K AI Wallpaper & Phone Theme Packs (£0.10 - £0.99)',
+    category: 'Digital Products',
+    tagline: 'High-volume batch generated 4K aesthetic wallpapers & mobile themes sold on Gumroad & Etsy.',
+    description: 'Use Midjourney or ComfyUI to batch generate 100+ 4K OLED dark mode mobile wallpapers, Cyberpunk themes, or Minimalist anime art. Bundle them into ZIP packs priced at 10p to 99p for ultra-fast friction-free impulse downloads.',
+    startupCost: 0,
+    marginPercentage: 99,
+    monthlyRevenuePotential: 1200,
+    automationScore: 96,
+    difficulty: 'Beginner',
+    timeToFirstDollar: '24 Hours',
+    weeklyHoursNeeded: 2,
+    isFreeStarterSet: true,
+    freeStarterAssets: {
+      assetType: 'Wallpaper & Mobile Theme Pack Blueprint',
+      title: '100+ 4K OLED Wallpaper Prompts & Auto-Listing Kit',
+      downloadableContent: `# 4K OLED Wallpaper Batch Generator & 24-Hour Listing Pack
+
+## 1. Top 5 High-Converting Wallpaper Prompts (Midjourney / ComfyUI / SDXL)
+- **Prompt 1 (Cyberpunk Neon City 8K):** \`Cyberpunk Tokyo alleyway at rainy midnight, ultra-detailed OLED black background, neon violet and cyan reflections, cinematic lighting, 4k 8k resolution, 9:16 aspect ratio --ar 9:16 --v 6.0\`
+- **Prompt 2 (Minimalist Matte Black Geometry):** \`Minimalist abstract 3D dark geometric fluid ribbon, deep charcoal and emerald gold highlights, clean vector aesthetic, 4k wallpaper, 9:16 aspect ratio --ar 9:16\`
+- **Prompt 3 (Lo-Fi Rainy Pixel Art):** \`Cozy lo-fi bedroom rainy window view, warm ambient desk lamp, pixel art style, high contrast dark theme, phone wallpaper --ar 9:16\`
+- **Prompt 4 (Japanese Ink Landscape):** \`Traditional Japanese sumi-e ink painting of misty sakura mountains, minimalist red sun contrast, OLED deep black background --ar 9:16\`
+- **Prompt 5 (Abstract Cosmic Nebula):** \`Deep space cosmic nebula with glowing gold dust particles, deep void black space, ultra high resolution 8K mobile wallpaper --ar 9:16\`
+
+## 2. 24-Hour 1p/10p Promotion Post Copy (Copy-Paste)
+**Reddit (r/wallpapers / r/MobileWallpapers / Discord):**
+> "Hey everyone! I rendered a batch of 50 Ultra-HD 4K OLED mobile wallpapers using custom SDXL workflows. I put them in a Gumroad pack for 1p (or pay what you want). Here is the direct link: [https://paypal.me/dlinacre16 or Gumroad link]. Enjoy the free preview!"
+
+## 3. Instant Automated Delivery Setup
+1. Upload ZIP to Google Drive or Gumroad.
+2. Set price to £0.10 (or Pay What You Want starting at 1p).
+3. Post in 3 wallpaper Reddit/Discord groups for instant Day 1 sales.`,
+      setupGuide: 'Batch render 20 images using prompts above -> Zip images -> Upload to Gumroad/Drive -> Share link on Reddit/Pinterest/Discord for instant 24h downloads.'
+    },
+    scalabilityPillars: [
+      'Mass volume: Millions of phone owners look for clean 4K wallpapers daily',
+      'Zero production cost after initial AI render batch',
+      'Can expand into iPad, 4K Desktop, and dual-monitor wallpaper packs'
+    ],
+    recommendedTools: ['Midjourney / ComfyUI', 'Gumroad', 'Google Drive', 'Reddit / Pinterest'],
+    workflowBlueprint: [
+      {
+        stepNumber: 1,
+        title: 'Batch AI Image Generation',
+        tool: 'ComfyUI / Midjourney',
+        description: 'Generate 50 high-res 9:16 images in 15 minutes using curated prompts.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 2,
+        title: 'Auto Upscaling & Compression',
+        tool: 'Upscayl / PIL Script',
+        description: 'Upscale renders to crisp 4K OLED resolution and compress into a ZIP file.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 3,
+        title: 'Gumroad Storefront & Paypal Link',
+        tool: 'Gumroad / PayPal',
+        description: 'List asset for 10p - 99p with instant automated ZIP delivery.',
+        isAutomated: true
+      }
+    ],
+    defaultEconomics: {
+      pricePerUnit: 0.50,
+      monthlyCustomers: 1200,
+      monthlyOperatingCost: 0,
+      conversionRate: 15.0,
+      estimatedMonthlyLeads: 8000,
+      fulfillmentCostPerUnit: 0
+    },
+    sampleHook: '50 Ultra-HD 4K OLED Cyberpunk & Minimalist Mobile Wallpapers - Grab the ZIP for 10p!',
+    sampleAudience: 'Mobile customization enthusiasts, iPhone/Android users, Reddit wallpaper fans',
+    realisticWeek1Earnings: '1p - £15.00 (First 5-20 impulse downloads from Reddit/Discord/Pinterest threads)',
+    honestRealityCheck: 'Wallpapers priced at 10p - 50p have almost zero buying friction. Posting a free 3-image preview thread on Reddit or Pinterest routinely nets 1 to 10 micro-sales within 24 hours.',
+    baseViabilityScore: 95,
+    zapierBlueprint: {
+      blueprintName: 'New Gumroad Wallpaper Sale to Auto Instant Download & Thank You Note',
+      description: 'Fires when customer buys wallpaper pack on Gumroad or PayPal, emails direct Drive ZIP link, and offers 50% discount on 500-wallpaper mega vault.',
+      platform: 'Zapier',
+      nodes: [
+        {
+          id: 'wp-1',
+          type: 'trigger',
+          toolName: 'Gumroad / PayPal Webhook',
+          iconName: 'Webhook',
+          actionTitle: 'New Wallpaper Purchase',
+          description: 'Triggers on new 10p - 99p payment.',
+          samplePayload: '{\n  "email": "buyer@example.com",\n  "product": "4K Wallpaper Pack"\n}',
+          setupTip: 'Set minimum price to 1p for maximum impulse conversions.'
+        }
+      ]
+    }
+  },
+  {
+    id: 'wearos-smartwatch-presets',
+    title: 'WearOS & Apple Watch Face Digital Preset Vault (£0.49 - £0.99)',
+    category: 'Digital Products',
+    tagline: 'Custom digital smartwatch face presets & WatchMaker/Facer themes exported for instant download.',
+    description: 'Design minimalist, tactical, and cyberpunk smartwatch face templates for Galaxy Watch, WearOS, and Apple Watch. Export `.watch` and `.face` files or Clockology bundles and list them on Etsy or Facer for 49p - 99p.',
+    startupCost: 0,
+    marginPercentage: 98,
+    monthlyRevenuePotential: 1800,
+    automationScore: 94,
+    difficulty: 'Beginner',
+    timeToFirstDollar: '24 Hours',
+    weeklyHoursNeeded: 2,
+    isFreeStarterSet: true,
+    freeStarterAssets: {
+      assetType: 'Smartwatch Face Preset Starter Kit',
+      title: '5 Cyberpunk & Minimalist Watch Face Templates + Facer Export Guide',
+      downloadableContent: `# Smartwatch Face Preset Vault (WearOS / Galaxy / Apple Watch)
+
+## 1. Included Watch Face Presets
+- **Preset 1: "CyberOLED Minimalist"** — Deep black background, neon green step counter, battery ring, UTC clock.
+- **Preset 2: "Tactical HUD 2026"** — Weather radar widget, heart rate pulse gauge, military time display.
+- **Preset 3: "Retro Synthwave"** — Sunset grid design, digital retro typography, instant health tracking.
+- **Preset 4: "Monochrome Executive"** — Brushed steel background, luxury analog hands, dual time zone.
+- **Preset 5: "Lo-Fi Pixel Watch"** — Animated pixel cat/weather, minimal battery percentage.
+
+## 2. Fast 24-Hour Deployment Steps
+1. Import designs into Facer Creator or Clockology.
+2. Publish presets on Facer / Etsy / Gumroad priced at 49p ($0.65).
+3. Share a short 10-second wrist shot clip on TikTok, Instagram Reels, and r/GalaxyWatch.`,
+      setupGuide: 'Export watch face preset files -> List on Gumroad/Etsy at 49p -> Post 15-second smartwatch clip on Reddit/TikTok -> Earn instant daily sales.'
+    },
+    scalabilityPillars: [
+      'Over 200 million WearOS & Apple Watch owners seeking unique watch faces',
+      'Once created, watch face files generate 100% passive digital downloads indefinitely',
+      'High conversion rate when paired with short 10-second wrist video clips'
+    ],
+    recommendedTools: ['Facer Creator', 'Clockology', 'Gumroad', 'TikTok / Reddit'],
+    workflowBlueprint: [
+      {
+        stepNumber: 1,
+        title: 'Watch Face Design & Export',
+        tool: 'Facer / Canva',
+        description: 'Design high-contrast OLED watch face layouts and export template files.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 2,
+        title: 'Listing & Multi-Storefront Export',
+        tool: 'Gumroad / Etsy',
+        description: 'List .watch/.face files for 49p with instant download delivery.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 3,
+        title: 'Automated Social Wrist Clips',
+        tool: 'CapCut / TikTok',
+        description: 'Post short wrist preview videos with link in bio for high-volume organic traffic.',
+        isAutomated: true
+      }
+    ],
+    defaultEconomics: {
+      pricePerUnit: 0.75,
+      monthlyCustomers: 900,
+      monthlyOperatingCost: 0,
+      conversionRate: 12.0,
+      estimatedMonthlyLeads: 6000,
+      fulfillmentCostPerUnit: 0
+    },
+    sampleHook: 'Turn your Galaxy or Apple Watch into a futuristic Cyberpunk HUD - Download the preset for 49p!',
+    sampleAudience: 'Galaxy Watch owners, Apple Watch power users, WearOS customization fans',
+    realisticWeek1Earnings: '49p - £12.00 (First 1-5 sales from r/GalaxyWatch or TikTok wrist clips)',
+    honestRealityCheck: 'Smartwatch enthusiasts love showing off custom watch faces. A simple photo/video on r/GalaxyWatch or r/AppleWatch with a 49p Gumroad link gets 1-3 sales on Day 1.',
+    baseViabilityScore: 93,
+    zapierBlueprint: {
+      blueprintName: 'Watch Face Download to Automated Custom Wrist Request Upsell',
+      description: 'Sends download link automatically upon purchase and invites buyer to submit a custom watch face request for £4.99.',
+      platform: 'Zapier',
+      nodes: [
+        {
+          id: 'wf-1',
+          type: 'trigger',
+          toolName: 'Gumroad Webhook',
+          iconName: 'Webhook',
+          actionTitle: 'New Watch Face Download',
+          description: 'Triggers on 49p sale.',
+          samplePayload: '{\n  "email": "user@gmail.com",\n  "preset": "CyberOLED Watch Face"\n}',
+          setupTip: 'Include video installation guide in receipt email.'
+        }
+      ]
+    }
+  },
+  {
+    id: 'audio-chimes-ringtones',
+    title: 'Custom Ringtones, Notification Chimes & Lo-Fi SFX Pack (£0.10 - £0.50)',
+    category: 'Digital Products',
+    tagline: 'Aesthetic notification sounds, retro game chimes & lo-fi ringtones for phones & creators.',
+    description: 'Produce high-converting 1-3 second notification chimes, zen bell alarms, and retro arcade ringtones using AI audio tools or DAWs. Package 20 M4R/MP3 audio files into a 10p - 50p micro-pack for instant downloads.',
+    startupCost: 0,
+    marginPercentage: 99,
+    monthlyRevenuePotential: 1500,
+    automationScore: 97,
+    difficulty: 'Beginner',
+    timeToFirstDollar: '24 Hours',
+    weeklyHoursNeeded: 1,
+    isFreeStarterSet: true,
+    freeStarterAssets: {
+      assetType: 'Aesthetic Chime & Ringtone Vault',
+      title: '20 Aesthetic iPhone/Android Chimes + Auto-Listing Package',
+      downloadableContent: `# 20 Aesthetic Notification Chimes & Ringtones Pack
+
+## 1. Included Audio Preset Descriptions (.mp3 & .m4r formats)
+1. **Zen Japanese Woodblock Chime** — Soft 1.2s acoustic woodblock chime for calm SMS alerts.
+2. **Cyberpunk Cyber-Beep** — Futuristic 0.8s digital notification sound.
+3. **8-Bit Retro Coin Pickup** — Nostalgic arcade sound for email notifications.
+4. **Lo-Fi Raindrop Bell** — Soothing 2s rain chime for morning alarm.
+5. **Glass Water Drop** — Crisp crystal clear notification chime.
+
+## 2. 24-Hour 1p Promotion Pitch
+> "I got tired of annoying harsh phone ringtones, so I created 20 aesthetic, calm notification chimes in M4R & MP3. Grab the full ZIP for 10p on Gumroad: [https://paypal.me/dlinacre16]. Hope it makes your phone sound better!"`,
+      setupGuide: 'Export 20 short MP3/M4R files -> Zip folder -> Upload to Gumroad/Paypal link -> Share audio preview clip on TikTok/X -> Get instant 10p sales.'
+    },
+    scalabilityPillars: [
+      'Massive global market: Everyone wants pleasant, unique phone notification chimes',
+      'Zero shipping or hosting costs; instant ZIP file delivery',
+      'High viral potential on TikTok/Instagram Reels using sound preview clips'
+    ],
+    recommendedTools: ['Suno / Audacity / ElevenLabs', 'Gumroad', 'TikTok / YouTube Shorts'],
+    workflowBlueprint: [
+      {
+        stepNumber: 1,
+        title: 'AI Audio Generation & Trimming',
+        tool: 'Audacity / ElevenLabs / Suno',
+        description: 'Generate 20 clean 1-2 second notification sounds and trim silent gaps.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 2,
+        title: 'M4R & MP3 Formatting',
+        tool: 'FFmpeg Script',
+        description: 'Convert audio into iOS M4R ringtone format and standard Android MP3.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 3,
+        title: 'Gumroad 10p Storefront',
+        tool: 'Gumroad / PayPal',
+        description: 'Deliver instant automated ZIP download upon payment.',
+        isAutomated: true
+      }
+    ],
+    defaultEconomics: {
+      pricePerUnit: 0.25,
+      monthlyCustomers: 1500,
+      monthlyOperatingCost: 0,
+      conversionRate: 18.0,
+      estimatedMonthlyLeads: 10000,
+      fulfillmentCostPerUnit: 0
+    },
+    sampleHook: 'Replace annoying phone notification sounds with 20 calm, aesthetic chimes - 10p ZIP download!',
+    sampleAudience: 'iPhone & Android owners, productivity enthusiasts, lo-fi music fans',
+    realisticWeek1Earnings: '10p - £10.00 (First 5-20 impulse purchases from TikTok/Reddit preview clips)',
+    honestRealityCheck: 'Ringtones and chimes priced at 10p are the ultimate impulse buy. Posting a 15-second audio preview reel on TikTok or Instagram Reels consistently drives Day 1 micro-sales.',
+    baseViabilityScore: 94,
+    zapierBlueprint: {
+      blueprintName: 'Audio Chime Sale to Automated Custom Sound Request Upsell',
+      description: 'Emails buyer their ringtone ZIP instantly and offers custom 5-second branded audio intro/outro for £2.99.',
+      platform: 'Zapier',
+      nodes: [
+        {
+          id: 'ac-1',
+          type: 'trigger',
+          toolName: 'Gumroad Webhook',
+          iconName: 'Webhook',
+          actionTitle: 'New Ringtone Pack Sale',
+          description: 'Triggers on 10p purchase.',
+          samplePayload: '{\n  "email": "listener@gmail.com",\n  "item": "20 Aesthetic Chimes"\n}',
+          setupTip: 'Provide both iPhone .m4r and Android .mp3 files in the zip.'
+        }
+      ]
+    }
+  },
+  {
+    id: 'n8n-workflow-blueprints',
+    title: 'n8n Automated Workflow JSON Blueprint Vault (£1.00 - £4.99)',
+    category: 'AI & Automation',
+    tagline: 'Plug-and-play n8n JSON workflow templates for lead scraping, AI agents & Telegram bots.',
+    description: 'Build production-tested n8n automation workflows (e.g. Lead Enrichment -> Gemini AI Summary -> Telegram Alert -> Google Sheets). Export JSON workflow files and sell them to agency owners, developers, and solopreneurs for £1.00 to £4.99.',
+    startupCost: 0,
+    marginPercentage: 99,
+    monthlyRevenuePotential: 2800,
+    automationScore: 98,
+    difficulty: 'Intermediate',
+    timeToFirstDollar: '24 Hours',
+    weeklyHoursNeeded: 2,
+    isFreeStarterSet: true,
+    freeStarterAssets: {
+      assetType: 'n8n JSON Workflow Vault Starter',
+      title: '3 Production-Ready n8n Workflows (JSON Files + Setup Guides)',
+      downloadableContent: `# 3 Plug-and-Play n8n Automated Workflow Blueprints
+
+## Workflow 1: Instant Lead Scraper & Gemini AI Qualification
+- **Trigger:** Webhook / Google Forms / Tally submission.
+- **Node 1:** Webhook receives prospect website & email.
+- **Node 2:** HTTP Request fetches home page HTML text.
+- **Node 3:** Gemini 3.6 Flash extracts company size, tech stack, and pain points.
+- **Node 4:** Telegram Bot sends formatted instant lead alert with 1-tap WhatsApp quick reply link.
+
+## Workflow 2: Automated RSS/YouTube to Social Media AI Summarizer
+- **Trigger:** RSS Feed / YouTube Channel Upload.
+- **Node 1:** Extracts latest article/transcript.
+- **Node 2:** Gemini 3.6 Flash formats 3 viral X (Twitter) threads and LinkedIn posts.
+- **Node 3:** Posts directly to Buffer / Hootsuite.
+
+## Workflow 3: Auto-Invoicing & PayPal/Stripe Payment Webhook Router
+- **Trigger:** Stripe / PayPal Checkout event.
+- **Node 1:** Formats clean PDF receipt using PDFMonkey API.
+- **Node 2:** Sends direct download link to customer via Resend Email API.
+
+## 24-Hour Sales Pitch for r/n8n & LinkedIn
+> "Hey automation builders! I built 3 production n8n workflows for lead scraping, Telegram alerts, and AI social summarization. You can import the exact JSON files in 10 seconds. Grab the JSON bundle for £1.00 here: [https://paypal.me/dlinacre16]."`,
+      setupGuide: 'Copy n8n JSON code -> List bundle on Gumroad for £1.00 -> Share demo video on r/n8n or LinkedIn -> Earn instant Day 1 sales.'
+    },
+    scalabilityPillars: [
+      'n8n is exploding in popularity as the open-source alternative to Zapier & Make',
+      'Developers & agency owners pay £1-£10 instantly to save 3 hours of building time',
+      'JSON files import in 1 click with zero technical friction'
+    ],
+    recommendedTools: ['n8n Cloud / Self-Hosted', 'Gemini API', 'Gumroad', 'Reddit r/n8n / X'],
+    workflowBlueprint: [
+      {
+        stepNumber: 1,
+        title: 'Build & Test n8n Workflow',
+        tool: 'n8n',
+        description: 'Construct workflow nodes and test with live Webhooks.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 2,
+        title: 'Export JSON Blueprint',
+        tool: 'n8n JSON Export',
+        description: 'Export raw JSON file and remove personal API keys.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 3,
+        title: 'Gumroad £1.00 Listing',
+        tool: 'Gumroad / PayPal',
+        description: 'List JSON file with step-by-step import guide for instant download.',
+        isAutomated: true
+      }
+    ],
+    defaultEconomics: {
+      pricePerUnit: 2.50,
+      monthlyCustomers: 450,
+      monthlyOperatingCost: 0,
+      conversionRate: 10.0,
+      estimatedMonthlyLeads: 4500,
+      fulfillmentCostPerUnit: 0
+    },
+    sampleHook: 'Stop building n8n workflows from scratch - Import 3 production JSON templates for £1.00!',
+    sampleAudience: 'Agency owners, n8n developers, no-code builders, solopreneurs',
+    realisticWeek1Earnings: '£1.00 - £25.00 (First 1-5 JSON sales from r/n8n, LinkedIn, or Discord)',
+    honestRealityCheck: 'The n8n community is hungry for ready-to-import JSON templates. Posting a 30-second workflow demonstration video on r/n8n or X with a £1 link lands 1-3 sales within 24 hours.',
+    baseViabilityScore: 96,
+    zapierBlueprint: {
+      blueprintName: 'n8n JSON Sale to Auto Email Delivery & Video Walkthrough',
+      description: 'Delivers n8n JSON file instantly upon receipt of payment and sends Loom video setup guide.',
+      platform: 'Zapier',
+      nodes: [
+        {
+          id: 'n8n-1',
+          type: 'trigger',
+          toolName: 'Gumroad Webhook',
+          iconName: 'Webhook',
+          actionTitle: 'New n8n Blueprint Sale',
+          description: 'Triggers on £1.00 - £4.99 purchase.',
+          samplePayload: '{\n  "email": "builder@agency.com",\n  "blueprint": "n8n Lead Scraper JSON"\n}',
+          setupTip: 'Include direct pastebin link to JSON code for mobile buyers.'
+        }
+      ]
+    }
+  },
+  {
+    id: 'comfyui-pipeline-matrix',
+    title: 'ComfyUI AI Image Pipeline & Prompt Matrix (£0.99 - £2.99)',
+    category: 'Digital Products',
+    tagline: 'Ready-to-import ComfyUI JSON node workflows for hyper-realistic AI portraits & product photo renders.',
+    description: 'Create advanced ComfyUI node graphs featuring Flux.1, SDXL, ControlNet, IP-Adapter, and Upscayl pipelines. Export the `.json` node workflow files and sell them to AI artists, marketers, and e-commerce brands for £0.99 to £2.99.',
+    startupCost: 0,
+    marginPercentage: 99,
+    monthlyRevenuePotential: 3200,
+    automationScore: 96,
+    difficulty: 'Intermediate',
+    timeToFirstDollar: '24 Hours',
+    weeklyHoursNeeded: 2,
+    isFreeStarterSet: true,
+    freeStarterAssets: {
+      assetType: 'ComfyUI Node Workflow Vault',
+      title: 'Flux.1 Studio Portrait & Product Rendering ComfyUI JSON Workflows',
+      downloadableContent: `# ComfyUI Studio Quality Pipeline & Prompt Matrix
+
+## 1. Included Workflows (.json)
+- **Workflow 1: Flux.1 Hyper-Realistic Photorealistic Portrait Pipeline** — Node graph configured with KSampler, Flux Guidance, and Face Detailer for 8K studio photography.
+- **Workflow 2: E-Commerce Product Studio Backdrop Engine** — Takes raw smartphone product photo, removes background with RMBG-1.4 node, and places product in luxury marble/wood environments.
+- **Workflow 3: Anime to Real-World Cosplay Render Pipeline** — ControlNet Canny + IP-Adapter node graph converting line art into photorealistic 3D renders.
+
+## 2. 24-Hour Promo Post for r/ComfyUI & AI Art Groups
+> "I spent 15 hours optimizing a ComfyUI Flux.1 workflow that handles background removal, lighting matching, and 8K face detailing in 1 click. Drag and drop the JSON into ComfyUI! Grab the JSON for 99p: [https://paypal.me/dlinacre16]."`,
+      setupGuide: 'Export ComfyUI JSON workflow -> Upload to Civitai / Gumroad for 99p -> Post before/after render comparison on r/ComfyUI -> Land instant Day 1 sales.'
+    },
+    scalabilityPillars: [
+      'ComfyUI is the industry standard node builder for AI image generation',
+      'AI artists and marketers spend hours wiring node graphs; a 99p JSON workflow saves days of frustration',
+      'Huge organic distribution via Civitai, Reddit, and Discord'
+    ],
+    recommendedTools: ['ComfyUI', 'Flux.1 / SDXL', 'Gumroad', 'Civitai / Reddit'],
+    workflowBlueprint: [
+      {
+        stepNumber: 1,
+        title: 'Construct ComfyUI Node Graph',
+        tool: 'ComfyUI',
+        description: 'Wire model loaders, KSamplers, ControlNet, and Upscalers into a clean graph.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 2,
+        title: 'Save API / UI JSON Workflow',
+        tool: 'ComfyUI JSON Export',
+        description: 'Export clean JSON graph without hardcoded local directory paths.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 3,
+        title: 'Publish on Gumroad & Civitai',
+        tool: 'Gumroad / Civitai',
+        description: 'List JSON workflow for 99p - £2.99 with instant download delivery.',
+        isAutomated: true
+      }
+    ],
+    defaultEconomics: {
+      pricePerUnit: 1.99,
+      monthlyCustomers: 600,
+      monthlyOperatingCost: 0,
+      conversionRate: 12.0,
+      estimatedMonthlyLeads: 5000,
+      fulfillmentCostPerUnit: 0
+    },
+    sampleHook: '1-Click ComfyUI Flux.1 Studio Portrait Pipeline - Drag and drop the JSON for 99p!',
+    sampleAudience: 'AI creators, ComfyUI power users, e-commerce product photographers',
+    realisticWeek1Earnings: '99p - £20.00 (First 1-8 JSON sales from r/ComfyUI or Civitai)',
+    honestRealityCheck: 'ComfyUI users love drag-and-drop node workflows. Posting a high-quality before/after render comparison on r/ComfyUI or Civitai with a 99p purchase link routinely generates sales in < 24 hours.',
+    baseViabilityScore: 95,
+    zapierBlueprint: {
+      blueprintName: 'ComfyUI Workflow Sale to Auto Email Delivery & Model Checkpoint Guide',
+      description: 'Delivers ComfyUI JSON file instantly upon purchase with download links for required LoRAs and checkpoints.',
+      platform: 'Zapier',
+      nodes: [
+        {
+          id: 'cui-1',
+          type: 'trigger',
+          toolName: 'Gumroad Webhook',
+          iconName: 'Webhook',
+          actionTitle: 'New ComfyUI Workflow Sale',
+          description: 'Triggers on 99p purchase.',
+          samplePayload: '{\n  "email": "aiartist@gmail.com",\n  "workflow": "Flux Studio Portrait JSON"\n}',
+          setupTip: 'Provide list of custom nodes required in the receipt email.'
+        }
+      ]
+    }
+  },
+  {
+    id: 'obsidian-pkm-vault',
+    title: 'Obsidian PKM Vault & Daily Automation System (£0.50 - £1.99)',
+    category: 'Digital Products',
+    tagline: 'Pre-configured Obsidian Markdown vault with Dataview, Templater & daily planner dashboards.',
+    description: 'Assemble a clean, pre-configured Obsidian Personal Knowledge Management (PKM) vault ZIP with pre-installed community plugins (Dataview, Templater, QuickAdd, Kanban) and daily note templates. Sell the pre-built vault on Gumroad for 50p to £1.99.',
+    startupCost: 0,
+    marginPercentage: 99,
+    monthlyRevenuePotential: 2100,
+    automationScore: 95,
+    difficulty: 'Beginner',
+    timeToFirstDollar: '24 Hours',
+    weeklyHoursNeeded: 1,
+    isFreeStarterSet: true,
+    freeStarterAssets: {
+      assetType: 'Obsidian Pre-Configured Vault Pack',
+      title: 'Minimalist Life OS & Daily Planner Obsidian Vault (.zip)',
+      downloadableContent: `# Obsidian Minimalist Life OS Vault Starter
+
+## 1. Vault Folder Structure Included
+- \`00 - Inbox/\` (Default capture folder for quick thoughts)
+- \`01 - Daily Notes/\` (Automated daily journal with habit tracker & top 3 priorities)
+- \`02 - Projects/\` (Kanban boards for active side hustles)
+- \`03 - Knowledge Base/\` (Zettelkasten smart notes setup)
+- \`04 - Archives/\`
+
+## 2. Pre-Configured Dataview Query Snippets Included
+\`\`\`dataview
+TABLE status, priority, due-date
+FROM "02 - Projects"
+WHERE status != "Completed"
+SORT priority DESC
+\`\`\`
+
+## 3. 24-Hour Promotion Post for r/ObsidianMD
+> "I spent a week setting up a clean, zero-bloat Obsidian Life OS vault with Dataview, Templater daily notes, and Kanban boards pre-configured. Just unzip and open folder! Download the vault ZIP for 50p on Gumroad: [https://paypal.me/dlinacre16]."`,
+      setupGuide: 'Zip configured Obsidian folder -> Upload to Gumroad for 50p -> Post screenshot tour on r/ObsidianMD -> Earn instant Day 1 sales.'
+    },
+    scalabilityPillars: [
+      'Millions of active Obsidian users look for clean, ready-to-use PKM setups',
+      'Zero monthly cost; Markdown files are 100% future-proof and offline',
+      'High conversion rate when showing sleek dark-mode dashboard screenshots'
+    ],
+    recommendedTools: ['Obsidian', 'Gumroad', 'Reddit r/ObsidianMD', 'Twitter/X'],
+    workflowBlueprint: [
+      {
+        stepNumber: 1,
+        title: 'Configure Vault & Templates',
+        tool: 'Obsidian',
+        description: 'Set up folder structure, Dataview queries, and Templater daily scripts.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 2,
+        title: 'Export ZIP Archive',
+        tool: 'ZIP Compression',
+        description: 'Compress `.obsidian` configuration folder and Markdown templates.',
+        isAutomated: true
+      },
+      {
+        stepNumber: 3,
+        title: 'Gumroad 50p Storefront',
+        tool: 'Gumroad / PayPal',
+        description: 'Deliver instant automated ZIP download upon purchase.',
+        isAutomated: true
+      }
+    ],
+    defaultEconomics: {
+      pricePerUnit: 1.25,
+      monthlyCustomers: 500,
+      monthlyOperatingCost: 0,
+      conversionRate: 14.0,
+      estimatedMonthlyLeads: 3500,
+      fulfillmentCostPerUnit: 0
+    },
+    sampleHook: 'Stop spending 20 hours configuring Obsidian - Download a complete Life OS vault for 50p!',
+    sampleAudience: 'Obsidian users, students, programmers, knowledge workers, productivity fans',
+    realisticWeek1Earnings: '50p - £15.00 (First 1-10 vault downloads from r/ObsidianMD or X)',
+    honestRealityCheck: 'The Obsidian community loves seeing sleek PKM dashboards. Sharing a 3-screenshot preview of your dark mode dashboard on r/ObsidianMD with a 50p purchase link consistently yields 1-5 sales in 24 hours.',
+    baseViabilityScore: 96,
+    zapierBlueprint: {
+      blueprintName: 'Obsidian Vault Sale to Auto Download & Plugin Walkthrough Guide',
+      description: 'Delivers Obsidian vault ZIP instantly and sends markdown cheat sheet for Dataview and Templater.',
+      platform: 'Zapier',
+      nodes: [
+        {
+          id: 'obs-1',
+          type: 'trigger',
+          toolName: 'Gumroad Webhook',
+          iconName: 'Webhook',
+          actionTitle: 'New Obsidian Vault Purchase',
+          description: 'Triggers on 50p purchase.',
+          samplePayload: '{\n  "email": "note-taker@gmail.com",\n  "product": "Obsidian Life OS Vault"\n}',
+          setupTip: 'Include instructions on how to enable community plugins after unzipping.'
+        }
+      ]
+    }
   }
 ];

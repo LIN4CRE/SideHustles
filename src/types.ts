@@ -120,10 +120,11 @@ export interface SideHustle {
   automationScore: number; // 1-100
   weeklyHoursNeeded: number; // e.g. 4
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  timeToFirstDollar?: string;
   
   // Traditional vs Automated comparison
-  traditionalModel: string;
-  automatedUpgrade: string;
+  traditionalModel?: string;
+  automatedUpgrade?: string;
   
   // Key Features & Scalability
   scalabilityPillars: string[];
@@ -143,6 +144,12 @@ export interface SideHustle {
   // Free Starter Set extensions
   isFreeStarterSet?: boolean;
   freeStarterSet?: FreeStarterSetInfo;
+  freeStarterAssets?: {
+    assetType: string;
+    title: string;
+    downloadableContent: string;
+    setupGuide: string;
+  };
 
   // Ground Truth & Same-Week Realism
   realisticWeek1Earnings: string; // e.g. "£0.00 - £25.00 (Requires sending 10-15 pitches)"

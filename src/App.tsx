@@ -15,6 +15,7 @@ import { ExecutionLog } from './components/ExecutionLog';
 import { SavedHustleHealthCard } from './components/SavedHustleHealthCard';
 import { LocalLlmMcpHubModal } from './components/LocalLlmMcpHubModal';
 import { AutomationTourModal } from './components/AutomationTourModal';
+import { Day1SaleChallengeModal } from './components/Day1SaleChallengeModal';
 import { 
   Sparkles, 
   Bot, 
@@ -64,6 +65,7 @@ export default function App() {
   const [isFoolproofWizardOpen, setIsFoolproofWizardOpen] = useState<boolean>(false);
   const [isLocalLlmHubOpen, setIsLocalLlmHubOpen] = useState<boolean>(false);
   const [isAutomationTourOpen, setIsAutomationTourOpen] = useState<boolean>(false);
+  const [is24hChallengeOpen, setIs24hChallengeOpen] = useState<boolean>(false);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(() => {
     return localStorage.getItem('sh_has_seen_tour') === 'true';
   });
@@ -125,6 +127,7 @@ export default function App() {
         onOpenFoolproofWizard={() => setIsFoolproofWizardOpen(true)}
         onOpenLocalLlmHub={() => setIsLocalLlmHubOpen(true)}
         onOpenAutomationTour={() => setIsAutomationTourOpen(true)}
+        onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
       />
 
       {/* Main Container */}
@@ -152,11 +155,19 @@ export default function App() {
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
+                  onClick={() => setIs24hChallengeOpen(true)}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 via-amber-500 to-emerald-500 hover:from-rose-500 hover:to-emerald-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-rose-500/20 flex items-center gap-2 transition-all border border-amber-300/40 animate-pulse"
+                >
+                  <Sparkles className="w-4 h-4 text-slate-950 fill-slate-950" />
+                  <span>🔥 24-Hour 1p Micro-Sale Challenge</span>
+                </button>
+
+                <button
                   onClick={() => setIsFoolproofWizardOpen(true)}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition-all border border-emerald-400/30 animate-pulse"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition-all border border-emerald-400/30"
                 >
                   <Zap className="w-4 h-4 text-amber-300" />
-                  <span>⚡ 1-Click Foolproof Auto-Launcher (Zero Code)</span>
+                  <span>⚡ 1-Click Foolproof Auto-Launcher</span>
                 </button>
 
                 <button
@@ -508,6 +519,16 @@ export default function App() {
           setIsAutomationTourOpen(false);
           setIsSavedDrawerOpen(true);
           setDrawerTab('execution');
+        }}
+      />
+
+      {/* 24-HOUR 1P MICRO-SALE CHALLENGE MODAL */}
+      <Day1SaleChallengeModal
+        isOpen={is24hChallengeOpen}
+        onClose={() => setIs24hChallengeOpen(false)}
+        onOpenPayoutModal={() => {
+          setIs24hChallengeOpen(false);
+          setIsPayoutModalOpen(true);
         }}
       />
 
