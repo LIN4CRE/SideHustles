@@ -97,6 +97,26 @@ export const ReadyProductVaultView: React.FC = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const handleExportGumroadCSV = () => {
+    const headers = ["Name", "Price", "Description", "Category", "File Path", "Target Platforms"];
+    const rows = READY_PRODUCTS.map(p => [
+      `"${p.title.replace(/"/g, '""')}"`,
+      `"${p.price}"`,
+      `"${p.description.replace(/"/g, '""')}"`,
+      `"${p.category}"`,
+      `"${p.file}"`,
+      `"${p.platforms.join(', ')}"`
+    ]);
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "gumroad-catalog-bulk.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Vault Header Banner */}
@@ -112,7 +132,16 @@ export const ReadyProductVaultView: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <button
+            onClick={handleExportGumroadCSV}
+            className="px-4 py-2.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 rounded-xl text-xs font-bold flex items-center gap-2 transition-all"
+            title="Export Gumroad Bulk Import CSV"
+          >
+            <Download className="w-4 h-4 text-indigo-400" />
+            <span>Export Gumroad CSV</span>
+          </button>
+
           <a
             href="https://app.gumroad.com/products/new"
             target="_blank"
