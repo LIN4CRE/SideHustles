@@ -18,9 +18,9 @@ export const DeveloperTracker: React.FC = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/Tasks`, {
+      const response = await fetch(`https://api.airtable.com/v0/${(import.meta as any).env.VITE_AIRTABLE_BASE_ID}/Tasks`, {
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_AIRTABLE_PAT}`,
+          'Authorization': `Bearer ${(import.meta as any).env.VITE_AIRTABLE_PAT}`,
         }
       });
       if (!response.ok) throw new Error('Failed to fetch tasks');
@@ -51,10 +51,10 @@ export const DeveloperTracker: React.FC = () => {
     
     setIsAdding(true);
     try {
-      const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/Tasks`, {
+      const response = await fetch(`https://api.airtable.com/v0/${(import.meta as any).env.VITE_AIRTABLE_BASE_ID}/Tasks`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_AIRTABLE_PAT}`,
+          'Authorization': `Bearer ${(import.meta as any).env.VITE_AIRTABLE_PAT}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -84,10 +84,10 @@ export const DeveloperTracker: React.FC = () => {
   const handleUpdateStatus = async (id: string, currentStatus: string) => {
     const nextStatus = currentStatus === 'Todo' ? 'In Progress' : currentStatus === 'In Progress' ? 'Done' : 'Todo';
     try {
-      await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/Tasks/${id}`, {
+      await fetch(`https://api.airtable.com/v0/${(import.meta as any).env.VITE_AIRTABLE_BASE_ID}/Tasks/${id}`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_AIRTABLE_PAT}`,
+          'Authorization': `Bearer ${(import.meta as any).env.VITE_AIRTABLE_PAT}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({

@@ -4,6 +4,10 @@ import fs from "fs";
 import dotenv from "dotenv";
 import { GoogleGenAI, Type } from "@google/genai";
 import { createServer as createViteServer } from "vite";
+import { exec } from "child_process";
+import util from "util";
+
+const execAsync = util.promisify(exec);
 
 dotenv.config();
 
@@ -579,18 +583,26 @@ let recentSales = loadRealSales();
 // SSE Clients for Live Sale Notifications
 const sseClients: any[] = [];
 
-// Real Payout & Sale Webhook Endpoint (Gumroad, Stripe, PayPal, n8n)
+// Real Payout & Sale Webhook Endpoint (Gumroad, Stripe, Payhip, n8n)
 app.post("/api/webhooks/sale", (req, res) => {
-  const { item, amount, platform } = req.body;
-  if (!amount) {
-    return res.status(400).json({ error: "Amount is required for real sale" });
+  const payload = req.body;
+  
+  // Payhip sends { type: 'paid', product_name: '...', price: 10, ... }
+  // Gumroad sends { item: '...', amount: '...', ... }
+
+  let item = payload.item || payload.product_name || "Digital Asset Download";
+  let amount = payload.amount || payload.price || 0;
+  let platform = payload.platform || (payload.type === 'paid' ? 'Payhip' : 'Gumroad');
+
+  if (!amount && payload.type !== 'paid') {
+    return res.status(400).json({ error: "Amount or valid type is required for real sale" });
   }
 
   const newSale = {
     id: `sale-${Date.now()}`,
-    item: item || "Real Digital Asset Download",
-    amount: parseFloat(amount),
-    platform: platform || "Gumroad",
+    item: item,
+    amount: parseFloat(amount as string) || 0,
+    platform: platform,
     timestamp: new Date().toISOString()
   };
 
@@ -680,14 +692,25 @@ app.get("/api/system/telemetry", (req, res) => {
 });
 
 // Task 20: 1-Click Firebase CLI Deploy Runner
-app.post("/api/firebase/deploy", (req, res) => {
-  res.json({
-    status: "success",
-    message: "Firebase Hosting build verified and targeted to project hosting root.",
-    distPath: path.join(process.cwd(), "dist"),
-    targetProject: "firebase-blueprint.json",
-    timestamp: new Date().toISOString()
-  });
+app.post("/api/firebase/deploy", async (req, res) => {
+  try {
+    const { stdout, stderr } = await execAsync("npm run build && npx firebase deploy --only hosting", { cwd: process.cwd() });
+    
+    res.json({
+      status: "success",
+      message: "Build and deploy completed successfully!",
+      logs: stdout,
+      distPath: path.join(process.cwd(), "dist"),
+      timestamp: new Date().toISOString()
+    });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "Deployment failed.",
+      logs: error.stdout || error.message
+    });
+  }
 });
 
 async function startServer() {

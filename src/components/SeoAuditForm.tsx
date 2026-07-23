@@ -11,10 +11,10 @@ export const SeoAuditForm: React.FC = () => {
     setStatus('loading');
 
     try {
-      const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/Submissions`, {
+      const response = await fetch(`https://api.airtable.com/v0/${(import.meta as any).env.VITE_AIRTABLE_BASE_ID}/Submissions`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_AIRTABLE_PAT}`,
+          'Authorization': `Bearer ${(import.meta as any).env.VITE_AIRTABLE_PAT}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({

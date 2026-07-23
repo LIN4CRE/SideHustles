@@ -38,6 +38,7 @@ import { SystemAutomationHealthView } from './components/SystemAutomationHealthV
 import { MultiPlatformExporterModal } from './components/MultiPlatformExporterModal';
 import { FinancialCalculatorModal } from './components/FinancialCalculatorModal';
 import { LocalLlmHubModal } from './components/LocalLlmHubModal';
+import { DeploymentWizard } from './components/DeploymentWizard';
 import { 
   Sparkles, 
   Bot, 
@@ -59,7 +60,8 @@ import {
   Package,
   BarChart3,
   Cpu,
-  Layers
+  Layers,
+  Rocket
 } from 'lucide-react';
 
 export default function App() {
@@ -108,7 +110,7 @@ export default function App() {
   const [isMultiExporterOpen, setIsMultiExporterOpen] = useState<boolean>(false);
   const [isFinancialCalculatorOpen, setIsFinancialCalculatorOpen] = useState<boolean>(false);
   const [proTipHustle, setProTipHustle] = useState<SideHustle | null>(null);
-  const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'catalog' | 'vault' | 'analytics' | 'system'>('catalog');
+  const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'catalog' | 'vault' | 'analytics' | 'system' | 'deploy'>('catalog');
 
   const handleExecuteMacroAction = (actionType: string) => {
     if (actionType === 'open_genai') setIsGenAIGalleryOpen(true);
@@ -413,6 +415,18 @@ export default function App() {
             <Cpu className="w-4 h-4 text-amber-400" />
             <span>⚙️ System & Automation Hub</span>
           </button>
+
+          <button
+            onClick={() => setActiveWorkspaceTab('deploy')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all whitespace-nowrap ${
+              activeWorkspaceTab === 'deploy'
+                ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <Rocket className="w-4 h-4 text-emerald-400" />
+            <span>🚀 Deploy & Go Live</span>
+          </button>
         </div>
 
         {/* TAB 1: SIDE HUSTLE CATALOG VIEW */}
@@ -600,6 +614,11 @@ export default function App() {
             onOpenAutomatedFixModal={() => setIsAutomatedFixOpen(true)}
             onOpenLocalLlmHub={() => setIsLocalLlmHubOpen(true)}
           />
+        )}
+
+        {/* TAB 5: DEPLOYMENT WIZARD */}
+        {activeWorkspaceTab === 'deploy' && (
+          <DeploymentWizard />
         )}
 
       </main>
