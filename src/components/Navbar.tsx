@@ -39,6 +39,7 @@ interface NavbarProps {
   onOpenAutomatedFixModal?: () => void;
   onOpenDirectLaunchpad?: () => void;
   onOpenSaleNotifications?: () => void;
+  onOpenMultiExporter?: () => void;
   currency: CurrencyType;
   onCurrencyChange: (c: CurrencyType) => void;
   theme: ThemeType;
@@ -72,6 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAutomatedFixModal,
   onOpenDirectLaunchpad,
   onOpenSaleNotifications,
+  onOpenMultiExporter,
   currency,
   onCurrencyChange,
   theme,
@@ -209,6 +211,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span>💰 Direct Monetization</span>
               </button>
             )}
+
+            <button
+              onClick={onOpenMultiExporter}
+              className="px-3 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0"
+              title="Multi-Platform Exporter Suite (Etsy, Fiverr, Social Threads)"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Multi-Platform Exporter</span>
+            </button>
 
             {onOpenSaleNotifications && (
               <button

@@ -35,6 +35,7 @@ import { DirectActionLaunchpadModal } from './components/DirectActionLaunchpadMo
 import { SaleNotificationCenter } from './components/SaleNotificationCenter';
 import { ReadyProductVaultView } from './components/ReadyProductVaultView';
 import { SystemAutomationHealthView } from './components/SystemAutomationHealthView';
+import { MultiPlatformExporterModal } from './components/MultiPlatformExporterModal';
 import { 
   Sparkles, 
   Bot, 
@@ -102,6 +103,7 @@ export default function App() {
   const [isAutomatedFixOpen, setIsAutomatedFixOpen] = useState<boolean>(false);
   const [isDirectLaunchpadOpen, setIsDirectLaunchpadOpen] = useState<boolean>(false);
   const [isSaleNotificationsOpen, setIsSaleNotificationsOpen] = useState<boolean>(false);
+  const [isMultiExporterOpen, setIsMultiExporterOpen] = useState<boolean>(false);
   const [proTipHustle, setProTipHustle] = useState<SideHustle | null>(null);
   const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'catalog' | 'vault' | 'analytics' | 'system'>('catalog');
 
@@ -235,6 +237,7 @@ export default function App() {
         onOpenAutomatedFixModal={() => setIsAutomatedFixOpen(true)}
         onOpenDirectLaunchpad={() => setIsDirectLaunchpadOpen(true)}
         onOpenSaleNotifications={() => setIsSaleNotificationsOpen(true)}
+        onOpenMultiExporter={() => setIsMultiExporterOpen(true)}
         currency={currency}
         onCurrencyChange={setCurrency}
         theme={theme}
@@ -910,6 +913,12 @@ export default function App() {
       <SaleNotificationCenter
         isOpen={isSaleNotificationsOpen}
         onClose={() => setIsSaleNotificationsOpen(false)}
+      />
+
+      {/* MULTI-PLATFORM LISTING & EXPORTER SUITE MODAL */}
+      <MultiPlatformExporterModal
+        isOpen={isMultiExporterOpen}
+        onClose={() => setIsMultiExporterOpen(false)}
       />
 
       {/* FLOATING CONTEXT-SENSITIVE SMART HUD OVERLAY */}
