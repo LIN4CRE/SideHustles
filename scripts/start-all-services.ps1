@@ -8,15 +8,18 @@ Write-Host "=========================================================" -Foregrou
 Write-Host "  🚀 SIDE HUSTLE AUTOMATION STUDIO - MASTER SYSTEM START " -ForegroundColor Green
 Write-Host "=========================================================" -ForegroundColor Cyan
 
-# 0. Free Port 3847 if held by a previous lingering process
-$portCheck = Get-NetTCPConnection -LocalPort 3847 -ErrorAction SilentlyContinue
-if ($portCheck) {
-    Write-Host "[0/3] Clearing lingering process on port 3847..." -ForegroundColor Yellow
-    foreach ($conn in $portCheck) {
-        Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue
+# 0. Free Ports 3847, 3848, 24678 if held by previous lingering processes
+$ports = @(3847, 3848, 24678)
+foreach ($p in $ports) {
+    $portCheck = Get-NetTCPConnection -LocalPort $p -ErrorAction SilentlyContinue
+    if ($portCheck) {
+        Write-Host "[0/3] Clearing lingering process on port $p..." -ForegroundColor Yellow
+        foreach ($conn in $portCheck) {
+            Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue
+        }
     }
-    Start-Sleep -Seconds 1
 }
+Start-Sleep -Seconds 1
 
 # 1. Start GitHub Auto-Sync Listener in Background
 Write-Host "[1/3] Starting Continuous GitHub Auto-Sync Daemon..." -ForegroundColor Yellow
