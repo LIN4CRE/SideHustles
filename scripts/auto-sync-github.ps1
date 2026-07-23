@@ -4,6 +4,9 @@
 $repoDir = Resolve-Path "$PSScriptRoot\.."
 Set-Location -Path $repoDir
 
+# Clear invalid environment token if present so gh/git keyring authentication is used
+$env:GITHUB_TOKEN = ""
+
 $logFile = "$repoDir\scripts\sync.log"
 
 function Log-Sync ($msg) {
@@ -40,7 +43,7 @@ $pushResult = git push origin main 2>&1
 if ($LASTEXITCODE -eq 0) {
     Log-Sync "Successfully pushed latest state to origin/main."
 } else {
-    Log-Sync "Push output: $pushResult"
+    Log-Sync "Push result: $pushResult"
 }
 
 # Pull latest from origin main to ensure no drift
