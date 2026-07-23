@@ -270,26 +270,26 @@ export default function App() {
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
-                  onClick={() => setIs24hChallengeOpen(true)}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 via-amber-500 to-emerald-500 hover:from-rose-500 hover:to-emerald-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-rose-500/20 flex items-center gap-2 transition-all border border-amber-300/40 animate-pulse"
+                  onClick={() => setIsDirectLaunchpadOpen(true)}
+                  className="px-5 py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs shadow-lg shadow-emerald-500/10 flex items-center gap-2 transition-all backdrop-blur-md"
                 >
-                  <Sparkles className="w-4 h-4 text-slate-950 fill-slate-950" />
-                  <span>🔥 24-Hour 1p Micro-Sale Challenge</span>
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <span>💰 Direct £ Monetization Launchpad</span>
                 </button>
 
                 <button
                   onClick={() => setIsFoolproofWizardOpen(true)}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition-all border border-emerald-400/30"
+                  className="px-5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/60 text-slate-200 font-bold text-xs flex items-center gap-2 transition-all backdrop-blur-md"
                 >
-                  <Zap className="w-4 h-4 text-amber-300" />
-                  <span>⚡ 1-Click Foolproof Auto-Launcher</span>
+                  <Zap className="w-4 h-4 text-amber-400" />
+                  <span>⚡ 1-Click Auto-Launcher</span>
                 </button>
 
                 <button
                   onClick={() => setIsValidatorOpen(true)}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-xs shadow-lg shadow-indigo-600/25 flex items-center gap-2 transition-all"
+                  className="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/60 text-slate-200 font-medium text-xs flex items-center gap-2 transition-all backdrop-blur-md"
                 >
-                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <Sparkles className="w-4 h-4 text-purple-400" />
                   <span>Test Custom Idea with AI</span>
                 </button>
 
