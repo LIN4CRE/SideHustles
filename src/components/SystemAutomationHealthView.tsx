@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Cpu, Server, Github, CheckCircle2, Wrench, RefreshCw, Flame, Terminal, Database, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Cpu, Server, Github, CheckCircle2, Wrench, RefreshCw, Flame, Terminal, Database, ShieldCheck, Activity } from 'lucide-react';
 
 interface SystemAutomationHealthViewProps {
   onOpenAutomatedFixModal: () => void;
@@ -12,6 +12,27 @@ export const SystemAutomationHealthView: React.FC<SystemAutomationHealthViewProp
 }) => {
   const [syncStatus, setSyncStatus] = useState<string>('Active (Scheduled Task every 5 mins)');
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [apiHealth, setApiHealth] = useState<{ status: string; timestamp: string } | null>(null);
+
+  // SH-004: Dynamic Truthful Health Polling
+  useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const res = await fetch('/api/health');
+        if (res.ok) {
+          const data = await res.json();
+          setApiHealth({ status: 'Online (200 OK)', timestamp: new Date(data.timestamp || Date.now()).toLocaleTimeString() });
+        } else {
+          setApiHealth({ status: 'Degraded', timestamp: new Date().toLocaleTimeString() });
+        }
+      } catch (e) {
+        setApiHealth({ status: 'Offline / Unreachable', timestamp: new Date().toLocaleTimeString() });
+      }
+    };
+    checkHealth();
+    const interval = setInterval(checkHealth, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleManualSync = async () => {
     setIsSyncing(true);
@@ -50,7 +71,34 @@ export const SystemAutomationHealthView: React.FC<SystemAutomationHealthViewProp
       {/* Grid of System Modules */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
-        {/* Module 1: Continuous GitHub Auto-Sync */}
+        {/* Module 1: Dynamic API Server Health (SH-004) */}
+        <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-emerald-400">
+                <Activity className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white">Express API Server</h3>
+                <span className="text-[11px] text-slate-400 font-mono">Port 3847</span>
+              </div>
+            </div>
+            <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${
+              apiHealth?.status.includes('Online')
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+            }`}>
+              {apiHealth ? apiHealth.status : 'Checking...'}
+            </span>
+          </div>
+
+          <div className="p-3 bg-slate-950 border border-slate-800/80 rounded-xl text-xs space-y-1 font-mono">
+            <div className="text-slate-400">Endpoint: <span className="text-emerald-300">/api/health</span></div>
+            <div className="text-slate-400">Last Verified: <span className="text-slate-200">{apiHealth?.timestamp || 'N/A'}</span></div>
+          </div>
+        </div>
+
+        {/* Module 2: Continuous GitHub Auto-Sync */}
         <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -83,7 +131,7 @@ export const SystemAutomationHealthView: React.FC<SystemAutomationHealthViewProp
           </button>
         </div>
 
-        {/* Module 2: Firebase Hosting & Firestore */}
+        {/* Module 3: Firebase Hosting & Firestore */}
         <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -105,43 +153,6 @@ export const SystemAutomationHealthView: React.FC<SystemAutomationHealthViewProp
             <div className="text-slate-400">Blueprint: <span className="text-slate-200">firebase-blueprint.json</span></div>
             <div className="text-[11px] text-emerald-400">Public Root: dist/</div>
           </div>
-
-          <div className="text-xs text-slate-400 flex items-center gap-1.5 pt-1">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            <span>Firestore rules configured</span>
-          </div>
-        </div>
-
-        {/* Module 3: Local LLM & Obsidian Bridge */}
-        <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 p-5 rounded-2xl space-y-4 shadow-lg">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-indigo-400">
-                <Server className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-white">Obsidian NA10 Bridge</h3>
-                <span className="text-[11px] text-slate-400 font-mono">Local LLM MCP</span>
-              </div>
-            </div>
-            <span className="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold">
-              LISTENING
-            </span>
-          </div>
-
-          <div className="p-3 bg-slate-950 border border-slate-800/80 rounded-xl text-xs space-y-1 font-mono">
-            <div className="text-slate-400">MCP Endpoint:</div>
-            <div className="text-indigo-300">/api/mcp/local-llm</div>
-            <div className="text-[11px] text-slate-500">Vault: Obsidian AI Second Brain</div>
-          </div>
-
-          <button
-            onClick={onOpenLocalLlmHub}
-            className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors"
-          >
-            <Terminal className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Open LLM Hub Console</span>
-          </button>
         </div>
 
       </div>
