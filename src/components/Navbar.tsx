@@ -12,7 +12,8 @@ import {
   Cpu,
   Server,
   Flame,
-  Workflow
+  Workflow,
+  Database
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -33,6 +34,8 @@ interface NavbarProps {
   onOpenViralScout?: () => void;
   onOpenRecipes?: () => void;
   onOpenGenAIGallery?: () => void;
+  onOpenSnapshotModal?: () => void;
+  voiceControlBar?: React.ReactNode;
 }
 
 const CATEGORIES: CategoryType[] = [
@@ -64,7 +67,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpen24hChallenge,
   onOpenViralScout,
   onOpenRecipes,
-  onOpenGenAIGallery
+  onOpenGenAIGallery,
+  onOpenSnapshotModal,
+  voiceControlBar
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
@@ -215,6 +220,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
                   <span>Setup Tour</span>
+                </button>
+              )}
+
+              {voiceControlBar}
+
+              {onOpenSnapshotModal && (
+                <button
+                  onClick={onOpenSnapshotModal}
+                  className="px-3 py-2 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-200 font-bold text-xs border border-emerald-500/30 flex items-center gap-1.5 transition-all shadow-sm shadow-emerald-500/20"
+                  title="Local IndexedDB / LocalStorage Config Backup & 1-Click Restore Engine"
+                >
+                  <Database className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Setup Snapshots</span>
                 </button>
               )}
 

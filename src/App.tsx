@@ -26,6 +26,10 @@ import { TaskSchedulerWidget } from './components/TaskSchedulerWidget';
 import { GenAIAssetLibraryModal } from './components/GenAIAssetLibraryModal';
 import { GrowthAnalyticsChart } from './components/GrowthAnalyticsChart';
 import { AutomationProTipToast } from './components/AutomationProTipToast';
+import { QuickLaunchMacroWidget, MacroAction } from './components/QuickLaunchMacroWidget';
+import { SmartHudOverlay } from './components/SmartHudOverlay';
+import { VoiceControlBar } from './components/VoiceControlBar';
+import { SetupSnapshotManagerModal } from './components/SetupSnapshotManagerModal';
 import { 
   Sparkles, 
   Bot, 
@@ -41,7 +45,9 @@ import {
   Clock,
   ChevronRight,
   Activity,
-  Download
+  Download,
+  Github,
+  Star
 } from 'lucide-react';
 
 export default function App() {
@@ -81,7 +87,30 @@ export default function App() {
   const [isSaleSuccessOpen, setIsSaleSuccessOpen] = useState<boolean>(false);
   const [isRecipeMarketplaceOpen, setIsRecipeMarketplaceOpen] = useState<boolean>(false);
   const [isGenAIGalleryOpen, setIsGenAIGalleryOpen] = useState<boolean>(false);
+  const [isSnapshotModalOpen, setIsSnapshotModalOpen] = useState<boolean>(false);
   const [proTipHustle, setProTipHustle] = useState<SideHustle | null>(null);
+
+  const handleExecuteMacroAction = (actionType: string) => {
+    if (actionType === 'open_genai') setIsGenAIGalleryOpen(true);
+    else if (actionType === 'open_recipes') setIsRecipeMarketplaceOpen(true);
+    else if (actionType === 'open_challenge') setIs24hChallengeOpen(true);
+    else if (actionType === 'open_scout') setIsViralScoutOpen(true);
+    else if (actionType === 'open_hub') setIsLocalLlmHubOpen(true);
+    else if (actionType === 'export_csv') handleExportCSV();
+    else if (actionType === 'toggle_focus') {
+      if (selectedHustle) {
+        // Toggle focus mode on selected hustle
+      } else {
+        setSelectedHustle(SIDE_HUSTLES[0]);
+      }
+    }
+  };
+
+  const handleRestorePortfolioState = (restoredState: any) => {
+    if (restoredState?.savedIds && Array.isArray(restoredState.savedIds)) {
+      setSavedHustleIds(restoredState.savedIds);
+    }
+  };
   const [isProTipOpen, setIsProTipOpen] = useState<boolean>(false);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(() => {
     return localStorage.getItem('sh_has_seen_tour') === 'true';
@@ -176,6 +205,8 @@ export default function App() {
         onOpenViralScout={() => setIsViralScoutOpen(true)}
         onOpenRecipes={() => setIsRecipeMarketplaceOpen(true)}
         onOpenGenAIGallery={() => setIsGenAIGalleryOpen(true)}
+        onOpenSnapshotModal={() => setIsSnapshotModalOpen(true)}
+        voiceControlBar={<VoiceControlBar onExecuteCommand={handleExecuteMacroAction} />}
       />
 
       {/* Main Container */}
@@ -188,9 +219,25 @@ export default function App() {
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="max-w-2xl space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 text-xs font-semibold">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>AI-Powered Micro-Business Studio</span>
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 text-xs font-semibold">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>AI-Powered Micro-Business Studio</span>
+                </div>
+
+                <a
+                  href="https://github.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-mono font-semibold transition-all hover:scale-105"
+                >
+                  <Github className="w-3.5 h-3.5 text-white" />
+                  <span>v2.4 Production Release</span>
+                  <span className="flex items-center gap-0.5 text-amber-400 text-[10px] bg-slate-900 px-1.5 py-0.2 rounded-full border border-amber-500/30">
+                    <Star className="w-2.5 h-2.5 fill-amber-400" />
+                    1.8k
+                  </span>
+                </a>
               </div>
 
               <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
@@ -267,6 +314,9 @@ export default function App() {
             </div>
           </div>
         </div>
+
+        {/* REUSABLE 1-CLICK QUICK LAUNCH MACRO ENGINE */}
+        <QuickLaunchMacroWidget onExecuteAction={handleExecuteMacroAction} />
 
         {/* Quick Setup Checklist to 1p Sale State */}
         <QuickSetupChecklist
@@ -678,6 +728,25 @@ export default function App() {
           else if (actionType === 'hub') setIsLocalLlmHubOpen(true);
           else if (actionType === 'payout') setIsPayoutModalOpen(true);
         }}
+      />
+
+      {/* AUTOMATED SETUP SNAPSHOT & REVERT ENGINE MODAL */}
+      <SetupSnapshotManagerModal
+        isOpen={isSnapshotModalOpen}
+        onClose={() => setIsSnapshotModalOpen(false)}
+        currentPortfolioState={{
+          savedIds: savedHustleIds,
+          allHustlesCount: SIDE_HUSTLES.length
+        }}
+        onRestoreState={handleRestorePortfolioState}
+      />
+
+      {/* FLOATING CONTEXT-SENSITIVE SMART HUD OVERLAY */}
+      <SmartHudOverlay
+        onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
+        onOpenRecipes={() => setIsRecipeMarketplaceOpen(true)}
+        onOpenGenAI={() => setIsGenAIGalleryOpen(true)}
+        onOpenLocalLlmHub={() => setIsLocalLlmHubOpen(true)}
       />
 
     </div>

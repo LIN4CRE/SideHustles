@@ -68,6 +68,9 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
   const [kitError, setKitError] = useState<string | null>(null);
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
 
+  // Focus Mode toggle state
+  const [isFocusMode, setIsFocusMode] = useState<boolean>(false);
+
   // Calculated economics metrics
   const grossMonthlyRevenue = economics.pricePerUnit * economics.monthlyCustomers;
   const variableCosts = economics.fulfillmentCostPerUnit * economics.monthlyCustomers;
@@ -149,6 +152,19 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
 
           <div className="flex items-center gap-2">
             <button
+              onClick={() => setIsFocusMode(!isFocusMode)}
+              className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all ${
+                isFocusMode
+                  ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-lg shadow-amber-500/20 animate-pulse'
+                  : 'bg-slate-800 text-amber-300 border-amber-500/30 hover:bg-slate-700'
+              }`}
+              title="Toggle Focus Mode: Collapse UI to show only essential progress indicators & next actions"
+            >
+              <Target className="w-3.5 h-3.5" />
+              <span>{isFocusMode ? 'Focus Mode ON' : 'Focus Mode'}</span>
+            </button>
+
+            <button
               onClick={() => onToggleSave(hustle.id)}
               className={`px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-all ${
                 isSaved
@@ -168,7 +184,91 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
           </div>
         </div>
 
-        {/* Tab Navigation */}
+        {/* FOCUS MODE OVERRIDE VIEW */}
+        {isFocusMode ? (
+          <div className="p-6 sm:p-8 space-y-6 bg-slate-950 font-mono flex-1 overflow-y-auto">
+            {/* Focus Mode Banner */}
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40">
+                  <Target className="w-6 h-6 animate-spin" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-bold text-amber-300 uppercase tracking-wider">
+                    DEEP WORK FOCUS MODE ACTIVE
+                  </h3>
+                  <p className="text-xs text-slate-300 font-sans">
+                    Non-essential interface elements collapsed. Focus purely on key velocity metrics and execution.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsFocusMode(false)}
+                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700"
+              >
+                Exit Focus Mode
+              </button>
+            </div>
+
+            {/* Essential Progress Indicators Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-1">
+                <span className="text-[10px] uppercase text-slate-400 font-bold">Automation Level</span>
+                <div className="text-xl sm:text-2xl font-bold text-amber-400 flex items-center gap-1">
+                  <Bot className="w-5 h-5" />
+                  {hustle.automationScore}%
+                </div>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-1">
+                <span className="text-[10px] uppercase text-slate-400 font-bold">Monthly Net Potential</span>
+                <div className="text-xl sm:text-2xl font-bold text-emerald-400">
+                  ${netMonthlyProfit.toLocaleString()}
+                </div>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-1">
+                <span className="text-[10px] uppercase text-slate-400 font-bold">Profit Margin</span>
+                <div className="text-xl sm:text-2xl font-bold text-cyan-400">
+                  {hustle.marginPercentage}%
+                </div>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-1">
+                <span className="text-[10px] uppercase text-slate-400 font-bold">Setup Time</span>
+                <div className="text-xl sm:text-2xl font-bold text-indigo-400">
+                  {hustle.setupTimeHours} hrs
+                </div>
+              </div>
+            </div>
+
+            {/* Essential Next Action Steps */}
+            <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <Zap className="w-4 h-4 text-amber-400" />
+                Immediate Next Action Queue
+              </h4>
+
+              <div className="space-y-2.5">
+                {realityCheck.failProofSteps.map((step, idx) => (
+                  <div key={idx} className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-start gap-3">
+                      <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                        {idx + 1}
+                      </span>
+                      <p className="text-xs text-slate-200 leading-relaxed font-sans">{step}</p>
+                    </div>
+
+                    <SetupStepToolTooltip stepText={step} hustleTitle={hustle.title} hustleCategory={hustle.category} stepNumber={idx + 1} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Standard Tab Navigation */}
         <div className="flex items-center border-b border-slate-800 px-5 bg-slate-950/40 overflow-x-auto scrollbar-none">
           {hustle.isFreeStarterSet && (
             <button
@@ -875,6 +975,8 @@ CTA: ${executionKit.landingPageCopy.ctaButtonText}
           )}
 
         </div>
+        </>
+        )}
 
       </div>
     </div>
