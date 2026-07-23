@@ -13,6 +13,7 @@ import { PayoutDestinationModal } from './components/PayoutDestinationModal';
 import { FoolproofAutoLauncherModal } from './components/FoolproofAutoLauncherModal';
 import { ExecutionLog } from './components/ExecutionLog';
 import { SavedHustleHealthCard } from './components/SavedHustleHealthCard';
+import { LocalLlmMcpHubModal } from './components/LocalLlmMcpHubModal';
 import { 
   Sparkles, 
   Bot, 
@@ -60,6 +61,7 @@ export default function App() {
   const [isAssetGenOpen, setIsAssetGenOpen] = useState<boolean>(false);
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState<boolean>(false);
   const [isFoolproofWizardOpen, setIsFoolproofWizardOpen] = useState<boolean>(false);
+  const [isLocalLlmHubOpen, setIsLocalLlmHubOpen] = useState<boolean>(false);
   const [drawerTab, setDrawerTab] = useState<'tracker' | 'items' | 'execution'>('tracker');
 
   const toggleSaveHustle = (id: string) => {
@@ -106,6 +108,7 @@ export default function App() {
         onOpenAssetGen={() => setIsAssetGenOpen(true)}
         onOpenPayoutModal={() => setIsPayoutModalOpen(true)}
         onOpenFoolproofWizard={() => setIsFoolproofWizardOpen(true)}
+        onOpenLocalLlmHub={() => setIsLocalLlmHubOpen(true)}
       />
 
       {/* Main Container */}
@@ -458,6 +461,18 @@ export default function App() {
         isOpen={isFoolproofWizardOpen}
         onClose={() => setIsFoolproofWizardOpen(false)}
         onSelectHustle={(hustle) => setSelectedHustle(hustle)}
+      />
+
+      {/* LOCAL LLM, MCP, OBSIDIAN & GITHUB SCRAPER HUB */}
+      <LocalLlmMcpHubModal
+        isOpen={isLocalLlmHubOpen}
+        onClose={() => setIsLocalLlmHubOpen(false)}
+        onImportHustle={(importedHustle) => {
+          if (!savedHustleIds.includes(importedHustle.id)) {
+            toggleSaveHustle(importedHustle.id);
+          }
+          setSelectedHustle(importedHustle);
+        }}
       />
 
     </div>

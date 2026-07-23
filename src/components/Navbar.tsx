@@ -8,7 +8,9 @@ import {
   Sparkles,
   Layers,
   Building2,
-  ArrowRight
+  ArrowRight,
+  Cpu,
+  Server
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -23,6 +25,7 @@ interface NavbarProps {
   onOpenAssetGen: () => void;
   onOpenPayoutModal: () => void;
   onOpenFoolproofWizard: () => void;
+  onOpenLocalLlmHub?: () => void;
 }
 
 const CATEGORIES: CategoryType[] = [
@@ -48,7 +51,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenCalculator,
   onOpenAssetGen,
   onOpenPayoutModal,
-  onOpenFoolproofWizard
+  onOpenFoolproofWizard,
+  onOpenLocalLlmHub
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
@@ -133,8 +137,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 title="Foolproof 1-Click Zero-Code Side Hustle Wizard"
               >
                 <Zap className="w-3.5 h-3.5 text-slate-950 fill-slate-950" />
-                <span>⚡ 1-Click Launch Wizard</span>
+                <span>⚡ 1-Click Launch</span>
               </button>
+
+              {onOpenLocalLlmHub && (
+                <button
+                  onClick={onOpenLocalLlmHub}
+                  className="px-3 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/80 text-purple-200 font-bold text-xs border border-purple-500/30 flex items-center gap-1.5 transition-all shadow-sm shadow-purple-500/20"
+                  title="Connect Local LLM (Ollama), Obsidian, MCP & GitHub Scraper"
+                >
+                  <Cpu className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <span>Local LLM & MCP</span>
+                </button>
+              )}
 
               <button
                 onClick={onOpenPayoutModal}

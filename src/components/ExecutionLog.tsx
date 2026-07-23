@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { SideHustle, ExecutionLogItem } from '../types';
 import { INITIAL_EXECUTION_LOGS } from '../utils/hustleHealth';
+import { FullExecutionLogsModal } from './FullExecutionLogsModal';
 
 interface ExecutionLogProps {
   savedHustles: SideHustle[];
@@ -45,6 +46,7 @@ export const ExecutionLog: React.FC<ExecutionLogProps> = ({
   const [selectedHustleIdFilter, setSelectedHustleIdFilter] = useState<string>('all');
   const [expandedLogId, setExpandedLogId] = useState<string | null>('log-1');
   const [isSimulatingTask, setIsSimulatingTask] = useState<boolean>(false);
+  const [isFullLogsModalOpen, setIsFullLogsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -150,18 +152,28 @@ export const ExecutionLog: React.FC<ExecutionLogProps> = ({
             </div>
           </div>
 
-          <button
-            onClick={handleTriggerNewAiTask}
-            disabled={isSimulatingTask || savedHustles.length === 0}
-            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 disabled:opacity-50 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-indigo-500/20 transition-all font-mono"
-          >
-            {isSimulatingTask ? (
-              <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-300" />
-            ) : (
-              <Zap className="w-3.5 h-3.5 text-amber-300" />
-            )}
-            <span>{isSimulatingTask ? 'Running AI Task...' : 'Trigger AI Task Now'}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsFullLogsModalOpen(true)}
+              className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold text-xs flex items-center justify-center gap-1.5 border border-slate-800 transition-all font-mono"
+            >
+              <Terminal className="w-3.5 h-3.5 text-indigo-400" />
+              <span>View Full Logs</span>
+            </button>
+
+            <button
+              onClick={handleTriggerNewAiTask}
+              disabled={isSimulatingTask || savedHustles.length === 0}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 disabled:opacity-50 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-indigo-500/20 transition-all font-mono"
+            >
+              {isSimulatingTask ? (
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-300" />
+              ) : (
+                <Zap className="w-3.5 h-3.5 text-amber-300" />
+              )}
+              <span>{isSimulatingTask ? 'Running AI Task...' : 'Trigger AI Task Now'}</span>
+            </button>
+          </div>
         </div>
 
         {/* Filters Row */}
@@ -293,6 +305,14 @@ export const ExecutionLog: React.FC<ExecutionLogProps> = ({
           <p className="text-xs text-slate-400">No execution logs matching filter criteria.</p>
         </div>
       )}
+      {/* Full Execution Logs Modal */}
+      <FullExecutionLogsModal
+        isOpen={isFullLogsModalOpen}
+        onClose={() => setIsFullLogsModalOpen(false)}
+        logs={logs}
+        savedHustles={savedHustles}
+        onClearLogs={() => setLogs([])}
+      />
     </div>
   );
 };

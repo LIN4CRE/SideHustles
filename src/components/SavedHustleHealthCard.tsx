@@ -12,7 +12,9 @@ import {
   ChevronUp, 
   Zap, 
   Bot, 
-  Sparkles 
+  Sparkles,
+  Pause,
+  Play
 } from 'lucide-react';
 
 interface SavedHustleHealthCardProps {
@@ -32,6 +34,24 @@ export const SavedHustleHealthCard: React.FC<SavedHustleHealthCardProps> = ({
     getCompletedStepsForHustle(hustle.id)
   );
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isAutomationActive, setIsAutomationActive] = useState<boolean>(() => {
+    try {
+      const stored = localStorage.getItem(`sh_auto_status_${hustle.id}`);
+      return stored !== null ? JSON.parse(stored) : true;
+    } catch (e) {
+      return true;
+    }
+  });
+
+  const handleToggleAutomation = () => {
+    const newState = !isAutomationActive;
+    setIsAutomationActive(newState);
+    try {
+      localStorage.setItem(`sh_auto_status_${hustle.id}`, JSON.stringify(newState));
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const health = calculateHustleHealth(hustle, completedSteps);
   const workflowSteps = hustle.workflowBlueprint.length > 0 
@@ -103,6 +123,39 @@ export const SavedHustleHealthCard: React.FC<SavedHustleHealthCardProps> = ({
             <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
+      </div>
+
+      {/* Automation Switch & Status Banner */}
+      <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-mono">
+        <div className="flex items-center gap-1.5">
+          <Bot className={`w-3.5 h-3.5 ${isAutomationActive ? 'text-amber-400 animate-pulse' : 'text-slate-500'}`} />
+          <span className="text-slate-300">AI Automation Agent:</span>
+          <span className={`font-bold ${isAutomationActive ? 'text-emerald-400' : 'text-amber-400'}`}>
+            {isAutomationActive ? 'Active & Running' : 'Paused'}
+          </span>
+        </div>
+
+        <button
+          onClick={handleToggleAutomation}
+          className={`px-2.5 py-1 rounded-md text-[10px] font-bold flex items-center gap-1 transition-all border ${
+            isAutomationActive
+              ? 'bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20'
+              : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20'
+          }`}
+          title={isAutomationActive ? 'Pause AI Automation for this hustle' : 'Resume AI Automation'}
+        >
+          {isAutomationActive ? (
+            <>
+              <Pause className="w-3 h-3 text-amber-400" />
+              <span>Pause AI</span>
+            </>
+          ) : (
+            <>
+              <Play className="w-3 h-3 text-emerald-400" />
+              <span>Resume AI</span>
+            </>
+          )}
+        </button>
       </div>
 
       {/* Progress Bar & Health Status */}
