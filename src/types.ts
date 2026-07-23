@@ -147,6 +147,8 @@ export interface SideHustle {
   // Ground Truth & Same-Week Realism
   realisticWeek1Earnings: string; // e.g. "£0.00 - £25.00 (Requires sending 10-15 pitches)"
   honestRealityCheck: string; // Ground truth explanation of week 1 expectations
+  conservativeMonthlyBaseline?: string; // Ground truth realistic baseline (e.g. "£150 - £450/mo working baseline")
+  failProofContingency?: string; // Fail-proof fallback plan if initial attempts fail
 
   // Initial Viability Score (base)
   baseViabilityScore: number;

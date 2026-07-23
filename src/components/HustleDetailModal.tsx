@@ -5,6 +5,7 @@ import { WorkflowBlueprintLibrary } from './WorkflowBlueprintLibrary';
 import { CompetitiveEdgeSection } from './CompetitiveEdgeSection';
 import { RecommendedToolingStack } from './RecommendedToolingStack';
 import { FreeStarterKitTester } from './FreeStarterKitTester';
+import { RealityCheckService } from '../services/realityCheckService';
 import { 
   X, 
   Sparkles, 
@@ -19,6 +20,10 @@ import {
   Layers, 
   Calendar, 
   ShieldAlert,
+  ShieldCheck,
+  AlertTriangle,
+  Gauge,
+  Info,
   Loader2,
   Share2,
   Wrench,
@@ -51,6 +56,8 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
     hustle.isFreeStarterSet ? 'starterKit' : 'overview'
   );
   
+  const realityCheck = RealityCheckService.evaluateHustle(hustle);
+
   // Economics state with defaults from hustle
   const [economics, setEconomics] = useState<UnitEconomics>(hustle.defaultEconomics);
 
@@ -296,6 +303,138 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
                   <span className="text-sm font-extrabold text-emerald-400 font-mono block">
                     {hustle.realisticWeek1Earnings || '£0.00 - £25.00'}
                   </span>
+                </div>
+              </div>
+
+              {/* RISK SCORE & VOLATILITY ANALYZER */}
+              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-4 shadow-md">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-900 pb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
+                      <Gauge className={`w-4 h-4 ${realityCheck.riskScore.riskColor}`} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white font-mono flex items-center gap-2">
+                        <span>RiskScore & Market Volatility</span>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-mono font-bold ${realityCheck.riskScore.riskBgClass} ${realityCheck.riskScore.riskColor} border ${realityCheck.riskScore.riskBorderClass}`}>
+                          {realityCheck.riskScore.volatilityLabel}
+                        </span>
+                      </h4>
+                      <p className="text-[11px] text-slate-400 font-mono">
+                        Evaluated across saturation, setup complexity & cashflow speed
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Verification Badge */}
+                  <div className={`px-3 py-1.5 rounded-xl border ${realityCheck.verificationBadge.badgeClass} flex items-center gap-2 font-mono text-xs font-bold shrink-0`}>
+                    {realityCheck.verificationBadge.isTheoretical ? (
+                      <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                    ) : (
+                      <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                    )}
+                    <span>{realityCheck.verificationBadge.badgeText}</span>
+                  </div>
+                </div>
+
+                {/* Volatility Meter */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-[11px] font-mono">
+                    <span className="text-slate-400">Volatility Score Meter</span>
+                    <span className={`font-bold ${realityCheck.riskScore.riskColor}`}>
+                      {realityCheck.riskScore.volatilityScore} / 10.0
+                    </span>
+                  </div>
+                  <div className="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800 relative">
+                    <div 
+                      className={`h-full transition-all duration-700 ${
+                        realityCheck.riskScore.overallRisk === 'High'
+                          ? 'bg-gradient-to-r from-amber-500 to-rose-500'
+                          : realityCheck.riskScore.overallRisk === 'Medium'
+                          ? 'bg-gradient-to-r from-emerald-500 to-amber-500'
+                          : 'bg-emerald-500'
+                      }`}
+                      style={{ width: `${(realityCheck.riskScore.volatilityScore / 10) * 100}%` }}
+                    />
+                  </div>
+                  <p className="text-[10px] text-slate-400 font-mono">
+                    {realityCheck.verificationBadge.truthWarning}
+                  </p>
+                </div>
+
+                {/* 3 Pillars Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                  <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-slate-500 block">Market Saturation</span>
+                    <span className="text-xs font-bold text-white block">{realityCheck.riskScore.marketSaturation}</span>
+                    <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800 mt-1">
+                      <div 
+                        className={`h-full ${realityCheck.riskScore.saturationScore > 70 ? 'bg-rose-500' : realityCheck.riskScore.saturationScore > 40 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                        style={{ width: `${realityCheck.riskScore.saturationScore}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-slate-500 block">Cashflow Speed</span>
+                    <span className="text-xs font-bold text-emerald-400 block">{realityCheck.riskScore.cashflowSpeed}</span>
+                    <span className="text-[10px] text-slate-400 font-mono block">First cash in {realityCheck.riskScore.cashflowSpeedDays}</span>
+                  </div>
+
+                  <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-slate-500 block">Setup Complexity</span>
+                    <span className="text-xs font-bold text-indigo-300 block">{realityCheck.riskScore.setupDifficulty}</span>
+                    <span className="text-[10px] text-slate-400 font-mono block">Requires ~{hustle.weeklyHoursNeeded} hrs/wk</span>
+                  </div>
+                </div>
+
+                {/* Risks & Mitigation */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                  <div className="p-3 bg-rose-950/20 border border-rose-500/20 rounded-lg space-y-1.5">
+                    <span className="text-[10px] font-mono uppercase font-bold text-rose-400 flex items-center gap-1">
+                      <AlertTriangle className="w-3 h-3 text-rose-400" />
+                      Key Challenge & Risk Factors
+                    </span>
+                    <ul className="space-y-1">
+                      {realityCheck.riskScore.keyRisks.map((risk, idx) => (
+                        <li key={idx} className="text-[11px] text-slate-300 flex items-start gap-1.5 leading-tight">
+                          <span className="text-rose-400 font-bold">•</span>
+                          <span>{risk}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="p-3 bg-emerald-950/20 border border-emerald-500/20 rounded-lg space-y-1.5">
+                    <span className="text-[10px] font-mono uppercase font-bold text-emerald-400 flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                      Recommended Mitigation Plan
+                    </span>
+                    <p className="text-[11px] text-slate-300 leading-relaxed font-mono">
+                      {realityCheck.riskScore.mitigationPlan}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Fail-Proof Contingency Protocols */}
+                <div className="p-3.5 bg-indigo-950/30 border border-indigo-500/30 rounded-lg space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono uppercase font-bold text-indigo-300 flex items-center gap-1.5">
+                      <Wrench className="w-3.5 h-3.5 text-indigo-400" />
+                      Fail-Proof Execution Contingencies (Zero Hope Dashed)
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-emerald-400">
+                      Grounded Baseline: {realityCheck.conservativeMonthlyBaseline}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {realityCheck.failProofSteps.map((step, idx) => (
+                      <div key={idx} className="bg-slate-900/90 p-2.5 rounded border border-slate-800 text-[10px] text-slate-300 leading-tight space-y-1">
+                        <span className="font-bold text-indigo-400 block font-mono">Contingency #{idx + 1}</span>
+                        <p>{step}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 

@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { SideHustle } from '../types';
 import { calculateDynamicViabilityScore, ViabilityOverrides } from '../utils/viability';
 import { getCompletedStepsForHustle, calculateHustleHealth } from '../utils/hustleHealth';
+import { RealityCheckService } from '../services/realityCheckService';
 import { 
   Zap, 
   DollarSign, 
@@ -13,6 +14,7 @@ import {
   BookmarkCheck, 
   ArrowRight,
   ShieldCheck,
+  AlertTriangle,
   Sparkles,
   Layers,
   Activity,
@@ -40,6 +42,7 @@ export const HustleCard: React.FC<HustleCardProps> = ({
   const viability = calculateDynamicViabilityScore(hustle, viabilityOverrides);
   const completedSteps = getCompletedStepsForHustle(hustle.id);
   const health = calculateHustleHealth(hustle, completedSteps);
+  const realityCheck = RealityCheckService.evaluateHustle(hustle);
 
   return (
     <div className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 shadow-lg hover:shadow-indigo-500/10 transition-all group flex flex-col justify-between relative overflow-hidden">
@@ -49,7 +52,7 @@ export const HustleCard: React.FC<HustleCardProps> = ({
 
       <div>
         {/* Top Header Row */}
-        <div className="flex items-start justify-between gap-2 mb-3">
+        <div className="flex items-start justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 text-[11px] font-medium">
               {hustle.category}
@@ -98,6 +101,23 @@ export const HustleCard: React.FC<HustleCardProps> = ({
           </div>
         </div>
 
+        {/* Verified Real-World Potential Badge Banner */}
+        <div className={`p-2 rounded-xl border ${realityCheck.verificationBadge.badgeClass} mb-3 flex items-center justify-between gap-2 shadow-sm`}>
+          <div className="flex items-center gap-1.5 min-w-0">
+            {realityCheck.verificationBadge.isTheoretical ? (
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            ) : (
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            )}
+            <span className="text-[11px] font-bold font-mono truncate">
+              {realityCheck.verificationBadge.badgeText}
+            </span>
+          </div>
+          <span className={`text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-slate-950/80 border border-slate-800 shrink-0 ${realityCheck.riskScore.riskColor}`}>
+            {realityCheck.riskScore.volatilityLabel}
+          </span>
+        </div>
+
         {/* Title & Tagline */}
         <h3 className="text-lg font-bold text-white group-hover:text-indigo-300 transition-colors mb-1">
           {hustle.title}
@@ -109,10 +129,11 @@ export const HustleCard: React.FC<HustleCardProps> = ({
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 mb-3">
           <div>
-            <span className="text-[10px] uppercase font-mono text-slate-500 block">Monthly Goal</span>
-            <span className="text-sm font-bold text-emerald-400 flex items-center gap-0.5">
-              ${hustle.monthlyRevenuePotential.toLocaleString()}
+            <span className="text-[10px] uppercase font-mono text-slate-500 block">Conservative Baseline</span>
+            <span className="text-xs font-bold text-emerald-400 flex items-center gap-0.5 font-mono">
+              {realityCheck.conservativeMonthlyBaseline}
             </span>
+            <span className="text-[9px] text-slate-500 font-mono block">Max: ${hustle.monthlyRevenuePotential.toLocaleString()}</span>
           </div>
 
           <div>
