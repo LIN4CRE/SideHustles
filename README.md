@@ -9,37 +9,33 @@
 
 ---
 
-## 🌟 Key Features & Power Architecture
+## 🌟 Master Workspace Architecture (4 Dedicated Views)
 
-### ⚡ 1. Quick Launch Macro Engine
-- **Reusable 1-Click Chains**: Record multi-step platform action sequences (e.g. *Open GenAI Studio ➔ Batch Generate 4K OLED Wallpapers ➔ Trigger 24h Sale Challenge*) into custom macro triggers.
-- **Execution Telemetry**: Tracks macro execution frequency and sequential automated dispatches.
+### 🚀 1. Side Hustle Catalog & Blueprints
+- **37 Curated Models**: Searchable micro-business concepts across Micro-SaaS, Prompt Kits, Local Lead Gen, and Digital Products.
+- **Adaptive Grid Layout**: Responsive container queries (`grid-cols-1 md:2 lg:3 xl:4`) scaling seamlessly across mobile screens, laptops, and 4K ultrawide monitors.
 
-### 🎯 2. Deep Work Focus Mode
-- **Zero-Distraction Interface**: Toggle Focus Mode inside any hustle detail panel to collapse non-essential UI and display purely critical velocity metrics, automated profit projections, and the immediate **Next Action Queue**.
+### 📦 2. Ready-to-Sell Product & Image Vault
+- **7 Pre-Built Assets**: Production-ready prompt vaults, cold outreach pitch packs, and resume kits in `ready-to-sell-assets/`.
+- **12 4K OLED Images**: High-resolution wallpapers and smartwatch faces generated for immediate marketplace listing.
 
-### 🎙️ 3. Hands-Free Voice Control Layer
-- **Speech Command Engine**: Execute platform navigation hands-free while working on client deliverables. Speak commands like `"generate assets"`, `"open recipes"`, `"24h challenge"`, or `"export csv"`.
+### 📊 3. Revenue & Sales Analytics
+- **Production Webhook Listener**: Real-time sales logging at `/api/webhooks/sale`.
+- **Persistent Sales Log**: Stores incoming genuine payouts in `ready-to-sell-assets/sales-history.json`.
 
-### 🛡️ 4. Setup Snapshot & Revert Engine
-- **Local IndexedDB / Storage State Backups**: Automatically snapshot hustle configurations and saved pipelines whenever settings change. Revert to a "known-good" baseline instantly with 1-click state restore.
-
-### 🛰️ 5. Smart HUD Overlay
-- **Context-Sensitive Floating Telemetry**: Real-time HUD banner monitoring 24-hour conversion rates, traffic velocity, and n8n/Make webhook connection status with direct action shortcuts.
-
-### 🛠️ 6. Blueprint Recipe Marketplace & GenAI Asset Studio
-- **n8n / Make JSON Blueprints**: One-click copyable visual workflow node blueprints.
-- **AI Asset Batch Generator**: Produce 1p micro-assets, 4K OLED wallpapers, and Smartwatch Faces with instant Gumroad payment integration.
+### ⚙️ 4. System Automation & Health Hub
+- **GitHub Auto-Sync Daemon**: Windows Scheduled Task `SideHustles_GitHub_AutoSync` running every 5 minutes.
+- **Firebase Deployment**: `firebase.json` pointing to `dist` production build directory with `firestore.rules`.
+- **Local LLM / Obsidian NA10 Bridge**: Context endpoint at `/api/mcp/local-llm`.
 
 ---
 
-## 🛠️ Stack & Technologies
+## 🛠️ Tech Stack
 
-- **Frontend Framework**: React 18 + TypeScript + Vite
-- **Styling & UI**: Tailwind CSS + Lucide Icons
-- **State Management**: React State + LocalStorage & IndexedDB Snapshot Engine
-- **Voice Recognition**: Web Speech API (`SpeechRecognition` / `webkitSpeechRecognition`)
-- **Server Runtime**: Express + Vite Middleware with CommonJS bundling (`esbuild`)
+- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS + Framer Motion
+- **Server**: Express + Vite Dev & Production Middleware (`esbuild`) on Port **3847**
+- **Persistence**: LocalStorage, IndexedDB Snapshots, and `sales-history.json`
+- **Deployment**: GitHub (`origin/main`) & Firebase Hosting (`firebase.json`)
 
 ---
 
@@ -47,50 +43,25 @@
 
 ### 1. Installation
 ```bash
-# Clone the repository
-git clone https://github.com/user/side-hustle-automation-studio.git
-
-# Navigate into project directory
-cd side-hustle-automation-studio
-
-# Install dependencies
+git clone https://github.com/LIN4CRE/SideHustles.git
+cd SideHustles
 npm install
 ```
 
-### 2. Development Mode
+### 2. Launch Master Studio
 ```bash
+# Launch via master 1-click batch script:
+.\Launch-SideHustle-Studio.bat
+
+# Or run manually:
 npm run dev
 ```
-Open `http://localhost:3000` to view the application live in your browser.
+Open `http://localhost:3847` (or `http://dl:3847`) to access your studio.
 
 ### 3. Production Build
 ```bash
 npm run build
 npm start
-```
-
----
-
-## 📋 System Architecture Overview
-
-```
-src/
-├── components/
-│   ├── QuickLaunchMacroWidget.tsx    # 1-Click Macro Recorder & Execution Engine
-│   ├── SmartHudOverlay.tsx           # Floating Contextual HUD Telemetry
-│   ├── VoiceControlBar.tsx           # Web Speech Hands-Free Command Parser
-│   ├── SetupSnapshotManagerModal.tsx # State Backup & Revert Manager
-│   ├── SetupStepToolTooltip.tsx      # Tool Guidance & Setup Prompts
-│   ├── HustleDetailModal.tsx         # Comprehensive Hustle View & Focus Mode
-│   ├── WorkflowBlueprintLibrary.tsx  # n8n & Make Automation Scenarios
-│   ├── RecommendedToolingStack.tsx   # Stack Checklist & Implementation Steps
-│   ├── FreeStarterKitTester.tsx      # Micro-Asset Storefront Previewer
-│   └── ...
-├── services/                          # Economics & Reality Check Calculators
-├── data/                             # Curated Hustle Database & Blueprints
-├── types.ts                          # Shared TypeScript Interfaces
-├── App.tsx                           # Root Studio Shell & Global State
-└── server.ts                         # Custom Express Production Entry Point
 ```
 
 ---
