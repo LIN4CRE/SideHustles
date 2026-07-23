@@ -16,6 +16,10 @@ import { SavedHustleHealthCard } from './components/SavedHustleHealthCard';
 import { LocalLlmMcpHubModal } from './components/LocalLlmMcpHubModal';
 import { AutomationTourModal } from './components/AutomationTourModal';
 import { Day1SaleChallengeModal } from './components/Day1SaleChallengeModal';
+import { DailySalesPredictor } from './components/DailySalesPredictor';
+import { QuickSetupChecklist } from './components/QuickSetupChecklist';
+import { ViralAssetScoutModal } from './components/ViralAssetScoutModal';
+import { SaleSuccessModal } from './components/SaleSuccessModal';
 import { 
   Sparkles, 
   Bot, 
@@ -66,6 +70,8 @@ export default function App() {
   const [isLocalLlmHubOpen, setIsLocalLlmHubOpen] = useState<boolean>(false);
   const [isAutomationTourOpen, setIsAutomationTourOpen] = useState<boolean>(false);
   const [is24hChallengeOpen, setIs24hChallengeOpen] = useState<boolean>(false);
+  const [isViralScoutOpen, setIsViralScoutOpen] = useState<boolean>(false);
+  const [isSaleSuccessOpen, setIsSaleSuccessOpen] = useState<boolean>(false);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(() => {
     return localStorage.getItem('sh_has_seen_tour') === 'true';
   });
@@ -128,6 +134,7 @@ export default function App() {
         onOpenLocalLlmHub={() => setIsLocalLlmHubOpen(true)}
         onOpenAutomationTour={() => setIsAutomationTourOpen(true)}
         onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
+        onOpenViralScout={() => setIsViralScoutOpen(true)}
       />
 
       {/* Main Container */}
@@ -219,6 +226,20 @@ export default function App() {
             </div>
           </div>
         </div>
+
+        {/* Quick Setup Checklist to 1p Sale State */}
+        <QuickSetupChecklist
+          payoutDestination="https://paypal.me/dlinacre16"
+          onOpenPayoutModal={() => setIsPayoutModalOpen(true)}
+          onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
+          onLogFirstSale={() => setIsSaleSuccessOpen(true)}
+        />
+
+        {/* Daily Sales Predictor Service */}
+        <DailySalesPredictor
+          activeHustleCount={savedHustleIds.length}
+          onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
+        />
 
         {/* Search Results Summary */}
         <div className="flex items-center justify-between">
@@ -529,6 +550,25 @@ export default function App() {
         onOpenPayoutModal={() => {
           setIs24hChallengeOpen(false);
           setIsPayoutModalOpen(true);
+        }}
+      />
+
+      {/* VIRAL ASSET SCOUT MODAL */}
+      <ViralAssetScoutModal
+        isOpen={isViralScoutOpen}
+        onClose={() => setIsViralScoutOpen(false)}
+        onOpen24hChallenge={() => {
+          setIsViralScoutOpen(false);
+          setIs24hChallengeOpen(true);
+        }}
+      />
+
+      {/* SALE SUCCESS CONFETTI MODAL */}
+      <SaleSuccessModal
+        isOpen={isSaleSuccessOpen}
+        onClose={() => setIsSaleSuccessOpen(false)}
+        onConfirmSale={(amount, platform, notes) => {
+          console.log('Logged 1p sale:', amount, platform, notes);
         }}
       />
 

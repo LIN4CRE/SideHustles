@@ -10,7 +10,8 @@ import {
   Building2,
   ArrowRight,
   Cpu,
-  Server
+  Server,
+  Flame
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -28,6 +29,7 @@ interface NavbarProps {
   onOpenLocalLlmHub?: () => void;
   onOpenAutomationTour?: () => void;
   onOpen24hChallenge?: () => void;
+  onOpenViralScout?: () => void;
 }
 
 const CATEGORIES: CategoryType[] = [
@@ -56,7 +58,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenFoolproofWizard,
   onOpenLocalLlmHub,
   onOpenAutomationTour,
-  onOpen24hChallenge
+  onOpen24hChallenge,
+  onOpenViralScout
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
@@ -143,6 +146,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <Sparkles className="w-3.5 h-3.5 text-slate-950 fill-slate-950" />
                   <span>🔥 24h 1p Challenge</span>
+                </button>
+              )}
+
+              {onOpenViralScout && (
+                <button
+                  onClick={onOpenViralScout}
+                  className="px-3 py-2 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 text-rose-200 font-bold text-xs border border-rose-500/30 flex items-center gap-1.5 transition-all shadow-sm shadow-rose-500/20"
+                  title="Viral Asset Scout - TikTok, Pinterest & Reddit Trends"
+                >
+                  <Flame className="w-3.5 h-3.5 text-rose-400" />
+                  <span>Viral Scout</span>
                 </button>
               )}
 
