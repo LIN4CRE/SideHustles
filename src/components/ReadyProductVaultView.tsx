@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Copy, Download, ExternalLink, Check, Sparkles, Image as ImageIcon, FileText, PoundSterling, Building2, Eye } from 'lucide-react';
+import { SeoAuditForm } from './SeoAuditForm';
 
 interface ReadyProduct {
   id: string;
@@ -181,6 +182,9 @@ export const ReadyProductVaultView: React.FC = () => {
           </a>
         </div>
       </div>
+
+      {/* SEO Audit Lead Capture */}
+      <SeoAuditForm />
 
       {/* Section 1: Pre-Built Digital Products */}
       <div className="space-y-4">

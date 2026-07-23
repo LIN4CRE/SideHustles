@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Cpu, Server, Github, CheckCircle2, Wrench, RefreshCw, Flame, Terminal, Database, ShieldCheck, Activity } from 'lucide-react';
+import { DeveloperTracker } from './DeveloperTracker';
 
 interface SystemAutomationHealthViewProps {
   onOpenAutomatedFixModal: () => void;
@@ -170,6 +171,8 @@ export const SystemAutomationHealthView: React.FC<SystemAutomationHealthViewProp
         </div>
 
       </div>
+
+      <DeveloperTracker />
     </div>
   );
 };
