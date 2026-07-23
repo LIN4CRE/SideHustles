@@ -13,7 +13,8 @@ import {
   Server,
   Flame,
   Workflow,
-  Database
+  Database,
+  Wrench
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -35,6 +36,7 @@ interface NavbarProps {
   onOpenRecipes?: () => void;
   onOpenGenAIGallery?: () => void;
   onOpenSnapshotModal?: () => void;
+  onOpenAutomatedFixModal?: () => void;
   voiceControlBar?: React.ReactNode;
 }
 
@@ -69,6 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenRecipes,
   onOpenGenAIGallery,
   onOpenSnapshotModal,
+  onOpenAutomatedFixModal,
   voiceControlBar
 }) => {
   return (
@@ -200,6 +203,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Zap className="w-3.5 h-3.5 text-slate-950 fill-slate-950" />
                 <span>⚡ 1-Click Launch</span>
               </button>
+
+              {onOpenAutomatedFixModal && (
+                <button
+                  onClick={onOpenAutomatedFixModal}
+                  className="px-3 py-2 rounded-xl bg-amber-950/70 hover:bg-amber-900/90 text-amber-300 font-bold text-xs border border-amber-500/40 flex items-center gap-1.5 transition-all shadow-sm shadow-amber-500/20 hover:scale-105"
+                  title="Open 1-Click Automated Diagnostics & System Self-Healing Box"
+                >
+                  <Wrench className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                  <span>1-Click Auto-Fix Box</span>
+                </button>
+              )}
 
               {onOpenLocalLlmHub && (
                 <button

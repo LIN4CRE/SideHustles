@@ -27,6 +27,7 @@ interface ToolExplanation {
   explanation: string;
   quickPrompt: string;
   proTip: string;
+  directUrl: string;
 }
 
 interface SetupStepToolTooltipProps {
@@ -45,7 +46,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: FileText,
     explanation: 'Obsidian is recommended for this step to organize markdown prompt templates, client SOPs, and prompt chains in a local, lightning-fast vault with zero subscription fees.',
     quickPrompt: 'Create a new vault folder titled "Prompt Library" and add markdown templates for automated lead generation and client response protocols.',
-    proTip: 'Use community plugins like Dataview to tag and query client deliverables instantly.'
+    proTip: 'Use community plugins like Dataview to tag and query client deliverables instantly.',
+    directUrl: 'https://obsidian.md/download'
   },
   n8n: {
     toolName: 'n8n',
@@ -54,7 +56,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: Workflow,
     explanation: 'n8n is recommended for this step because its self-hosted or cloud node graph executes sub-second webhook triggers and LLM pipelines with zero task limit fees.',
     quickPrompt: 'Set up an n8n webhook trigger listening on POST /api/webhook, connected to an OpenAI/Gemini node and HTTP email dispatch.',
-    proTip: 'Run n8n in Docker or Railway for 100% free unlimited execution tasks.'
+    proTip: 'Run n8n in Docker or Railway for 100% free unlimited execution tasks.',
+    directUrl: 'https://n8n.io/cloud/'
   },
   make: {
     toolName: 'Make.com',
@@ -63,7 +66,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: Zap,
     explanation: 'Make.com is ideal for this step to visually map complex multi-branch integrations between forms, databases, and AI generation endpoints.',
     quickPrompt: 'Add a Make scenario: Watch Airtable Records -> Parse Webhook -> HTTP POST to Gemini -> Send Resend Email.',
-    proTip: 'Set execution error handlers to retry failed webhook calls automatically.'
+    proTip: 'Set execution error handlers to retry failed webhook calls automatically.',
+    directUrl: 'https://www.make.com/en/register'
   },
   zapier: {
     toolName: 'Zapier',
@@ -72,7 +76,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: Zap,
     explanation: 'Zapier is recommended for quick 1-click connections between 5,000+ app integrations without writing custom code.',
     quickPrompt: 'Create a Zap: Trigger on New Form Submission in Tally -> AI Prompt step -> Update Google Sheet row.',
-    proTip: 'Use Zapier Paths to branch logic based on high-value client tags.'
+    proTip: 'Use Zapier Paths to branch logic based on high-value client tags.',
+    directUrl: 'https://zapier.com/app/dashboard'
   },
   airtable: {
     toolName: 'Airtable',
@@ -81,7 +86,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: Database,
     explanation: 'Airtable is recommended for this step to act as your lightweight CRM base, tracking client status, deal pipeline, and delivery links.',
     quickPrompt: 'Configure base fields: [Lead Name], [Email], [Pipeline Status: Lead / Active / Done], [Output Link], [Date Created].',
-    proTip: 'Enable Airtable Automations to send Slack notifications when new high-value leads arrive.'
+    proTip: 'Enable Airtable Automations to send Slack notifications when new high-value leads arrive.',
+    directUrl: 'https://airtable.com/signup'
   },
   gumroad: {
     toolName: 'Gumroad',
@@ -90,7 +96,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: CreditCard,
     explanation: 'Gumroad is optimal for this step to host 1p - 10p micro-assets, wallpapers, or templates with instant digital product fulfillment and zero upfront cost.',
     quickPrompt: 'Create Gumroad digital product at £0.10, upload PNG/ZIP deliverable, and copy 1-click checkout embed link.',
-    proTip: 'Set "Pay What You Want" starting at £0.10 to capture higher tips from enthusiastic buyers.'
+    proTip: 'Set "Pay What You Want" starting at £0.10 to capture higher tips from enthusiastic buyers.',
+    directUrl: 'https://gumroad.com/products/new'
   },
   stripe: {
     toolName: 'Stripe',
@@ -99,7 +106,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: CreditCard,
     explanation: 'Stripe is recommended for this step to handle client invoices, recurring retainer subscriptions, and direct bank payouts.',
     quickPrompt: 'Generate a Stripe Payment Link with webhook listening for checkout.session.completed events.',
-    proTip: 'Attach customer email to Stripe metadata to automatically unlock client portal access.'
+    proTip: 'Attach customer email to Stripe metadata to automatically unlock client portal access.',
+    directUrl: 'https://dashboard.stripe.com/register'
   },
   resend: {
     toolName: 'Resend',
@@ -108,7 +116,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: Mail,
     explanation: 'Resend is recommended for this step to reliably dispatch HTML reports, download links, and onboarding emails with 99.9% inbox deliverability.',
     quickPrompt: 'Initialize Resend API key and send HTML template payload containing custom client report download variables.',
-    proTip: 'Verify domain DKIM/SPF records for maximum email inbox placement.'
+    proTip: 'Verify domain DKIM/SPF records for maximum email inbox placement.',
+    directUrl: 'https://resend.com/overview'
   },
   midjourney: {
     toolName: 'Midjourney / Flux.1',
@@ -117,7 +126,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: ImageIcon,
     explanation: 'Midjourney or Flux.1 is recommended for this step to batch generate photorealistic 4K wallpapers, stock visuals, or UI graphics.',
     quickPrompt: 'Run prompt: "4K OLED cyberpunk wallpaper, deep black #000000, neon glow, octane render --v 6.0 --ar 16:9"',
-    proTip: 'Use --tile parameter for seamless repeating background patterns.'
+    proTip: 'Use --tile parameter for seamless repeating background patterns.',
+    directUrl: 'https://www.midjourney.com/'
   },
   tally: {
     toolName: 'Tally.so / Framer',
@@ -126,7 +136,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: FileText,
     explanation: 'Tally.so is recommended for this step to create sleek, high-converting lead capture forms that connect directly to webhooks.',
     quickPrompt: 'Build Tally intake form with input fields: [Name], [Email], [Business Details], set POST redirect webhook URL.',
-    proTip: 'Embed Tally forms into Framer or Notion for a seamless native landing page experience.'
+    proTip: 'Embed Tally forms into Framer or Notion for a seamless native landing page experience.',
+    directUrl: 'https://tally.so/dashboard'
   },
   facer: {
     toolName: 'WatchFace Studio / Facer',
@@ -135,7 +146,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: Watch,
     explanation: 'WatchFace Studio or Facer is recommended for this step to compile WearOS and Apple Watch digital faces for instant app store publishing.',
     quickPrompt: 'Import 450x450 OLED PNG art layer, attach digital clock HUD elements, and export WearOS APK / WatchFace file.',
-    proTip: 'Keep active background pixels under 15% to maintain Always-On Display battery efficiency.'
+    proTip: 'Keep active background pixels under 15% to maintain Always-On Display battery efficiency.',
+    directUrl: 'https://facer.io/creator'
   },
   ollama: {
     toolName: 'Ollama / LM Studio',
@@ -144,7 +156,8 @@ const TOOL_KNOWLEDGE_BASE: Record<string, ToolExplanation> = {
     icon: Cpu,
     explanation: 'Ollama or LM Studio is recommended for this step to run local LLM models (e.g. Llama 3) for trend analysis and data processing with $0 API fees.',
     quickPrompt: 'Run "ollama run llama3" on localhost port 11434 and bind endpoint to your n8n or Python scraper.',
-    proTip: 'Use quantized Q4_K_M models for high execution speed on standard laptop GPUs.'
+    proTip: 'Use quantized Q4_K_M models for high execution speed on standard laptop GPUs.',
+    directUrl: 'https://ollama.com/download'
   }
 };
 
@@ -310,6 +323,18 @@ export const SetupStepToolTooltip: React.FC<SetupStepToolTooltipProps> = ({
             <HelpCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span>Pro Tip: {tool.proTip}</span>
           </div>
+
+          {/* Direct Official Link - NO Google Search */}
+          <a
+            href={tool.directUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md shadow-indigo-600/30"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>Open Official {tool.toolName} Page Direct</span>
+          </a>
         </div>
       )}
 

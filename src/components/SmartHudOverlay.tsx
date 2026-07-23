@@ -10,7 +10,8 @@ import {
   Sparkles, 
   X,
   Workflow,
-  DollarSign
+  DollarSign,
+  Wrench
 } from 'lucide-react';
 
 interface SmartHudOverlayProps {
@@ -18,13 +19,15 @@ interface SmartHudOverlayProps {
   onOpenRecipes: () => void;
   onOpenGenAI: () => void;
   onOpenLocalLlmHub: () => void;
+  onOpenAutomatedFixModal?: () => void;
 }
 
 export const SmartHudOverlay: React.FC<SmartHudOverlayProps> = ({
   onOpen24hChallenge,
   onOpenRecipes,
   onOpenGenAI,
-  onOpenLocalLlmHub
+  onOpenLocalLlmHub,
+  onOpenAutomatedFixModal
 }) => {
   const [isMinimized, setIsMinimized] = useState<boolean>(false);
   const [hudState, setHudState] = useState<{
@@ -147,16 +150,29 @@ export const SmartHudOverlay: React.FC<SmartHudOverlayProps> = ({
       </div>
 
       {/* Recommended Shortcut Action */}
-      <button
-        onClick={handleExecuteHudAction}
-        className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-bold text-[11px] flex items-center justify-between transition-all shadow-md shadow-emerald-600/20"
-      >
-        <span className="flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-          <span>{hudState.actionLabel}</span>
-        </span>
-        <ArrowUpRight className="w-3.5 h-3.5 text-slate-200" />
-      </button>
+      <div className="grid grid-cols-1 gap-1.5">
+        <button
+          onClick={handleExecuteHudAction}
+          className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-bold text-[11px] flex items-center justify-between transition-all shadow-md shadow-emerald-600/20"
+        >
+          <span className="flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+            <span>{hudState.actionLabel}</span>
+          </span>
+          <ArrowUpRight className="w-3.5 h-3.5 text-slate-200" />
+        </button>
+
+        {onOpenAutomatedFixModal && (
+          <button
+            onClick={onOpenAutomatedFixModal}
+            className="w-full py-1 px-2.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 font-bold text-[10px] flex items-center justify-center gap-1.5 transition-all"
+            title="Open 1-Click System Diagnostics & Automated Fix Box"
+          >
+            <Wrench className="w-3 h-3 text-amber-400 animate-pulse" />
+            <span>1-Click Auto-Fix & Diagnostics Box</span>
+          </button>
+        )}
+      </div>
 
     </div>
   );

@@ -30,6 +30,7 @@ import { QuickLaunchMacroWidget, MacroAction } from './components/QuickLaunchMac
 import { SmartHudOverlay } from './components/SmartHudOverlay';
 import { VoiceControlBar } from './components/VoiceControlBar';
 import { SetupSnapshotManagerModal } from './components/SetupSnapshotManagerModal';
+import { AutomatedFixModal } from './components/AutomatedFixModal';
 import { 
   Sparkles, 
   Bot, 
@@ -88,6 +89,7 @@ export default function App() {
   const [isRecipeMarketplaceOpen, setIsRecipeMarketplaceOpen] = useState<boolean>(false);
   const [isGenAIGalleryOpen, setIsGenAIGalleryOpen] = useState<boolean>(false);
   const [isSnapshotModalOpen, setIsSnapshotModalOpen] = useState<boolean>(false);
+  const [isAutomatedFixOpen, setIsAutomatedFixOpen] = useState<boolean>(false);
   const [proTipHustle, setProTipHustle] = useState<SideHustle | null>(null);
 
   const handleExecuteMacroAction = (actionType: string) => {
@@ -96,6 +98,7 @@ export default function App() {
     else if (actionType === 'open_challenge') setIs24hChallengeOpen(true);
     else if (actionType === 'open_scout') setIsViralScoutOpen(true);
     else if (actionType === 'open_hub') setIsLocalLlmHubOpen(true);
+    else if (actionType === 'open_fix') setIsAutomatedFixOpen(true);
     else if (actionType === 'export_csv') handleExportCSV();
     else if (actionType === 'toggle_focus') {
       if (selectedHustle) {
@@ -216,6 +219,7 @@ export default function App() {
         onOpenRecipes={() => setIsRecipeMarketplaceOpen(true)}
         onOpenGenAIGallery={() => setIsGenAIGalleryOpen(true)}
         onOpenSnapshotModal={() => setIsSnapshotModalOpen(true)}
+        onOpenAutomatedFixModal={() => setIsAutomatedFixOpen(true)}
         voiceControlBar={<VoiceControlBar onExecuteCommand={handleExecuteMacroAction} />}
       />
 
@@ -802,12 +806,19 @@ export default function App() {
         onRestoreState={handleRestorePortfolioState}
       />
 
+      {/* 1-CLICK AUTOMATED DIAGNOSTICS & SYSTEM SELF-HEALING FIX MODAL */}
+      <AutomatedFixModal
+        isOpen={isAutomatedFixOpen}
+        onClose={() => setIsAutomatedFixOpen(false)}
+      />
+
       {/* FLOATING CONTEXT-SENSITIVE SMART HUD OVERLAY */}
       <SmartHudOverlay
         onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
         onOpenRecipes={() => setIsRecipeMarketplaceOpen(true)}
         onOpenGenAI={() => setIsGenAIGalleryOpen(true)}
         onOpenLocalLlmHub={() => setIsLocalLlmHubOpen(true)}
+        onOpenAutomatedFixModal={() => setIsAutomatedFixOpen(true)}
       />
 
     </div>
