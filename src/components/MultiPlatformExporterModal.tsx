@@ -10,13 +10,42 @@ export const MultiPlatformExporterModal: React.FC<MultiPlatformExporterModalProp
   isOpen,
   onClose
 }) => {
-  const [activeTab, setActiveTab] = useState<'etsy' | 'fiverr' | 'social'>('etsy');
+  const [activeTab, setActiveTab] = useState<'etsy' | 'fiverr' | 'social' | 'substack'>('etsy');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
+  };
+
+  const SUBSTACK_TEMPLATE = {
+    title: "Issue #42: The 5-Minute Solopreneur AI Stack (Zero-Cost Setup Guide)",
+    subtitle: "How to automate client proposals, SEO audits, and direct bank payouts without writing a single line of code.",
+    content: `# Issue #42: The 5-Minute Solopreneur AI Stack
+
+Welcome back to another edition! Today we're breaking down how to launch high-margin digital products using 100% automated workflows.
+
+## ðŸ’¡ The Problem
+Most creators waste 15+ hours a week manually answering client emails, formatting proposals, and chasing invoices.
+
+## ðŸš€ The 3-Step Solution
+
+### Step 1: Automated Proposal Engine
+Use standard prompt structures to generate tailored client pitches in under 30 seconds.
+
+### Step 2: Instant Payout Routing
+Inject direct settlement endpoints (PayPal / UK Bank Routing) into every invoice so funds land in your account immediately.
+
+### Step 3: Distribution & SEO
+Cross-post your top-performing digital blueprints to Etsy and Substack for passive organic traffic.
+
+---
+
+### ðŸ“¦ Tools Mentioned This Week:
+- **SideHustles Studio**: Autonomous monetization & blueprint launcher
+- **Resend**: Transactional email dispatch
+- **Airtable**: No-code CRM database`
   };
 
   const ETSY_TEMPLATE = {
@@ -154,7 +183,19 @@ Which execution model fits your strategy best? Let's discuss in the comments ðŸ‘
             }`}
           >
             <Share2 className="w-4 h-4 text-indigo-400" />
-            <span>Social Threads & Posts</span>
+            <span>Social Thread Exporter</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('substack')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+              activeTab === 'substack'
+                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <FileText className="w-4 h-4 text-rose-400" />
+            <span>Substack & Beehiiv Newsletter</span>
           </button>
         </div>
 
@@ -303,6 +344,38 @@ Which execution model fits your strategy best? Let's discuss in the comments ðŸ‘
                   </button>
                 </div>
                 <pre className="text-slate-300 whitespace-pre-wrap font-sans leading-relaxed">{SOCIAL_TEMPLATE.linkedinPost}</pre>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'substack' && (
+            <div className="space-y-4">
+              <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-rose-300 font-bold uppercase text-[10px]">Substack Issue Title:</span>
+                  <button
+                    onClick={() => handleCopy(SUBSTACK_TEMPLATE.title, 'sub-title')}
+                    className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-mono text-[11px]"
+                  >
+                    {copiedKey === 'sub-title' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedKey === 'sub-title' ? 'Copied' : 'Copy Title'}</span>
+                  </button>
+                </div>
+                <div className="text-slate-200 font-bold">{SUBSTACK_TEMPLATE.title}</div>
+              </div>
+
+              <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-rose-300 font-bold uppercase text-[10px]">Markdown Newsletter Body:</span>
+                  <button
+                    onClick={() => handleCopy(SUBSTACK_TEMPLATE.content, 'sub-body')}
+                    className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-mono text-[11px]"
+                  >
+                    {copiedKey === 'sub-body' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedKey === 'sub-body' ? 'Copied' : 'Copy Full Issue Markdown'}</span>
+                  </button>
+                </div>
+                <pre className="text-slate-300 whitespace-pre-wrap font-sans leading-relaxed">{SUBSTACK_TEMPLATE.content}</pre>
               </div>
             </div>
           )}

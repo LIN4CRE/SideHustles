@@ -42,6 +42,30 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
     return () => clearInterval(interval);
   }, []);
 
+  // Task 10: Web Audio API Synthesized Payout Chime
+  const playPayoutChime = () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const frequencies = [659.25, 830.61, 987.77, 1318.51]; // E5, G#5, B5, E6 major arpeggio
+      frequencies.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.15, ctx.currentTime + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + idx * 0.08);
+        osc.stop(ctx.currentTime + idx * 0.08 + 0.35);
+      });
+    } catch (e) {
+      console.log('Audio chime unavailable:', e);
+    }
+  };
+
   // Connect to SSE Live Stream
   useEffect(() => {
     let eventSource: EventSource | null = null;
@@ -50,25 +74,10 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
       eventSource.onmessage = (e) => {
         try {
           const newSale: SaleEvent = JSON.parse(e.data);
-          setSales(prev => [newSale, ...prev]);
-          setTotalRevenue(prev => prev + newSale.amount);
+          setSales((prev) => [newSale, ...prev]);
+          setTotalRevenue((prev) => prev + newSale.amount);
           setActiveToast(newSale);
-
-          // Play subtle web audio notification chime
-          try {
-            const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.frequency.setValueAtTime(880, ctx.currentTime);
-            gain.gain.setValueAtTime(0.1, ctx.currentTime);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.2);
-          } catch (err) {
-            // Audio context not allowed
-          }
-
+          playPayoutChime();
           setTimeout(() => setActiveToast(null), 5000);
         } catch (err) {
           console.error('Error parsing SSE event:', err);
