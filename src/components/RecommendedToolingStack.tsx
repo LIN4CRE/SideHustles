@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SideHustle } from '../types';
+import { SetupStepToolTooltip } from './SetupStepToolTooltip';
 import { 
   Wrench, 
   Sparkles, 
@@ -339,13 +340,18 @@ export const RecommendedToolingStack: React.FC<RecommendedToolingStackProps> = (
                         <span className="text-[10px] uppercase font-mono font-bold text-slate-400 block">
                           5-Minute Implementation Checklist
                         </span>
-                        <div className="space-y-1">
+                        <div className="space-y-1.5">
                           {tool.quickStartBlueprint.map((step, sIdx) => (
-                            <div key={sIdx} className="flex items-start gap-2 text-xs text-slate-300 bg-slate-950 p-2 rounded-lg border border-slate-800/60">
-                              <span className="w-4 h-4 rounded-full bg-indigo-500/10 text-indigo-400 font-mono font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
-                                {sIdx + 1}
-                              </span>
-                              <span>{step}</span>
+                            <div key={sIdx} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-300 bg-slate-950 p-2.5 rounded-lg border border-slate-800/60">
+                              <div className="flex items-start gap-2">
+                                <span className="w-4 h-4 rounded-full bg-indigo-500/10 text-indigo-400 font-mono font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                                  {sIdx + 1}
+                                </span>
+                                <span>{step}</span>
+                              </div>
+                              <div className="shrink-0 self-end sm:self-auto">
+                                <SetupStepToolTooltip stepText={`${tool.toolName} ${step}`} hustleTitle={hustle.title} hustleCategory={hustle.category} stepNumber={sIdx + 1} />
+                              </div>
                             </div>
                           ))}
                         </div>

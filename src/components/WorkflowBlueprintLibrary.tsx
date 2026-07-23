@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SideHustle, ZapierBlueprintNode } from '../types';
+import { SetupStepToolTooltip } from './SetupStepToolTooltip';
 import { 
   Zap, 
   Webhook, 
@@ -143,8 +144,11 @@ export const WorkflowBlueprintLibrary: React.FC<WorkflowBlueprintLibraryProps> =
                 {getNodeIcon(selectedNode.iconName)}
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">{selectedNode.toolName} — {selectedNode.actionTitle}</h4>
-                <p className="text-xs text-slate-400">{selectedNode.description}</p>
+                <div className="flex items-center gap-2">
+                  <h4 className="text-sm font-bold text-white">{selectedNode.toolName} — {selectedNode.actionTitle}</h4>
+                  <SetupStepToolTooltip stepText={`${selectedNode.toolName} ${selectedNode.actionTitle} ${selectedNode.description}`} hustleTitle={hustle.title} hustleCategory={hustle.category} />
+                </div>
+                <p className="text-xs text-slate-400 mt-0.5">{selectedNode.description}</p>
               </div>
             </div>
 

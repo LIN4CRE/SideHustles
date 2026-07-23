@@ -5,6 +5,7 @@ import { WorkflowBlueprintLibrary } from './WorkflowBlueprintLibrary';
 import { CompetitiveEdgeSection } from './CompetitiveEdgeSection';
 import { RecommendedToolingStack } from './RecommendedToolingStack';
 import { FreeStarterKitTester } from './FreeStarterKitTester';
+import { SetupStepToolTooltip } from './SetupStepToolTooltip';
 import { RealityCheckService } from '../services/realityCheckService';
 import { 
   X, 
@@ -429,8 +430,11 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {realityCheck.failProofSteps.map((step, idx) => (
-                      <div key={idx} className="bg-slate-900/90 p-2.5 rounded border border-slate-800 text-[10px] text-slate-300 leading-tight space-y-1">
-                        <span className="font-bold text-indigo-400 block font-mono">Contingency #{idx + 1}</span>
+                      <div key={idx} className="bg-slate-900/90 p-2.5 rounded border border-slate-800 text-[10px] text-slate-300 leading-tight space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-indigo-400 block font-mono">Contingency #{idx + 1}</span>
+                          <SetupStepToolTooltip stepText={step} hustleTitle={hustle.title} hustleCategory={hustle.category} stepNumber={idx + 1} />
+                        </div>
                         <p>{step}</p>
                       </div>
                     ))}
@@ -469,9 +473,14 @@ export const HustleDetailModal: React.FC<HustleDetailModalProps> = ({
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {hustle.scalabilityPillars.map((pillar, idx) => (
-                    <div key={idx} className="bg-slate-950/60 border border-slate-800/80 rounded-xl p-3 flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                      <span className="text-xs text-slate-300 leading-relaxed">{pillar}</span>
+                    <div key={idx} className="bg-slate-950/60 border border-slate-800/80 rounded-xl p-3 flex flex-col justify-between gap-2">
+                      <div className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <span className="text-xs text-slate-300 leading-relaxed">{pillar}</span>
+                      </div>
+                      <div className="pt-1 border-t border-slate-900 self-end">
+                        <SetupStepToolTooltip stepText={pillar} hustleTitle={hustle.title} hustleCategory={hustle.category} stepNumber={idx + 1} />
+                      </div>
                     </div>
                   ))}
                 </div>

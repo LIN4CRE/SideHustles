@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SideHustle, GrowthRoadmapData } from '../types';
+import { SetupStepToolTooltip } from './SetupStepToolTooltip';
 import { 
   Sparkles, 
   Calendar, 
@@ -199,22 +200,30 @@ export const GrowthRoadmap: React.FC<GrowthRoadmapProps> = ({ hustle }) => {
                   const key = `d30-${idx}`;
                   const isDone = !!completedItems[key];
                   return (
-                    <button
+                    <div
                       key={key}
-                      onClick={() => toggleCheck(key)}
-                      className={`w-full text-left p-2.5 rounded-lg border transition-all text-xs flex items-start gap-2.5 ${
+                      className={`w-full text-left p-2.5 rounded-lg border transition-all text-xs flex flex-col gap-2 ${
                         isDone 
                           ? 'bg-indigo-950/20 border-indigo-500/30 text-slate-400 line-through' 
                           : 'bg-slate-900 border-slate-800 text-slate-200 hover:border-slate-700'
                       }`}
                     >
-                      {isDone ? (
-                        <CheckSquare className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
-                      ) : (
-                        <Square className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
-                      )}
-                      <span className="leading-relaxed">{m}</span>
-                    </button>
+                      <button
+                        onClick={() => toggleCheck(key)}
+                        className="flex items-start gap-2.5 w-full text-left"
+                      >
+                        {isDone ? (
+                          <CheckSquare className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                        ) : (
+                          <Square className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                        )}
+                        <span className="leading-relaxed flex-1">{m}</span>
+                      </button>
+
+                      <div className="pt-1 border-t border-slate-800/60 flex justify-end">
+                        <SetupStepToolTooltip stepText={m} hustleTitle={hustle.title} hustleCategory={hustle.category} stepNumber={idx + 1} />
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -240,22 +249,30 @@ export const GrowthRoadmap: React.FC<GrowthRoadmapProps> = ({ hustle }) => {
                   const key = `d60-${idx}`;
                   const isDone = !!completedItems[key];
                   return (
-                    <button
+                    <div
                       key={key}
-                      onClick={() => toggleCheck(key)}
-                      className={`w-full text-left p-2.5 rounded-lg border transition-all text-xs flex items-start gap-2.5 ${
+                      className={`w-full text-left p-2.5 rounded-lg border transition-all text-xs flex flex-col gap-2 ${
                         isDone 
                           ? 'bg-amber-950/20 border-amber-500/30 text-slate-400 line-through' 
                           : 'bg-slate-900 border-slate-800 text-slate-200 hover:border-slate-700'
                       }`}
                     >
-                      {isDone ? (
-                        <CheckSquare className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                      ) : (
-                        <Square className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
-                      )}
-                      <span className="leading-relaxed">{m}</span>
-                    </button>
+                      <button
+                        onClick={() => toggleCheck(key)}
+                        className="flex items-start gap-2.5 w-full text-left"
+                      >
+                        {isDone ? (
+                          <CheckSquare className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                        ) : (
+                          <Square className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                        )}
+                        <span className="leading-relaxed flex-1">{m}</span>
+                      </button>
+
+                      <div className="pt-1 border-t border-slate-800/60 flex justify-end">
+                        <SetupStepToolTooltip stepText={m} hustleTitle={hustle.title} hustleCategory={hustle.category} stepNumber={idx + 1} />
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -281,22 +298,30 @@ export const GrowthRoadmap: React.FC<GrowthRoadmapProps> = ({ hustle }) => {
                   const key = `d90-${idx}`;
                   const isDone = !!completedItems[key];
                   return (
-                    <button
+                    <div
                       key={key}
-                      onClick={() => toggleCheck(key)}
-                      className={`w-full text-left p-2.5 rounded-lg border transition-all text-xs flex items-start gap-2.5 ${
+                      className={`w-full text-left p-2.5 rounded-lg border transition-all text-xs flex flex-col gap-2 ${
                         isDone 
                           ? 'bg-emerald-950/20 border-emerald-500/30 text-slate-400 line-through' 
                           : 'bg-slate-900 border-slate-800 text-slate-200 hover:border-slate-700'
                       }`}
                     >
-                      {isDone ? (
-                        <CheckSquare className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                      ) : (
-                        <Square className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
-                      )}
-                      <span className="leading-relaxed">{m}</span>
-                    </button>
+                      <button
+                        onClick={() => toggleCheck(key)}
+                        className="flex items-start gap-2.5 w-full text-left"
+                      >
+                        {isDone ? (
+                          <CheckSquare className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        ) : (
+                          <Square className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                        )}
+                        <span className="leading-relaxed flex-1">{m}</span>
+                      </button>
+
+                      <div className="pt-1 border-t border-slate-800/60 flex justify-end">
+                        <SetupStepToolTooltip stepText={m} hustleTitle={hustle.title} hustleCategory={hustle.category} stepNumber={idx + 1} />
+                      </div>
+                    </div>
                   );
                 })}
               </div>
