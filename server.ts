@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
 import dotenv from "dotenv";
 import { GoogleGenAI, Type } from "@google/genai";
 import { createServer as createViteServer } from "vite";
@@ -548,12 +549,32 @@ Provide a JSON output with:
   }
 });
 
-// Live Sales History In-Memory & File Persistence
-let recentSales: Array<{ id: string; item: string; amount: number; platform: string; timestamp: string }> = [
-  { id: 'sale-1', item: '50 AI Solopreneur Prompt Vault', amount: 2.99, platform: 'Gumroad', timestamp: new Date(Date.now() - 3600000).toISOString() },
-  { id: 'sale-2', item: '4K OLED Cyberpunk Neon Wallpaper', amount: 1.99, platform: 'Etsy', timestamp: new Date(Date.now() - 7200000).toISOString() },
-  { id: 'sale-3', item: 'Local SEO 5 Meta Description Audit', amount: 25.00, platform: 'Direct PayPal', timestamp: new Date(Date.now() - 14400000).toISOString() }
-];
+// Real Sales History File Persistence
+const SALES_FILE = path.join(process.cwd(), "ready-to-sell-assets", "sales-history.json");
+
+function loadRealSales(): Array<{ id: string; item: string; amount: number; platform: string; timestamp: string }> {
+  try {
+    if (fs.existsSync(SALES_FILE)) {
+      const raw = fs.readFileSync(SALES_FILE, "utf-8");
+      return JSON.parse(raw);
+    }
+  } catch (e) {
+    console.error("Error reading sales-history.json", e);
+  }
+  return [];
+}
+
+function saveRealSales(sales: any[]) {
+  try {
+    const dir = path.dirname(SALES_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(SALES_FILE, JSON.stringify(sales, null, 2), "utf-8");
+  } catch (e) {
+    console.error("Error writing sales-history.json", e);
+  }
+}
+
+let recentSales = loadRealSales();
 
 // SSE Clients for Live Sale Notifications
 const sseClients: any[] = [];
@@ -561,23 +582,28 @@ const sseClients: any[] = [];
 // Real Payout & Sale Webhook Endpoint (Gumroad, Stripe, PayPal, n8n)
 app.post("/api/webhooks/sale", (req, res) => {
   const { item, amount, platform } = req.body;
+  if (!amount) {
+    return res.status(400).json({ error: "Amount is required for real sale" });
+  }
+
   const newSale = {
     id: `sale-${Date.now()}`,
-    item: item || "Digital Asset Download",
-    amount: parseFloat(amount) || 1.99,
+    item: item || "Real Digital Asset Download",
+    amount: parseFloat(amount),
     platform: platform || "Gumroad",
     timestamp: new Date().toISOString()
   };
 
   recentSales.unshift(newSale);
-  if (recentSales.length > 50) recentSales.pop();
+  if (recentSales.length > 100) recentSales.pop();
+  saveRealSales(recentSales);
 
   // Notify all active browser SSE connections instantly
   sseClients.forEach(client => {
     client.res.write(`data: ${JSON.stringify(newSale)}\n\n`);
   });
 
-  console.log(`[LIVE SALE NOTIFICATION] Received £${newSale.amount} sale for "${newSale.item}" via ${newSale.platform}`);
+  console.log(`[REAL PAYOUT RECEIVED] £${newSale.amount} for "${newSale.item}" via ${newSale.platform}`);
   res.json({ success: true, sale: newSale });
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PoundSterling, Sparkles, X, TrendingUp, Bell, CheckCircle2, DollarSign } from 'lucide-react';
+import { PoundSterling, Sparkles, X, TrendingUp, Bell, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 interface SaleEvent {
   id: string;
@@ -22,7 +22,7 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [activeToast, setActiveToast] = useState<SaleEvent | null>(null);
 
-  // Fetch recent sales
+  // Fetch real logged sales
   const fetchSales = async () => {
     try {
       const res = await fetch('/api/sales/recent');
@@ -32,7 +32,7 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
         setTotalRevenue(data.totalRevenue || 0);
       }
     } catch (e) {
-      console.log('Using local fallback sales feed');
+      console.log('Unable to reach sales feed API');
     }
   };
 
@@ -66,7 +66,7 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
             osc.start();
             osc.stop(ctx.currentTime + 0.2);
           } catch (err) {
-            // Audio context not allowed or unsupported
+            // Audio context not allowed
           }
 
           setTimeout(() => setActiveToast(null), 5000);
@@ -83,26 +83,6 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
     };
   }, []);
 
-  const triggerTestSimulatedSale = async () => {
-    const testItems = [
-      { item: '50 AI Solopreneur Prompt Vault', amount: 2.99, platform: 'Gumroad' },
-      { item: '4K OLED Cyberpunk Neon Wallpaper', amount: 1.99, platform: 'Etsy' },
-      { item: 'Local SEO Meta Description Audit', amount: 25.00, platform: 'Direct PayPal' },
-      { item: 'ChatGPT Coding Cheatsheet', amount: 1.49, platform: 'Gumroad' }
-    ];
-    const randomItem = testItems[Math.floor(Math.random() * testItems.length)];
-    try {
-      await fetch('/api/webhooks/sale', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(randomItem)
-      });
-      fetchSales();
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   return (
     <>
       {/* FLOATING SALE TOAST NOTIFICATION */}
@@ -115,7 +95,7 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
             <div>
               <div className="text-xs font-extrabold text-emerald-300 uppercase tracking-wider flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-amber-400" />
-                NEW SALE RECEIVED!
+                REAL PAYOUT RECEIVED!
               </div>
               <div className="text-sm font-bold text-white line-clamp-1">{activeToast.item}</div>
               <div className="text-xs text-slate-300 font-mono">
@@ -144,10 +124,10 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    Live Payout & Sales Notification Center
+                    Real Payout & Sales Notification Center
                   </h2>
                   <p className="text-xs text-slate-400">
-                    Real-time webhook listener connected to Gumroad, Stripe, PayPal, and n8n workflows.
+                    Live production webhook listener connected to Gumroad, Stripe, PayPal, and n8n workflows.
                   </p>
                 </div>
               </div>
@@ -163,35 +143,34 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
               {/* Total Accumulated Revenue */}
               <div className="p-4 bg-gradient-to-r from-emerald-950 to-slate-950 border border-emerald-500/30 rounded-xl flex items-center justify-between">
                 <div>
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Studio Revenue Logged</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Real Studio Revenue Logged</span>
                   <div className="text-2xl font-extrabold text-emerald-400 font-mono">£{totalRevenue.toFixed(2)}</div>
                 </div>
-                <button
-                  onClick={triggerTestSimulatedSale}
-                  className="px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/40 hover:bg-emerald-500/30 text-emerald-300 rounded-lg text-xs font-bold font-mono transition-all flex items-center gap-1"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Test Sale Notification
-                </button>
+                <div className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span>● Webhook Active</span>
+                </div>
               </div>
 
               {/* Webhook Endpoint Info */}
               <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs space-y-1">
-                <div className="font-semibold text-indigo-300">Live Webhook Listener URL:</div>
+                <div className="font-semibold text-indigo-300">Your Production Webhook Listener URL:</div>
                 <code className="text-[11px] text-amber-300 font-mono bg-slate-900 px-2 py-1 rounded block">
                   http://localhost:3847/api/webhooks/sale
                 </code>
                 <div className="text-[11px] text-slate-400">
-                  Paste this URL in Gumroad ➔ Settings ➔ Advanced ➔ Ping / Webhook URL to receive live desktop sound alerts for every sale!
+                  Paste this URL in Gumroad ➔ Settings ➔ Advanced ➔ Ping / Webhook URL to trigger live desktop audio alerts whenever a customer buys your products!
                 </div>
               </div>
 
               {/* Sales List */}
               <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Recent Payout Log:</h3>
+                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Real Payout History Log:</h3>
                 {sales.length === 0 ? (
-                  <div className="p-6 text-center text-xs text-slate-500 border border-slate-800/60 rounded-xl">
-                    Waiting for incoming sales... (Your webhook listener is active)
+                  <div className="p-8 text-center text-xs text-slate-500 border border-slate-800/60 rounded-xl space-y-2">
+                    <ShieldCheck className="w-6 h-6 text-emerald-400 mx-auto opacity-80" />
+                    <div className="font-semibold text-slate-300">0 Real Payouts Logged Yet</div>
+                    <div>Waiting for incoming sales from Gumroad / Stripe / PayPal webhooks...</div>
                   </div>
                 ) : (
                   sales.map((sale) => (
