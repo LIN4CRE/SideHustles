@@ -38,6 +38,7 @@ interface NavbarProps {
   onOpenSnapshotModal?: () => void;
   onOpenAutomatedFixModal?: () => void;
   onOpenDirectLaunchpad?: () => void;
+  onOpenSaleNotifications?: () => void;
   voiceControlBar?: React.ReactNode;
 }
 
@@ -74,6 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSnapshotModal,
   onOpenAutomatedFixModal,
   onOpenDirectLaunchpad,
+  onOpenSaleNotifications,
   voiceControlBar
 }) => {
   return (
@@ -214,6 +216,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <Building2 className="w-3.5 h-3.5 text-slate-950" />
                   <span>💰 Direct £ Launchpad</span>
+                </button>
+              )}
+
+              {onOpenSaleNotifications && (
+                <button
+                  onClick={onOpenSaleNotifications}
+                  className="px-3 py-2 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/90 text-emerald-300 font-bold text-xs border border-emerald-500/40 flex items-center gap-1.5 transition-all shadow-sm shadow-emerald-500/20 hover:scale-105"
+                  title="Live Payout & Sales Notification Center"
+                >
+                  <Database className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+                  <span>🔔 Sales & Payout Feed</span>
                 </button>
               )}
 
