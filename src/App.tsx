@@ -20,6 +20,9 @@ import { DailySalesPredictor } from './components/DailySalesPredictor';
 import { QuickSetupChecklist } from './components/QuickSetupChecklist';
 import { ViralAssetScoutModal } from './components/ViralAssetScoutModal';
 import { SaleSuccessModal } from './components/SaleSuccessModal';
+import { RecipeMarketplaceModal } from './components/RecipeMarketplaceModal';
+import { GlobalMarketHeatmap } from './components/GlobalMarketHeatmap';
+import { TaskSchedulerWidget } from './components/TaskSchedulerWidget';
 import { 
   Sparkles, 
   Bot, 
@@ -72,6 +75,7 @@ export default function App() {
   const [is24hChallengeOpen, setIs24hChallengeOpen] = useState<boolean>(false);
   const [isViralScoutOpen, setIsViralScoutOpen] = useState<boolean>(false);
   const [isSaleSuccessOpen, setIsSaleSuccessOpen] = useState<boolean>(false);
+  const [isRecipeMarketplaceOpen, setIsRecipeMarketplaceOpen] = useState<boolean>(false);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(() => {
     return localStorage.getItem('sh_has_seen_tour') === 'true';
   });
@@ -135,6 +139,7 @@ export default function App() {
         onOpenAutomationTour={() => setIsAutomationTourOpen(true)}
         onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
         onOpenViralScout={() => setIsViralScoutOpen(true)}
+        onOpenRecipes={() => setIsRecipeMarketplaceOpen(true)}
       />
 
       {/* Main Container */}
@@ -239,6 +244,18 @@ export default function App() {
         <DailySalesPredictor
           activeHustleCount={savedHustleIds.length}
           onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
+        />
+
+        {/* Global Market Heatmap D3 Engine */}
+        <GlobalMarketHeatmap
+          onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
+          onOpenViralScout={() => setIsViralScoutOpen(true)}
+        />
+
+        {/* Task Scheduler Widget for AI Maintenance */}
+        <TaskSchedulerWidget
+          onOpen24hChallenge={() => setIs24hChallengeOpen(true)}
+          onOpenViralScout={() => setIsViralScoutOpen(true)}
         />
 
         {/* Search Results Summary */}
@@ -570,6 +587,12 @@ export default function App() {
         onConfirmSale={(amount, platform, notes) => {
           console.log('Logged 1p sale:', amount, platform, notes);
         }}
+      />
+
+      {/* RECIPE MARKETPLACE MODAL */}
+      <RecipeMarketplaceModal
+        isOpen={isRecipeMarketplaceOpen}
+        onClose={() => setIsRecipeMarketplaceOpen(false)}
       />
 
     </div>

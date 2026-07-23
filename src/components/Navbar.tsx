@@ -11,7 +11,8 @@ import {
   ArrowRight,
   Cpu,
   Server,
-  Flame
+  Flame,
+  Workflow
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -30,6 +31,7 @@ interface NavbarProps {
   onOpenAutomationTour?: () => void;
   onOpen24hChallenge?: () => void;
   onOpenViralScout?: () => void;
+  onOpenRecipes?: () => void;
 }
 
 const CATEGORIES: CategoryType[] = [
@@ -59,7 +61,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenLocalLlmHub,
   onOpenAutomationTour,
   onOpen24hChallenge,
-  onOpenViralScout
+  onOpenViralScout,
+  onOpenRecipes
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
@@ -157,6 +160,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <Flame className="w-3.5 h-3.5 text-rose-400" />
                   <span>Viral Scout</span>
+                </button>
+              )}
+
+              {onOpenRecipes && (
+                <button
+                  onClick={onOpenRecipes}
+                  className="px-3 py-2 rounded-xl bg-teal-950/60 hover:bg-teal-900/80 text-teal-200 font-bold text-xs border border-teal-500/30 flex items-center gap-1.5 transition-all shadow-sm shadow-teal-500/20"
+                  title="Automation Recipe Marketplace - Download n8n, Make.com JSONs"
+                >
+                  <Workflow className="w-3.5 h-3.5 text-teal-400" />
+                  <span>Recipes</span>
                 </button>
               )}
 
