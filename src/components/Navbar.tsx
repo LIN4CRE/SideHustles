@@ -4,19 +4,18 @@ import {
   Zap, 
   Search, 
   Bookmark, 
-  Calculator, 
   Sparkles,
-  Layers,
   Building2,
   ArrowRight,
-  Cpu,
-  Server,
-  Flame,
   Workflow,
-  Database,
   Wrench,
-  Bell
+  Bell,
+  Globe,
+  Palette
 } from 'lucide-react';
+
+export type CurrencyType = 'GBP' | 'USD' | 'EUR';
+export type ThemeType = 'emerald' | 'cyber' | 'indigo' | 'gold';
 
 interface NavbarProps {
   selectedCategory: CategoryType;
@@ -40,6 +39,10 @@ interface NavbarProps {
   onOpenAutomatedFixModal?: () => void;
   onOpenDirectLaunchpad?: () => void;
   onOpenSaleNotifications?: () => void;
+  currency: CurrencyType;
+  onCurrencyChange: (c: CurrencyType) => void;
+  theme: ThemeType;
+  onThemeChange: (t: ThemeType) => void;
   voiceControlBar?: React.ReactNode;
 }
 
@@ -62,35 +65,44 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSearchChange,
   savedCount,
   onOpenSaved,
-  onOpenValidator,
-  onOpenCalculator,
-  onOpenAssetGen,
-  onOpenPayoutModal,
   onOpenFoolproofWizard,
-  onOpenLocalLlmHub,
-  onOpenAutomationTour,
   onOpen24hChallenge,
-  onOpenViralScout,
   onOpenRecipes,
   onOpenGenAIGallery,
-  onOpenSnapshotModal,
   onOpenAutomatedFixModal,
   onOpenDirectLaunchpad,
   onOpenSaleNotifications,
-  voiceControlBar
+  currency,
+  onCurrencyChange,
+  theme,
+  onThemeChange
 }) => {
+  const getCurrencySymbol = (c: CurrencyType) => {
+    if (c === 'USD') return '$';
+    if (c === 'EUR') return '€';
+    return '£';
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full max-w-full overflow-x-hidden bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/80 text-white">
-      {/* Top Glass Announcement Banner */}
+    <header className="sticky top-0 z-40 w-full max-w-full overflow-x-hidden bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 text-white">
+      {/* Live Animated Ticker Tape Banner */}
       <div 
         onClick={onOpen24hChallenge || onOpenFoolproofWizard}
-        className="bg-slate-900/60 backdrop-blur-md px-4 py-1.5 text-xs text-center border-b border-slate-800 text-slate-300 flex items-center justify-center gap-2 cursor-pointer hover:bg-slate-900/80 transition-all font-mono"
+        className="bg-slate-900/80 backdrop-blur-md px-4 py-1 text-xs text-center border-b border-slate-800 text-slate-300 flex items-center justify-center gap-2 cursor-pointer hover:bg-slate-900 transition-all font-mono overflow-hidden"
       >
-        <Zap className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-        <span>
-          <strong>24-Hour 1p Sale Challenge:</strong> Deploy Wallpapers, WearOS Watch Faces, Ringtones & Notion Vaults for Day 1 sales!
-        </span>
-        <ArrowRight className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+        <div className="flex items-center gap-4 animate-marquee whitespace-nowrap">
+          <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
+            <Zap className="w-3.5 h-3.5" />
+            <span>LIVE WEBHOOK STREAM: Active</span>
+          </span>
+          <span className="text-slate-500">•</span>
+          <span>Deploy 4K OLED Wallpapers & WearOS Faces for Day 1 Sales</span>
+          <span className="text-slate-500">•</span>
+          <span className="text-amber-400 font-bold">GitHub Auto-Sync: 100% Synced</span>
+          <span className="text-slate-500">•</span>
+          <span className="text-indigo-400 font-bold">Local LLM MCP: Connected</span>
+        </div>
+        <ArrowRight className="w-3.5 h-3.5 text-emerald-400 shrink-0 hidden sm:inline-block" />
       </div>
 
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
@@ -99,14 +111,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Logo & Brand */}
           <div className="flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => onSelectCategory('All')}>
-              <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700/60 p-0.5 shadow-md flex items-center justify-center">
-                <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
+              <div className={`w-9 h-9 rounded-xl bg-slate-900 border p-0.5 shadow-md flex items-center justify-center ${
+                theme === 'cyber' ? 'border-pink-500/40' : theme === 'gold' ? 'border-amber-500/40' : 'border-emerald-500/40'
+              }`}>
+                <Zap className={`w-4 h-4 ${
+                  theme === 'cyber' ? 'text-pink-400 fill-pink-400' : theme === 'gold' ? 'text-amber-400 fill-amber-400' : 'text-emerald-400 fill-emerald-400'
+                }`} />
               </div>
               <div>
                 <h1 className="text-base font-bold tracking-tight text-white flex items-center gap-1.5">
-                  SideHustle<span className="text-emerald-400">Forge</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 text-emerald-300 border border-slate-700/60">
-                    Glass Pro
+                  SideHustle<span className={theme === 'cyber' ? 'text-pink-400' : theme === 'gold' ? 'text-amber-400' : 'text-emerald-400'}>Forge</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 text-slate-300 border border-slate-700/60">
+                    Pro Studio
                   </span>
                 </h1>
               </div>
@@ -151,14 +167,46 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Clean Dark Mode Glass Action Toolbar */}
           <div className="hidden lg:flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
             
+            {/* Currency Selector Toggle */}
+            <div className="flex items-center bg-slate-900/90 border border-slate-800 rounded-xl p-0.5 text-xs font-mono">
+              <Globe className="w-3.5 h-3.5 text-slate-400 ml-2 mr-1" />
+              {(['GBP', 'USD', 'EUR'] as CurrencyType[]).map((c) => (
+                <button
+                  key={c}
+                  onClick={() => onCurrencyChange(c)}
+                  className={`px-2 py-0.5 rounded-lg transition-all ${
+                    currency === c ? 'bg-slate-800 text-emerald-300 font-bold border border-emerald-500/30' : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  {getCurrencySymbol(c)} {c}
+                </button>
+              ))}
+            </div>
+
+            {/* Theme Selector Toggle */}
+            <div className="flex items-center bg-slate-900/90 border border-slate-800 rounded-xl p-0.5 text-xs font-mono">
+              <Palette className="w-3.5 h-3.5 text-slate-400 ml-2 mr-1" />
+              {(['emerald', 'cyber', 'indigo', 'gold'] as ThemeType[]).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => onThemeChange(t)}
+                  className={`px-1.5 py-0.5 rounded-lg capitalize text-[11px] transition-all ${
+                    theme === t ? 'bg-slate-800 text-white font-bold border border-slate-700' : 'text-slate-500 hover:text-slate-300'
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+
             {onOpenDirectLaunchpad && (
               <button
                 onClick={onOpenDirectLaunchpad}
-                className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm shadow-emerald-500/10 shrink-0"
+                className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0"
                 title="Direct Action & Monetization Launchpad"
               >
                 <Building2 className="w-3.5 h-3.5 text-emerald-400" />
-                <span>💰 Direct £ Launchpad</span>
+                <span>💰 Direct Monetization</span>
               </button>
             )}
 
@@ -170,48 +218,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <Bell className="w-3.5 h-3.5 text-emerald-400" />
                 <span>🔔 Sales Feed</span>
-              </button>
-            )}
-
-            <button
-              onClick={onOpenFoolproofWizard}
-              className="px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/60 text-slate-200 font-medium text-xs flex items-center gap-1.5 transition-all shrink-0"
-              title="1-Click Launch Wizard"
-            >
-              <Zap className="w-3.5 h-3.5 text-amber-400" />
-              <span>⚡ 1-Click Launch</span>
-            </button>
-
-            {onOpenRecipes && (
-              <button
-                onClick={onOpenRecipes}
-                className="px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/60 text-slate-200 font-medium text-xs flex items-center gap-1.5 transition-all shrink-0"
-                title="Automation Recipe Marketplace"
-              >
-                <Workflow className="w-3.5 h-3.5 text-teal-400" />
-                <span>Recipes</span>
-              </button>
-            )}
-
-            {onOpenGenAIGallery && (
-              <button
-                onClick={onOpenGenAIGallery}
-                className="px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/60 text-slate-200 font-medium text-xs flex items-center gap-1.5 transition-all shrink-0"
-                title="GenAI Studio"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                <span>GenAI Studio</span>
-              </button>
-            )}
-
-            {onOpenAutomatedFixModal && (
-              <button
-                onClick={onOpenAutomatedFixModal}
-                className="px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/60 text-slate-200 font-medium text-xs flex items-center gap-1.5 transition-all shrink-0"
-                title="Auto-Fix Diagnostics"
-              >
-                <Wrench className="w-3.5 h-3.5 text-amber-400" />
-                <span>Auto-Fix</span>
               </button>
             )}
 

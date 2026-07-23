@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SIDE_HUSTLES } from './data/hustles';
 import { SideHustle, CategoryType } from './types';
-import { Navbar } from './components/Navbar';
+import { Navbar, CurrencyType, ThemeType } from './components/Navbar';
 import { HustleCard } from './components/HustleCard';
 import { HustleDetailModal } from './components/HustleDetailModal';
 import { CustomIdeaValidator } from './components/CustomIdeaValidator';
@@ -62,6 +62,8 @@ import {
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [currency, setCurrency] = useState<CurrencyType>('GBP');
+  const [theme, setTheme] = useState<ThemeType>('emerald');
   
   // Saved Hustles in localStorage
   const [savedHustleIds, setSavedHustleIds] = useState<string[]>(() => {
@@ -233,6 +235,10 @@ export default function App() {
         onOpenAutomatedFixModal={() => setIsAutomatedFixOpen(true)}
         onOpenDirectLaunchpad={() => setIsDirectLaunchpadOpen(true)}
         onOpenSaleNotifications={() => setIsSaleNotificationsOpen(true)}
+        currency={currency}
+        onCurrencyChange={setCurrency}
+        theme={theme}
+        onThemeChange={setTheme}
         voiceControlBar={<VoiceControlBar onExecuteCommand={handleExecuteMacroAction} />}
       />
 
