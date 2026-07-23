@@ -232,40 +232,40 @@ export default function App() {
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         
-        {/* Compact Hero Banner */}
-        <div className="relative rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 p-6 sm:p-8 overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        {/* Master Class Glass Studio Hero Banner */}
+        <div className="relative rounded-3xl bg-slate-900/60 backdrop-blur-2xl border border-slate-800/80 p-6 sm:p-8 overflow-hidden shadow-2xl">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="max-w-2xl space-y-3">
               <div className="flex items-center gap-2 flex-wrap">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 text-xs font-semibold">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>AI-Powered Micro-Business Studio</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-xs font-semibold">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Master Studio 2.0 • Live Automation</span>
                 </div>
 
                 <a
-                  href="https://github.com"
+                  href="https://github.com/LIN4CRE/SideHustles"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-mono font-semibold transition-all hover:scale-105"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/60 text-xs font-mono font-semibold transition-all hover:scale-105"
                 >
                   <Github className="w-3.5 h-3.5 text-white" />
-                  <span>v2.4 Production Release</span>
-                  <span className="flex items-center gap-0.5 text-amber-400 text-[10px] bg-slate-900 px-1.5 py-0.2 rounded-full border border-amber-500/30">
-                    <Star className="w-2.5 h-2.5 fill-amber-400" />
-                    1.8k
+                  <span>GitHub Auto-Sync Active</span>
+                  <span className="flex items-center gap-0.5 text-emerald-400 text-[10px] bg-slate-950 px-1.5 py-0.2 rounded-full border border-emerald-500/30">
+                    <Star className="w-2.5 h-2.5 fill-emerald-400" />
+                    100% Synced
                   </span>
                 </a>
               </div>
 
               <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                Turn Curated Side Hustles into <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-amber-300">Automated Cashflow Engines</span>
+                Turn Automated Side Hustles into <span className="text-emerald-400">High-Margin £ Payout Engines</span>
               </h2>
 
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                Discover high-margin side hustle concepts upgraded with 80%+ automated workflows, interactive unit economics calculators, and 1-click Gemini AI launch execution kits.
+                7 ready-to-sell micro products, 12 4K OLED image assets, and 1-click execution launchpads connected to live payout webhooks.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -295,7 +295,7 @@ export default function App() {
 
                 <button
                   onClick={() => setIsCalculatorOpen(true)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-medium text-xs border border-slate-700 flex items-center gap-2 transition-all"
+                  className="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-medium text-xs border border-slate-700/60 flex items-center gap-2 transition-all"
                 >
                   <TrendingUp className="w-4 h-4 text-emerald-400" />
                   <span>Compare Profit Matrix</span>
@@ -303,8 +303,8 @@ export default function App() {
               </div>
             </div>
 
-            {/* Quick Stats Panel */}
-            <div className="grid grid-cols-2 gap-3 bg-slate-950/80 border border-slate-800 p-4 rounded-2xl shrink-0 w-full lg:w-72">
+            {/* Quick Telemetry Panel */}
+            <div className="grid grid-cols-2 gap-3 bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl shrink-0 w-full lg:w-72">
               <div>
                 <span className="text-[10px] font-mono text-slate-500 uppercase block">Curated Concepts</span>
                 <span className="text-2xl font-bold text-white">{SIDE_HUSTLES.length}</span>
@@ -313,7 +313,7 @@ export default function App() {
 
               <div>
                 <span className="text-[10px] font-mono text-slate-500 uppercase block">Avg. Automation</span>
-                <span className="text-2xl font-bold text-amber-400 flex items-center gap-1">
+                <span className="text-2xl font-bold text-emerald-400 flex items-center gap-1">
                   <Bot className="w-4 h-4" />
                   91%
                 </span>
