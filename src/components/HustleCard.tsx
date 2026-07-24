@@ -149,9 +149,10 @@ export const HustleCard: React.FC<HustleCardProps> = ({
               e.stopPropagation();
               onSelectHustle(hustle);
             }}
-            className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1 transition-all group-hover:border-emerald-500/50"
+            className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center gap-1 transition-all shadow-md shadow-emerald-950"
           >
-            <span>Execute</span>
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>1-Click Outcome</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </button>
         </div>
