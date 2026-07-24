@@ -96,6 +96,44 @@ export const MultiChannelSyncDashboard: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <button
+            onClick={async () => {
+              try {
+                const res = await fetch('/api/webhooks/sale', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    type: 'paid',
+                    product_name: 'Pro SideHustle Execution Kit',
+                    price: 49.99,
+                    platform: 'Payhip'
+                  })
+                });
+                if (res.ok) {
+                  const data = await res.json();
+                  if (data.sale) {
+                    setOrders(prev => [{
+                      id: data.sale.id,
+                      channel: 'Payhip',
+                      item: data.sale.item,
+                      amount: data.sale.amount,
+                      customerLocation: 'Live Webhook',
+                      status: 'Fulfilled',
+                      timestamp: 'Just now'
+                    }, ...prev]);
+                    setChannels(prev => prev.map(c => c.name === 'Payhip Store' ? { ...c, revenueToday: c.revenueToday + 49.99, lastSync: 'Just now' } : c));
+                  }
+                }
+              } catch (e) {
+                console.error(e);
+              }
+            }}
+            className="px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-emerald-600/20 transition-all"
+          >
+            <Zap className="w-4 h-4 text-amber-300" />
+            <span>Simulate Live Payhip Sale (£49.99)</span>
+          </button>
+
+          <button
             onClick={triggerManualSync}
             disabled={isSyncing}
             className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition-all"
