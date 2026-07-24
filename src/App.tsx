@@ -62,7 +62,8 @@ import {
   BarChart3,
   Cpu,
   Layers,
-  Rocket
+  Rocket,
+  Globe
 } from 'lucide-react';
 
 export default function App() {
