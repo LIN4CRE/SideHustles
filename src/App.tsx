@@ -39,6 +39,7 @@ import { MultiPlatformExporterModal } from './components/MultiPlatformExporterMo
 import { FinancialCalculatorModal } from './components/FinancialCalculatorModal';
 import { LocalLlmHubModal } from './components/LocalLlmHubModal';
 import { DeploymentWizard } from './components/DeploymentWizard';
+import { MultiChannelSyncDashboard } from './components/MultiChannelSyncDashboard';
 import { 
   Sparkles, 
   Bot, 
@@ -417,6 +418,18 @@ export default function App() {
           </button>
 
           <button
+            onClick={() => setActiveWorkspaceTab('multichannel')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all whitespace-nowrap ${
+              activeWorkspaceTab === 'multichannel'
+                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <Globe className="w-4 h-4 text-cyan-400" />
+            <span>🌐 Multi-Channel Sync Command Center</span>
+          </button>
+
+          <button
             onClick={() => setActiveWorkspaceTab('deploy')}
             className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all whitespace-nowrap ${
               activeWorkspaceTab === 'deploy'
@@ -428,6 +441,13 @@ export default function App() {
             <span>🚀 Deploy & Go Live</span>
           </button>
         </div>
+
+        {/* MULTI-CHANNEL E-COMMERCE TAB */}
+        {activeWorkspaceTab === 'multichannel' && (
+          <div className="space-y-6 animate-fadeIn">
+            <MultiChannelSyncDashboard />
+          </div>
+        )}
 
         {/* TAB 1: SIDE HUSTLE CATALOG VIEW */}
         {activeWorkspaceTab === 'catalog' && (
