@@ -770,11 +770,29 @@ app.post("/api/mcp/local-llm", (req, res) => {
   const { prompt, workflowNode } = req.body;
   res.json({
     status: "success",
-    node: workflowNode || "Obsidian NA10 Local Bridge",
+    node: workflowNode || "Obsidian NA10 Local Bridge (OmniRoute-LLM)",
     processedAt: new Date().toISOString(),
     output: `Processed prompt via Local LLM Bridge: "${prompt || 'Default execution'}"`
   });
 });
+
+// Smart-Mail Automated Lead Outreach & Sequence Dispatcher
+app.post("/api/smart-mail/auto-dispatch", (req, res) => {
+  const { recipientEmail, businessName, auditSummary, payhipLink } = req.body;
+  console.log(`[SMART-MAIL OUTREACH DISPATCHED] Queued 3-day follow-up sequence for ${recipientEmail || 'prospect@example.com'} (${businessName || 'Lead'}) including Payhip product link: ${payhipLink || 'https://payhip.com/products'}`);
+  res.json({
+    success: true,
+    status: "queued",
+    sequenceId: `seq-${Date.now()}`,
+    recipient: recipientEmail,
+    scheduledFollowUps: [
+      { day: 1, topic: "Your Custom Ground-Truth SEO Report" },
+      { day: 2, topic: "Top 3 Quick-Win Fixes for High Click-Throughs" },
+      { day: 3, topic: "Exclusive 50% Off Pro Automation Kit on Payhip" }
+    ]
+  });
+});
+
 
 // Task 18: System Telemetry Endpoint
 app.get("/api/system/telemetry", (req, res) => {

@@ -103,6 +103,18 @@ export const SeoAuditForm: React.FC = () => {
       if (data.success && data.audit) {
         setAuditResult(data.audit);
         setStatus('success');
+
+        // Automatically trigger Smart-Mail automated email sequence
+        fetch('/api/smart-mail/auto-dispatch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            recipientEmail: email,
+            businessName: businessName || 'Valued Lead',
+            auditSummary: data.audit.auditSummary,
+            payhipLink: 'https://payhip.com/products'
+          })
+        }).catch(err => console.error('Smart-Mail auto-dispatch error:', err));
       } else {
         throw new Error(data.error || 'Audit generation failed');
       }
