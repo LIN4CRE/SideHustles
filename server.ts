@@ -195,13 +195,16 @@ app.post("/api/analyze-viability", async (req, res) => {
     const ai = getGenAI();
 
     const prompt = `
-Analyze the business viability, automation index, and net margin potential for this side hustle concept:
-Concept: ${idea}
+You are an expert business analyst and local market researcher.
+IMPORTANT: Do NOT assume or guess the business trade/industry. If the input contains a company name and postcode/location, verify the EXACT industry (e.g., Garden Centre, Florist, Plumber, Accountant). Never confuse a Garden Centre or retail venue with a tradesperson (like a plumber).
+
+Analyze the business viability, automation index, and net margin potential for this concept/business:
+Concept / Business: ${idea}
 Price Point Target: $${pricePoint || 100}
 Weekly Effort Available: ${hoursPerWeek || 5} hours
 Target Monthly Income: $${targetMonthlyRevenue || 3000}
 
-Provide an objective, actionable breakdown in JSON:
+Provide an objective, highly accurate breakdown in JSON:
 - overallScore: integer 1 to 100
 - profitabilityScore: integer 1 to 100
 - automationScore: integer 1 to 100
