@@ -556,6 +556,83 @@ Provide a JSON output with:
   }
 });
 
+// AI Precision SEO & Business Category Audit Generator
+app.post("/api/seo-audit/generate", async (req, res) => {
+  try {
+    const { businessName, locationOrPostcode, targetUrl, userEmail } = req.body;
+
+    if (!businessName && !targetUrl) {
+      return res.status(400).json({ error: "Business name or website URL is required" });
+    }
+
+    const ai = getGenAI();
+
+    const prompt = `
+You are an expert Local SEO & Business Intelligence Specialist.
+Perform a search-grounded SEO audit for this business:
+Business Name: ${businessName || "Unknown"}
+Location / Postcode: ${locationOrPostcode || "UK"}
+Website URL: ${targetUrl || "N/A"}
+
+CRITICAL REQUIREMENT:
+1. Search the web using Google Search Grounding to find the EXACT industry and business type for "${businessName || targetUrl}" in "${locationOrPostcode || "UK"}".
+2. DO NOT GUESS. Verify whether it is a Garden Centre, Nursery, Plumber, Electrician, Cafe, Accountant, etc.
+3. Provide high-converting Title Tag & Meta Description optimizations.
+
+Return JSON format with:
+- detectedIndustry: verified exact industry (e.g. "Garden Centre & Plant Nursery")
+- verifiedAddress: approximate location/address found
+- currentTitleTagEstimate: estimate or current title tag
+- recommendedTitleTag: hyper-optimized <title> tag under 60 characters
+- recommendedMetaDescription: high-converting <meta description> under 155 characters with CTA
+- threeQuickWins: Array of 3 specific local SEO action items
+- overallHealthScore: integer 1-100
+- auditSummary: 2-sentence encouraging summary of potential local traffic gains
+`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: prompt,
+      config: {
+        tools: [{ googleSearch: {} }],
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            detectedIndustry: { type: Type.STRING },
+            verifiedAddress: { type: Type.STRING },
+            currentTitleTagEstimate: { type: Type.STRING },
+            recommendedTitleTag: { type: Type.STRING },
+            recommendedMetaDescription: { type: Type.STRING },
+            threeQuickWins: { type: Type.ARRAY, items: { type: Type.STRING } },
+            overallHealthScore: { type: Type.INTEGER },
+            auditSummary: { type: Type.STRING }
+          },
+          required: [
+            "detectedIndustry",
+            "verifiedAddress",
+            "currentTitleTagEstimate",
+            "recommendedTitleTag",
+            "recommendedMetaDescription",
+            "threeQuickWins",
+            "overallHealthScore",
+            "auditSummary"
+          ]
+        }
+      }
+    });
+
+    const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
+    const sources = groundingChunks?.map((chunk: any) => chunk.web?.title || chunk.web?.uri).filter(Boolean) || [];
+
+    const data = JSON.parse(response.text || "{}");
+    res.json({ success: true, audit: data, sources });
+  } catch (error: any) {
+    console.error("Error generating SEO audit:", error);
+    res.status(500).json({ error: error.message || "Failed to generate SEO audit" });
+  }
+});
+
 // Real Sales History File Persistence
 const SALES_FILE = path.join(process.cwd(), "ready-to-sell-assets", "sales-history.json");
 
