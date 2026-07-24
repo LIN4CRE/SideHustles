@@ -163,12 +163,12 @@ export const SaleNotificationCenter: React.FC<SaleNotificationCenterProps> = ({
 
               {/* Webhook Endpoint Info */}
               <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs space-y-1">
-                <div className="font-semibold text-indigo-300">Your Production Webhook Listener URL:</div>
+                <div className="font-semibold text-indigo-300">Your Payhip / Production Webhook Listener URL:</div>
                 <code className="text-[11px] text-amber-300 font-mono bg-slate-900 px-2 py-1 rounded block">
-                  http://localhost:3847/api/webhooks/sale
+                  https://gen-lang-client-0819381988.web.app/api/webhooks/sale
                 </code>
                 <div className="text-[11px] text-slate-400">
-                  Paste this URL in Gumroad ➔ Settings ➔ Advanced ➔ Ping / Webhook URL to trigger live desktop audio alerts whenever a customer buys your products!
+                  Paste this URL in Payhip ➔ Developer ➔ Webhooks (or Gumroad/Stripe) to trigger live instant desktop & browser audio alerts whenever a customer buys your products!
                 </div>
               </div>
 
